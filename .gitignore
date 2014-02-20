@@ -28,4 +28,10 @@
 *.thm
 *.swp
 *.swo
-thesis/preview
+*.pdf
+graduation/landt/references
+graduation/thesis/references
+graduation/paper/references
+graduation/proposal/references
+graduation/literature
+
