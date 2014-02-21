@@ -1,6 +1,6 @@
 % !Mode:: "TeX:UTF-8"
 \documentclass[landt]{skythesis}
-\graphicspath{{figures/}}  % 图路径
+\graphicspath{{preface/figures/}{landt/figures/}}  % 图路径
 \newcommand{\kappendix}[2][section]{
  \phantomsection
  \addcontentsline{toc}{#1}{#2}
@@ -15,7 +15,9 @@
 
 %\input{preface/absc}     % 中文摘要
 %\input{preface/abse}     % English Abstract
-{\singlespacing\tableofcontents           % 中文目录
+{\pdfbookmark[0]{目~~录}{thesiscontent}
+\phantomsection \label{thesiscontent} 
+\singlespacing\tableofcontents           % 中文目录
 }
 
 %%%%%%%%%% 正文 %%%%%%%%%%

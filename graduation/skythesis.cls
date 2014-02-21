@@ -323,7 +323,7 @@
   \let\cleardoublepage\relax %
   \titleclass{\chapter}{straight}  %%不换页！！
   \titleformat{\chapter}[block]{\singlespacing  \sihao\heiti\bf}{\thechapter}{1ex}{}{}
-  \titlespacing{\chapter}{0pt}{1em}{1em}
+  \titlespacing{\chapter}{0pt}{2em}{1em}
   \titleformat{\section}[hang]{\singlespacing \xiaosi\heiti}{\thesection}{1em}{}{}
   \titlespacing{\section}{0pt}{0.5em}{0.5em}
   \titleformat{\subsection}[hang]{\singlespacing  \wuhao\heiti}{\thesubsection}{1em}{}{}
