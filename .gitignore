@@ -28,10 +28,12 @@
 *.thm
 *.swp
 *.swo
-*.pdf
+Literature_Translation.pdf
+Paper.pdf
+Proposal.pdf
+Thesis.pdf
 graduation/landt/references
 graduation/thesis/references
 graduation/paper/references
 graduation/proposal/references
 graduation/literature
-
