@@ -28,10 +28,7 @@
 *.thm
 *.swp
 *.swo
-graduation/Literature_Translation.pdf
-graduation/Paper.pdf
-graduation/Proposal.pdf
-graduation/Thesis.pdf
+graduation/*.pdf
 graduation/landt/references
 graduation/thesis/references
 graduation/paper/references
