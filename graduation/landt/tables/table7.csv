@@ -1,0 +1,10 @@
+Table 7.
+        Performance measures for the shop floor.
+Period (month),Number of jobs,Average starvation time (h),Average flow time (h),On-time completion rate
+0,24,2.67,228,0.15
+1,12,1.17,128,0.50
+2,12,1.00,121,0.60
+3,16,0.63,160,0.65
+4,16,0.75,158,0.78
+5,24,0.75,194,0.82
+6,24,0.71,188,0.86

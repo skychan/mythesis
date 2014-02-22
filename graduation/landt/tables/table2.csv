@@ -1,0 +1,13 @@
+Table 2.
+        The models and families of jobs produced in the last two years.
+Model,Quantity,Processing time (h)
+No.,Family,2007,2008,p1/1 worker,p2/2 workers
+900BR,f1,26,15,24,16
+1000DT,f1,30,46,24,16
+800ST2,f2,44,51,24,12
+1100ST3,f2,18,11,24,12
+1000TT,f3,43,30,24,8
+800TT,f3,37,31,24,8
+1000VV,f4,21,47,24,10
+Others,f4,49,67,24,10
+Average (month),,22.33,24.83,–,–
