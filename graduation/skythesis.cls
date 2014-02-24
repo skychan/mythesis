@@ -30,7 +30,7 @@
 \DeclareOption{proposal}{\skypapertrue\skyproposaltrue}
 
 \ProcessOptions\relax
-\LoadClass[10.54pt,oneside,openany]{book}
+\LoadClass[oneside,openany]{book}
 \RequirePackage[a4paper,
     left = 25 mm,
     right = 20 mm,
@@ -51,10 +51,10 @@
 \RequirePackage{fancyhdr}                       % fancyhdr宏包 支持页眉和页脚的相关定义
 \RequirePackage[slantfont, CJKnumber, boldfont]{xeCJK}    %xeCJK中文粗体、斜体、数字支持，并提供将阿拉伯数字转换成中文数字的命令
 \RequirePackage{color}                          % 支持彩色
-\RequirePackage{amsmath}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
+\RequirePackage{amsmath,cases,amssymb}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
 \RequirePackage{amssymb}                        % 数学符号生成命令
 %\RequirePackage{euler}
-\RequirePackage{kmath}
+%\RequirePackage{kmath}
 \newcommand\hmax{0}                             % insert before bm package
 \RequirePackage{bm}                             % 处理数学公式中的黑斜体的宏包
 \RequirePackage[below]{placeins}                %允许上一个section的浮动图形出现在下一个section的开始部分,还提供\FloatBarrier命令,使所有未处理的浮动图形立即被处理
@@ -62,10 +62,12 @@
 %\RequirePackage{float}                          % 设置图片浮动格式
 \RequirePackage{multirow,bigstrut}              % 使用Multirow宏包，使得表格可以合并多个row格
 \RequirePackage{booktabs}                       % 表格，横的粗线；\specialrule{1pt}{0pt}{0pt}
+\RequirePackage{supertabular}   % 超表格环境
 \RequirePackage{colortbl}                       % 表格颜色
 \RequirePackage{paralist}
 \RequirePackage{rotating}                       % 表格旋转
 \RequirePackage{floatrow}                       % 浮动体宏包
+\floatsetup[table]{capposition=top}
 \RequirePackage{longtable}                      % 支持跨页的表格。
 \RequirePackage{tabularx}                       % 自动设置表格的列宽
 
@@ -325,7 +327,7 @@
   \titleformat{\chapter}[block]{\singlespacing  \sihao\heiti\bf}{\thechapter}{1ex}{}{}
   \titlespacing{\chapter}{0pt}{2em}{1em}
   \titleformat{\section}[hang]{\singlespacing \xiaosi\heiti}{\thesection}{1em}{}{}
-  \titlespacing{\section}{0pt}{0.5em}{0.5em}
+  \titlespacing{\section}{0pt}{0.8em}{0.1em}
   \titleformat{\subsection}[hang]{\singlespacing  \wuhao\heiti}{\thesubsection}{1em}{}{}
   \titlespacing{\subsection}{0pt}{0.5em}{0.5em}
 }{\endgroup}
