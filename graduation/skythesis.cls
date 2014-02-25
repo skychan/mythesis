@@ -366,6 +366,7 @@
 \pagestyle{fancy}
 \fancyhf{}
 \renewcommand{\headrulewidth}{0.8pt}
+\setlength{\headheight}{12pt}
 \fancypagestyle{plain}{
   \fancyhf{}
   \fancyhead[C]{\xiaowu\songti \headtitle}
