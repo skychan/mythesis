@@ -5,7 +5,7 @@
  \phantomsection
  \addcontentsline{toc}{#1}{#2}
 }
-
+\AddEverypageHook{\special{pdf: put @thispage << /Group << /S /Transparency /I true /CS /DeviceRGB >> >>}}
 \begin{document}
 
 \input{preface/cover}      % 封面
