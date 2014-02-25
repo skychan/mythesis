@@ -233,7 +233,7 @@
         {}
         {\wuhao\bfseries{第\CJKnumber{\thecontentslabel{}}章\hspace{1ex}}}
         {\wuhao\bfseries}
-        {\wuhao\bfseries\titlerule*[3pt]{.}\contentspage}
+        {\wuhao\titlerule*[3pt]{.}\contentspage}
 %%% }
 \ifskypaper
    \titleclass{\chapter}{straight}  %%不换页！！
