@@ -51,8 +51,11 @@
 \RequirePackage{fancyhdr}                       % fancyhdr宏包 支持页眉和页脚的相关定义
 \RequirePackage[slantfont, CJKnumber, boldfont]{xeCJK}    %xeCJK中文粗体、斜体、数字支持，并提供将阿拉伯数字转换成中文数字的命令
 \RequirePackage{color}                          % 支持彩色
+%\RequirePackage[fleqn]{amsmath}
 \RequirePackage{amsmath,cases,amssymb}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
+\allowdisplaybreaks[2]
 \RequirePackage{amssymb}                        % 数学符号生成命令
+\RequirePackage{mathtools}
 %\RequirePackage{euler}
 %\RequirePackage{kmath}
 \newcommand\hmax{0}                             % insert before bm package
