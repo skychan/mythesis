@@ -148,6 +148,7 @@ k_{2,[1]} & = 1 & k_{2,[5]} & = 1 & k_{2,[9]} & = 1 & k_{2,[12]} & = 1
 
 \ksection{启发式方法}
 在2.5节中，我们解释了现行的单件处理和EDD 规则调度方法。为了有效解决涌现的问题和提高调度效果，我们提出了启发式方法。
+
 \ksubsection{启发式方法1：FBEDD}
 我们将EDD 规则结合完整批的性质，建立了一个完整批EDD (FBEDD)启发式方法，以最小化目标值，具体步骤如下
 
@@ -155,9 +156,24 @@ k_{2,[1]} & = 1 & k_{2,[5]} & = 1 & k_{2,[9]} & = 1 & k_{2,[12]} & = 1
 \renewcommand{\labelenumi}{\heiti 步骤\theenumi~}
 \item 置$S=\phi,\ S_U = \{J_1,J_2,...,J_n\},\ B=\phi,\ i=1,2,...,b,\ b = n/c$。
 \item 将$S_U$中的作业按$d_j$非增的顺序排列，置$i=1$。
-\item 将$S_U$中的前$c$项作业组成批次$B_i$，即$B_i = \{J_{[1]},...,J_{[c]}\}$\label{step:3}。
-\item 如果$S_U = \phi$，则执行{\heiti 步骤}\ref{step:5}，否则$i=i+1$，并执行{\heiti 步骤}\ref{step:3}。
-\item 最终的调度为$S=B=(B_1,...,B_b)$。\label{step:5}
+\item 将$S_U$中的前$c$项作业组成批次$B_i$，即$B_i = \{J_{[1]},...,J_{[c]}\}$。
+\item 如果$S_U = \phi$，则执行{\heiti 步骤}5，否则$i=i+1$，并执行{\heiti 步骤}3。
+\item 最终的调度为$S=B=(B_1,...,B_b)$。
 \end{asparaenum}
+
 \ksubsection{启发式方法2：FBFS}
-作业群组成
+作业要群组成一些产品簇的集合。我们选用同簇中的$c$项作业组成一个完整批，然后把不同簇中剩余的作业组成最后一批，这批的作业按最短处理时间(SPT)规则排序。这个启发式方法的步骤叫做完整批簇排序启发式算法，如下所示。其中$\# F^f$表示产品簇作业$f$的集合$F^f$的作业数量。
+\begin{asparaenum}
+\renewcommand{\labelenumi}{\heiti 步骤\theenumi~}
+\item 置$S_1 = \phi,\ S_2=\phi,\ S_U = \{J_1,...,J_2\},\ B = \phi,\ B' = \phi,\ b=n/c$。
+\item 将$S_U$中的作业按$d_j$非增的顺序排列。
+\item 将得到的序列作业按产品簇排序以组成集合，置$f=1$。
+\item 如果$\# F^f \geqslant c$，执行{\heiti 步骤}7，否则执行{\heiti 步骤}5。
+\item 置$i=1$，将$F^f\text{并入}B'_i$作为一个局部批，然后从$S_U\text{剔除}B'_i$。
+\item 如果$S_U = \phi$，执行{\heiti 步骤}9，否则置$f=f+1$，并执行{\heiti 步骤}4。
+\item 置$i=1$，从$F^f$中拿出前$c$项作业作为一个完整批$B^f_i$，将至并入$B$，并从$S_U\text{中剔除}B^f_i$。
+\item 如果$\# F^f \geqslant c$，执行{\heiti 步骤}7，否则执行{\heiti 步骤}5。
+\item 置$B = \{B_1^1,...,B_i^1,...,B_1^4,...,B_i^4\},\ B' = \{B'_1,...,B'_4\}$。按$p_{2j}$非增的顺序排列重排$B'$中的作业。
+\item 在作业顺序不变的情况下，重新定$B\text{与}B'$中的指数。置$B=\{B_1,...,B_{k-1}\}\text{并且}B' = \{B_k,B_{k+1},...,B_b\}$均为完整批。
+\item 最终排序为$S=B\cup B' = \{B_1,B_2,..,B_b\} = \{J_{[1]},J_{[2]},...,J_{[n]}\}$。
+\end{asparaenum}
