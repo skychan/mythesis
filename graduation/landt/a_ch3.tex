@@ -114,8 +114,8 @@ C_{2,[(i-1)\times c + r]}\geqslant C_{2,[(i-1)\times c + r - 1]} + s_{f2}k_{2,[(
 由于所有作业流程在系统中的顺序一致，所以$k_{2,[j]}=k_{1,[i,r]}$。\eqref{equ:24}和(\ref{equ:25})确定了工段1的完工时间，\eqref{equ:26}和(\ref{equ:27})确定了工段2的完工时间，并确保作业只有在其前继作业和本身完成了工段1的处理后才能开始操作。\eqref{equ:28}和(\ref{equ:29})确定了案例问题的运行情况度量，\eqref{equ:30}和(\ref{equ:31})是0--1变量约束。
 
 \begin{example}
-作为一个例证，考虑一个有12项工作的问题，$f_j=(3,2,3,4,1,4,2,2,3,3,4,4),d_j=(100,160,160,100,180,\\
-140,140,140,140,140,180,140),s_b=6.4,s_{f1}=3.2,s_{f2}=1.6$，其他数据见\reft{tab:2yearproduction}。\label{exam:1}
+作为一个例证，考虑一个有12项工作的问题，$f_j=(3,2,3,4,1,4,2,2,3,3,4,4),d_j=(100,160,160,100,\\
+180,140,140,140,140,140,180,140),s_b=6.4,s_{f1}=3.2,s_{f2}=1.6$，其他数据见\reft{tab:2yearproduction}。\label{exam:1}
 \end{example}
 
 可以用LINGO 10 来解决这个MIP 问题，我们可以得到最优结果如下：
@@ -202,7 +202,7 @@ k_{2,[1]} & = 1 & k_{2,[5]} & = 1 & k_{2,[9]} & = 1 & k_{2,[12]} & = 1
 \end{asparaenum}
 
 \ksection{确定下界}
-为了评价启发式方法得到结果的质量，本节将引出下界。由于这些都是多目标函数，所以下界包含3个部分：\begin{inparaenum}[(1)]
+为了评估启发式方法得到结果的质量，本节将引出下界。由于这些都是多目标函数，所以下界包含3个部分：\begin{inparaenum}[(1)]
 \item $C_{\max}\text{的下界}LB_1$；
 \item $\sum C_j\text{的下界}LB_2$；
 \item $\sum T_j\text{的下界}LB_3$。
@@ -251,8 +251,26 @@ LB_3 = \sum_{j=1}^n T_j\notag
 \[ LB = \alpha LB_1 + \beta LB_2 + \gamma LB_3
 \]
 
-为了评价启发式算法求解的质量，我们用相对误差(RER)定义启发式方法和下界的差别：
-\begin{equation}
+为了评估启发式算法求解的质量，我们用相对误差(RER)定义启发式方法和下界的差别：
+\[
 RER = \left( \frac{Heuristic_i - LB}{LB}\right)\times 100\%
-\end{equation}
+\]
 其中$Heuristic_i$是各启发式方法的目标函数值。
+\begin{example}
+举一个下界的例子，考虑一个12个作业的问题，其中$p_{1j}=24,s_b=6.4,s_{f1}=3.2,s_{f2}=1.6$，其他数据同例\ref{exam:1}。
+\end{example}
+
+在参数为$(\alpha,\beta,\gamma)=(n/2,2,2)$的情况下，得到的下界为：
+\begin{align*}
+LB &= 0.6 \times LB_1 + 0.2 \times LB_2 + 0.2 \times LB_3 \\
+& =0.6 \times 164 + 0.2 \times 1152 + 0.2 \times 0\\
+& = 328.8 
+\end{align*}
+3种启发式方法的相对误差如下：
+\begin{align*}
+RER_{EDD} & = \left(\frac{408.32-328.8}{328.8}\right)\times 100 \% = 24.18 \%\\
+RER_{FBEDD} & = \left(\frac{375.92-328.8}{328.8}\right)\times 100 \% = 14.33 \%\\
+RER_{FBFS} & = \left(\frac{311.04-328.8}{328.8}\right)\times 100 \% = 24.18 \%
+\end{align*}
+
+从结果来看，$RER_{FBFS}$的值较小，说明由FBFS 得到的结果质量明显要优于EDD 和FBEDD。
