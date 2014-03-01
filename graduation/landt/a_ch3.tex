@@ -156,30 +156,103 @@ k_{2,[1]} & = 1 & k_{2,[5]} & = 1 & k_{2,[9]} & = 1 & k_{2,[12]} & = 1
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\heiti 步骤\theenumi~}
 \item 置$S=\phi,\ S_U = \{J_1,J_2,...,J_n\},\ B=\phi,\ i=1,2,...,b,\ b = n/c$。
-\item 将$S_U$中的作业按$d_j$非增的顺序排列，置$i=1$。
+\item 将$S_U$中的作业按$d_j$非减的顺序排列，置$i=1$。
 \item 将$S_U$中的前$c$项作业组成批次$B_i$，即$B_i = \{J_{[1]},...,J_{[c]}\}$。
 \item 如果$S_U = \phi$，则执行\Step5，否则$i=i+1$，并执行\Step 3。
 \item 最终的调度为$S=B=(B_1,...,B_b)$。
 \end{asparaenum}
 
 \ksubsection{启发式方法2：FBFS}
-作业要群组成一些产品簇的集合。我们选用同簇中的$c$项作业组成一个完整批，然后把不同簇中剩余的作业组成最后一批，这批的作业按最短处理时间(SPT)规则排序。这个启发式方法的步骤叫做完整批簇排序启发式算法，如下所示。其中$\# F^f$表示产品簇作业$f$的集合$F^f$的作业数量。
+作业要群组成一些产品簇的集合。我们选用同簇中的$c$项作业组成一个完整批，然后把不同簇中剩余的作业组成最后一批，这批的作业按最短处理时间(SPT)规则排序。这个启发式方法的步骤叫做完整批簇排序(FBFS)启发式算法，如下所示。其中$\# F^f$表示产品簇作业$f$的集合$F^f$的作业数量。
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\heiti 步骤\theenumi~}
-\item 置$S_1 = \phi,\ S_2=\phi,\ S_U = \{J_1,...,J_2\},\ B = \phi,\ B' = \phi,\ b=n/c$。
-\item 将$S_U$中的作业按$d_j$非增的顺序排列。
+\item 置$S_1 = \phi,\ S_2=\phi,\ S_U = \{J_1,...,J_n\},\ B = \phi,\ B' = \phi,\ b=n/c$。
+\item 将$S_U$中的作业按$d_j$非减的顺序排列。
 \item 将得到的序列作业按产品簇排序以组成集合，置$f=1$。
 \item 如果$\# F^f \geqslant c$，执行\Step 7，否则执行\Step 5。
 \item 置$i=1$，将$F^f\text{并入}B'_i$作为一个局部批，然后从$S_U\text{剔除}B'_i$。
 \item 如果$S_U = \phi$，执行\Step 9，否则置$f=f+1$，并执行\Step 4。
 \item 置$i=1$，从$F^f$中拿出前$c$项作业作为一个完整批$B^f_i$，将至并入$B$，并从$S_U\text{中剔除}B^f_i$。
 \item 如果$\# F^f \geqslant c$，执行\Step 7，否则执行\Step 5。
-\item 置$B = \{B_1^1,...,B_i^1,...,B_1^4,...,B_i^4\},\ B' = \{B'_1,...,B'_4\}$。按$p_{2j}$非增的顺序排列重排$B'$中的作业。
+\item 置$B = \{B_1^1,...,B_i^1,...,B_1^4,...,B_i^4\},\ B' = \{B'_1,...,B'_4\}$。按$p_{2j}$非减的顺序排列重排$B'$中的作业。
 \item 在作业顺序不变的情况下，重新定$B\text{与}B'$中的指数。置$B=\{B_1,...,B_{k-1}\}\text{并且}B' = \{B_k,B_{k+1},...,B_b\}$均为完整批。
-\item 最终排序为$S=B\cup B' = \{B_1,B_2,..,B_b\} = \{J_{[1]},J_{[2]},...,J_{[n]}\}$。
+\item 最终调度为$S=B\cup B' = \{B_1,B_2,..,B_b\} = \{J_{[1]},J_{[2]},...,J_{[n]}\}$。
 \end{asparaenum}
 
 我们来解释以上的步骤。在\Step1和\Step2中，我们构建了一个初始调度，作业是按EDD 规则排序的。在\Step3中，作业群组成4个簇。\Step4 -- 8，我们取各簇前$c$项作业组成一个完整批，并将剩余的作业组成一个最后批。在\Step9，我们按SPT 规则重排了局部批的作业，以改良目标函数值。\Step10我们在不改变作业顺序的情况下，重新设置了各完整批的指数，以保证其完整。在\Step11，我们得到了最终调度方案。
 \begin{example}
 考虑一个12个作业的问题，其中$p_{aj}=9,s_a=5.2,p_{1j}=24,s_b=6.4,s_{f1}=3.2,s_{f2}=1.6$。其他数据同例\ref{exam:1}。
 \end{example}
+\begin{asparaenum}
+\renewcommand{\labelenumi}{解\theenumi:}
+\item 用EDD 规则求解该问题，得到最终调度：$C_{\max}=211,\ \sum C_j = 1419.0,\ \sum T_j = 66.2,\ Z(S)=408.32$。
+\item 用FBEDD 规则求解该问题，得到最终调度：$C_{\max}=178.4,\ \sum C_j = 1344.4,\ \sum T_j = 0,\ Z(S)=375.92$。
+\item 用FBFS 规则求解该问题，得到最终调度：$C_{\max}=164,\ \sum C_j = 1163.2,\ \sum T_j = 0,\ Z(S)=331.04$。
+\end{asparaenum}
+\ksubsection{启发式方法3：RFBFS}
+当我们运用FBFS 求解大型问题的时候，换线时间和可以被最小化，然而，这个方法给出了同簇产品的优先级，却不顾工期。因此，这可能会耗费许多时间处理同簇产品的批次，导致一些作业被提前完成，而一些作业却要滞后完成。为了改善FBFS 的这个不足，我们融入了滚动时域调度策略以达成滚动完整批产品簇调度(RFBFS)的启发式方法。RFBFS 将大型问题分割成多个EDD 序列的小型问题，然后重复执行FBFS 直到所有作业都被调度。
+由于RFBFS 运行FBFS 处理小型短时域问题，这样可以用于处理大型问题。该启发式方法的步骤如下，其中$n_b$表示每月可处理的批数。
+\begin{asparaenum}
+\renewcommand{\labelenumi}{\heiti 步骤\theenumi~}
+\item 置$S_1 = \phi,\ S_U = \{J_1,...,J_n\},\ B_1 = \phi,\ B'_1 = \phi,\  n = b \times c$。
+\item 将$S_U$中的作业按$d_j$非减的顺序排列，并置$\nu = 1$。
+\item 从$S_U$中拿出前$n_b/2$项作业来执行FBFS，并产生一个局部调度$S_1 = B_1 \cup B'_1$。然后，置$\nu = \nu + 1$，并把剩下的$n_b/2$项作业执行FBFS，产生下一个局部调度$S_2 = B_2 \cup B'_2$。
+\item 如果$S_U=\phi$，执行\Step5，否则，置$\nu = \nu + 1$，执行\Step3。
+\item 最终的调度为$S=S_1\cup S_2\cup...\cup S_{\nu}$。
+\end{asparaenum}
+
+\ksection{确定下界}
+为了评价启发式方法得到结果的质量，本节将引出下界。由于这些都是多目标函数，所以下界包含3个部分：\begin{inparaenum}[(1)]
+\item $C_{\max}\text{的下界}LB_1$；
+\item $\sum C_j\text{的下界}LB_2$；
+\item $\sum T_j\text{的下界}LB_3$。
+\end{inparaenum}
+\renewcommand{\labelenumi}{}
+\begin{asparaenum}
+\item $C_{\max}\text{的下界}(LB_1)$
+\suspend{asparaenum}
+
+Ahmadi(1992)提出了LPT-Johnson 法则以最小化处理多簇产品的离散批系统的制造期。根据这个法则，作业在工段2按处理时间排列为非增序列。
+为了得到合理的下界，我们融入了Azizoglu 和Webster(2003)提出的获得下界进程。
+我们考虑将批换线时间$s_b$和产品簇换线时间$s_{f1}$计入工段1的处理时间，放宽工段2产品簇换线时间。
+这样一来，下界可以由制造期加最小工段2簇换线时间($f_n \times s_{f2}$)得到。
+记$C_{2,[j]}$(LPT)为$H_{[j]}$在工段2的完工时间，$f_n$为所有作业簇的数量，即：
+\begin{numcases}{}
+C_{2,[1]}(LPT) = (s_b + s_{f1} + p_1) + p_{2,[1]}\notag\\
+C_{2,[j]}(LPT) = C_{2,[j-1]} + p_{2,[j]},\quad j=2,...,n\notag\\
+LB_1 = C_{2,[n]}(LPT) + f_ns_{f2}\notag
+\end{numcases}
+\resume{asparaenum}
+\item $\sum C_j\text{的下界}(LB_2)$
+\suspend{asparaenum}
+
+Ahmadi(1992)同时也提出完整批最短处理时间(Full Batch-SPT)法则以最小化工段2无闲置的离散批系统完工时间和。
+根据这个法则，作业在工段2按处理时间排列为非减序列。
+记$C_{2,[j]}$(SPT)为作业在工段2的完工时间，这样一来下界可由完工时间和加上工段2最小簇换线时间得到。簇换线时间只有在首个作业和末尾作业$f_n-1$时才考虑，即：
+\begin{numcases}{}
+C_{2,[1]}(SPT) = s_b + s_{f1} + p_1 + p_{2,[1]}\notag\\
+C_{2,[j]}(SPT) = C_{2,[j-1]} + p_{2,[j]},\quad j=2,...,(n-f_n+1)\notag\\
+C_{2,[j]}(SPT) = C_{2,[j-1]} + s_{f2} + p_{2,[j]},\quad j=(n-f_n+2),...,n\notag\\
+LB_2 = \sum_{j=1}^n C_{2,[j]}(SPT) + (n+\sum_{k=1}^{f_n}(f_n-k))s_{f2}\notag
+\end{numcases}
+\resume{asparaenum}
+\item $\sum T_j\text{的下界}(LB_3)$
+\end{asparaenum}
+
+Baker 和Martin(1974)证明SPT序列最小化了当所有作业都滞后的单机器滞后时间和。在这个离散批系统中，批处理时间相同，这样考虑由此引起的滞后和时，这个系统可以考虑为单个机器。
+记$C_{2,[j]}$(SPT)为完工时间，$d_{[j]}$为SPT 顺序下$J_{[j]}$的工期。
+这样一来，滞后时间和的下界可以由放宽所有作业皆滞后的约束得到，即：
+\begin{numcases}{}
+T_j = \max \{C_{2,[j]}(SPT)-d_{[j]}(SPT),0\},\quad j=1,...,n \notag \\
+LB_3 = \sum_{j=1}^n T_j\notag
+\end{numcases}
+
+将这3个独立的下界综合，可以得到该问题的下界：
+\[ LB = \alpha LB_1 + \beta LB_2 + \gamma LB_3
+\]
+
+为了评价启发式算法求解的质量，我们用相对误差(RER)定义启发式方法和下界的差别：
+\begin{equation}
+RER = \left( \frac{Heuristic_i - LB}{LB}\right)\times 100\%
+\end{equation}
+其中$Heuristic_i$是各启发式方法的目标函数值。

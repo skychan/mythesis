@@ -68,7 +68,7 @@
 \RequirePackage{supertabular}   % 超表格环境
 \RequirePackage{colortbl}                       % 表格颜色
 \RequirePackage{paralist}
-%\RequirePackage{mdwlist}
+\RequirePackage{mdwlist}
 \RequirePackage{rotating}                       % 表格旋转
 \RequirePackage{floatrow}                       % 浮动体宏包
 \floatsetup[table]{capposition=top}
