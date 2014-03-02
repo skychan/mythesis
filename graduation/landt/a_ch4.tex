@@ -60,8 +60,8 @@
   \caption{通过10个示例比较$n=24, d_j = D_j$问题的三种启发式方法}
     \begin{tabular}{cccccccccc}
     \toprule
-    \multirow{2}[4]{*}{示例编号} & 下界(LB)    & \multicolumn{3}{c}{目标值(Z)} & \multicolumn{3}{c}{RER (\%)} & \multicolumn{2}{c}{RIR (\%)} \\
-    \cline{2-10}
+    \multirow{2}[4]{*}{示例编号} & \multirow{2}[4]{*}{LB}   & \multicolumn{3}{c}{目标值(Z)} & \multicolumn{3}{c}{RER (\%)} & \multicolumn{2}{c}{RIR (\%)} \\
+    \cline{3-10}
           &       & (1) EDD & (2) FBEDD & (3) RFBFS &$\frac{(1) - LB}{LB}$ & $\frac{(2) - LB}{LB}$ & $\frac{(3) - LB}{LB}$ &$\frac{(1) - (3)}{(3)}$ & $\frac{(2) - (3)}{(3)}$ \\
           \midrule 
     1     & 661.5 & 953.4 & 748.9 & 698.9 & 44.13 & 13.22 & 5.66  & 36.41 & 7.15 \\
@@ -81,3 +81,93 @@
 \end{table}
 由最后一行可以看出，EDD 和FBEDD 分别有平均RER $35.95\%\text{和}13.30\%$，而RFBFS 为$5.14\%$。同时可以看出，RFBFS 比EDD 和FBEDD 好，因为两者的平均RIR 分别为$29.31\%\text{和}7.76\%$。因此，RFBFS 就求解质量将提高效果上来说要优于其余两者。
 
+我们用同样的方法计算目标值函数、RER 和RIR，所有组合的权重为$(\alpha,\beta,\gamma) = (n/2,2,2)$。结果的平均值汇总在\reft{tab:allcompare}，
+\begin{table}[h]
+  \centering\xiaowu
+  \caption{所有组合的三种启发式方法比较}
+    \begin{tabular}{crccccccccc}
+    \toprule
+    \multirow{2}[4]{*}{n} & \multicolumn{1}{c}{\multirow{2}[4]{*}{$d_j$}} & \multirow{2}[4]{*}{LB} & \multicolumn{3}{c}{目标函数值 (Z)} & \multicolumn{3}{c}{RER (\%)} & \multicolumn{2}{c}{RIR (\%)} \\
+    \cline{4-11}
+          & \multicolumn{1}{c}{} &       & (1) EDD & (2) FBEDD & (3) RFBFS &$\frac{(1) - LB}{LB}$ & $\frac{(2) - LB}{LB}$ & $\frac{(3) - LB}{LB}$ &$\frac{(1) - (3)}{(3)}$ & $\frac{(2) - (3)}{(3)}$\\
+      \midrule    
+    \multirow{3}[1]{*}{24} & T     & 743   & 1017  & 824   & 769   & 36.77 & 10.92 & 3.48  & 32.17 & 7.19 \\
+          & N     & 716   & 973   & 811   & 753   & 35.95 & 13.3  & 5.14  & 29.31 & 7.76 \\
+          & L     & 701   & 957   & 811   & 753   & 36.59 & 15.78 & 7.42  & 27.15 & 7.78 \\[3pt]
+    \multirow{3}[0]{*}{60} & T     & 2036  & 2892  & 2339  & 2156  & 42.08 & 14.91 & 5.92  & 34.14 & 8.49 \\
+          & N     & 1977  & 2802  & 2268  & 2094  & 41.71 & 14.7  & 5.91  & 33.8  & 8.3 \\
+          & L     & 1931  & 2735  & 2221  & 2054  & 41.65 & 15.04 & 6.38  & 33.15 & 8.14 \\[3pt]
+    \multirow{3}[0]{*}{100} & T     & 3537  & 5170  & 4144  & 3774  & 46.18 & 17.16 & 6.71  & 36.99 & 9.79 \\
+          & N     & 3468  & 5050  & 4045  & 3702  & 45.61 & 16.64 & 6.76  & 36.4  & 9.26 \\
+          & L     & 3403  & 4939  & 3939  & 3633  & 45.16 & 15.77 & 6.79  & 35.93 & 8.41 \\[3pt]
+    \multirow{3}[0]{*}{200} & T     & 7208  & 10,552 & 8301  & 7662  & 46.39 & 15.17 & 6.3   & 37.71 & 8.34 \\
+          & N     & 7141  & 10,412 & 8169  & 7592  & 45.8  & 14.39 & 6.31  & 37.14 & 7.59 \\
+          & L     & 7077  & 10,278 & 8044  & 7524  & 45.22 & 13.66 & 6.31  & 36.59 & 6.91 \\[3pt]
+    \multirow{3}[1]{*}{300} & T     & 10,817 & 15,844 & 12,338 & 11,487 & 46.47 & 14.06 & 6.19  & 37.93 & 7.41 \\
+          & N     & 10,753 & 15,697 & 12,196 & 11,418 & 45.98 & 13.42 & 6.19  & 37.48 & 6.81 \\
+          & L     & 10,690 & 15,555 & 12,060 & 11,350 & 45.51 & 12.82 & 6.17  & 37.05 & 6.26 \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:allcompare}
+\end{table}
+可以看出，EDD 和FBEDD 的平均RER 分别为$35.95\% - 46.47\%$和$10.92\% - 17.16\%$，而RFBFS 为$3.48\% - 7.42\%$，要明显优于前两者。
+同时，可以发现其平均RIR 和RFBFS 也要明显优于EDD h($27.15\% - 37.93\%$)和FBEDD$6.29\% - 9.79\%$。因此，可以得出结论：RFBFS 表现要优于EDD
+ 和FBEDD。
+这些反映了完整批和簇分类的特性，对该问题有正面影响，并且影响会随问题型号增大而加强。
+此外，我们注意到几乎所有的问题会随工期的紧迫程度增加而得到更好的RER 和RIR。这就表示，严格控制工期可以改善调度效果。
+
+在前面的实验中，我们假设只有4个簇($f=4$)以简化问题。为了验证RFBFS 可运用到其他情形，需要设计更多实验。我们修改$n=24$，作业簇为18,19,20的示例，对于$f = 5$将其改为$f_j=5$；作业簇为15,16,17的示例，对于$f = 6$将其改为$f_j=6$，结果汇总于\reft{tab:n=24compare}，
+\begin{table}[h]
+  \centering\xiaowu
+  \caption{对于$n=24$时不同产品簇的3种启发式方法的比较}
+    \begin{tabular}{ccccccccccc}
+    \toprule
+    \multirow{2}[4]{*}{$f$} & \multirow{2}[4]{*}{$d_j$} & \multirow{2}[4]{*}{LB} & \multicolumn{3}{c}{目标函数值 (Z)} & \multicolumn{3}{c}{RER (\%)} & \multicolumn{2}{c}{RIR (\%)} \\
+    \cline{4-11}
+          &       &       & (1) EDD & (2) FBEDD & (3) RFBFS & $\frac{(1) - LB}{LB}$ & $\frac{(2) - LB}{LB}$ & $\frac{(3) - LB}{LB}$ &$\frac{(1) - (3)}{(3)}$ & $\frac{(2) - (3)}{(3)}$\\
+          \midrule
+    \multirow{3}[1]{*}{4} & T     & 743   & 1017  & 824   & 769   & 36.77 & 10.92 & 3.48  & 32.17 & 7.19 \\
+          & N     & 716   & 973   & 811   & 753   & 35.95 & 13.3  & 5.14  & 29.31 & 7.76 \\
+          & L     & 701   & 957   & 811   & 753   & 36.59 & 15.78 & 7.42  & 27.15 & 7.78 \\[3pt]
+    \multirow{3}[0]{*}{5} & T     & 740   & 1040  & 844   & 780   & 40.48 & 14    & 5.34  & 33.36 & 8.22 \\
+          & N     & 714   & 985   & 819   & 760   & 37.93 & 14.71 & 6.3   & 29.76 & 7.92 \\
+          & L     & 698   & 967   & 813   & 756   & 38.55 & 16.58 & 8.38  & 27.84 & 7.56 \\[3pt]
+    \multirow{3}[1]{*}{6} & T     & 737   & 1057  & 855   & 787   & 43.49 & 16.13 & 6.85  & 34.29 & 8.68 \\
+          & N     & 713   & 1000  & 829   & 769   & 40.19 & 16.31 & 7.81  & 30.04 & 7.88 \\
+          & L     & 696   & 978   & 821   & 762   & 40.53 & 18.02 & 9.54  & 28.29 & 7.74 \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:n=24compare}
+\end{table}
+可以看到，EDD 和FBEDD 求解的平均RER 分别为$35.95\% - 43.49\%$和$10.92\% - 18.02\%$，而RFBFS 为$3.48\% - 9.54\%$。同时，可以发现RFBFS 的平均RIR 为$7.19\% - 8.68\%$，比FBEDD($27.15\% - 34.29\%$)高，也比EDD 高。
+由此可得，RFBFS 的在求解质量、评测改善上表现优于EDD 和FBEDD，而且两者皆随作业簇的数量增加而轻微提高。
+\ksection{实际表现评估}
+为了进一步验证所提调度方法的运行情况，我们根据2.5节所提的3个问题提供了3个运行标准，包括短缺时间、流程时间和准时完成率。
+我们收集了从2009年1月到6月的车间一线数据，并比较了他们使用所提方法前后的运行情况，结果见\reft{tab:performancemeasure}和\reff{fig:performancemeasures}(横坐标皆为周期)，
+\begin{table}[h]
+  \centering\xiaowu
+  \caption{车间运行测评}
+    \begin{tabular}{ccccc}
+    \toprule
+    周期 (月) & 作业数量  & 平均短缺时间 (h) & 平均流程时间 (h) & 准时完成率 \\
+    \midrule
+    0     & 24    & 2.67  & 228   & 0.15 \\
+    1     & 12    & 1.17  & 128   & 0.5 \\
+    2     & 12    & 1     & 121   & 0.6 \\
+    3     & 16    & 0.63  & 160   & 0.65 \\
+    4     & 16    & 0.75  & 158   & 0.78 \\
+    5     & 24    & 0.75  & 194   & 0.82 \\
+    6     & 24    & 0.71  & 188   & 0.86 \\
+    \bottomrule
+    \end{tabular}
+  \label{tab:performancemeasure}
+\end{table}\vspace{-0.8cm}
+\begin{figure}[h]
+\begin{floatrow}
+  \subfloat[平均短缺时间(h) \label{fig:starvation}]{\centering\includegraphics[width=5cm,height=2cm]{starvationtime.jpg}}
+  \subfloat[平均流程时间(h) \label{fig:flow}]      {\centering\includegraphics[width=5cm,height=2cm,trim = 30 0 0 0]{flowtime.jpg}}
+  \subfloat[准时完成率\label{fig:ontime}]          {\centering\includegraphics[width=5cm,height=2cm,trim = -20 0 0 0]{ontimerate.jpg}}
+  \caption{车间运行评估\label{fig:performancemeasures}}
+  \end{floatrow}
+\end{figure}
+其中周期0表示使用方法前的测量值。可以发现用了批量处理后短缺时间显著减少，同时，用了作业划分和簇调度后，流程时间和准时完成率显著提高。

@@ -74,8 +74,8 @@
 \floatsetup[table]{capposition=top}
 \RequirePackage{longtable}                      % 支持跨页的表格。
 \RequirePackage{tabularx}                       % 自动设置表格的列宽
-
-\RequirePackage{subfigure}                      % 支持子图 %centerlast 设置最后一行是否居中
+\RequirePackage{subfig}
+%\RequirePackage{subfigure}                      % 支持子图 %centerlast 设置最后一行是否居中
 %\RequirePackage[subfigure]{ccaption}            % 支持子图的中文标题
 \RequirePackage{caption}
 
