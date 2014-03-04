@@ -86,3 +86,123 @@ $d_j:$ 任务$j$的工期\\
 类似的，活动2占用2个工作站4的资源，其中1个来自邻接工作站3，另一个来自邻接工作站5。
 因此，工作站1,3,5将被邻接约束所阻塞，不能和工作站2,4同时工作。
 然而，任何使用工作站6,7,8的活动可以在处理活动1,2时同时进行。
+
+进一步，整个调度周期可表示为多重时间周期$t = 1,...,T$，其中$T$表示每架飞机的生产周期。新增的参数模型如下：\\[3pt]
+\indent $J:$ 活动数；
+
+$T:$ 时间周期(时域)数；
+
+$K:$ 夹具中的工作站数；
+
+$W:$ 装配团队类型数；
+
+$j:$ 活动，$j = 1,...,J$；
+
+$t:$ 时间，$t = 1,...,T$；
+
+$k:$ 资源类型，对应于各夹具的工作站，$k = 1,...,K$；
+
+$w:$ 装配团队类型，$w = 1,...,W$；
+
+$c_{jk}:$ 需要执行活动$j$的资源类型$k$的数量。注意$c_{jk} = 0$说明活动$j$没有在工作站$k$进行装配；
+
+$C_k:$ 资源类型$k$的可用数量；
+
+$p_j:$ 活动$j$的持续时间；
+
+$n_{jw}:$ 需要执行活动$j$的类型$w$的工人数量；
+
+$v_w:$ 装配队伍类型$w$的单位工人成本。
+
+此外，对于每个活动对$(h,j)$，其中$h\neq j$，需要定义下面集合：
+\begin{numcases}{}
+H = \left\{(h,j)\mid\text{活动$h$先于活动$j$}\right\}\notag\\
+G = \left\{(j)\mid\text{活动$j$在夹具上处理过，无论是哪个工作站}\right\}\notag
+\end{numcases}
+
+该模型的决策变量定义如下：
+\begin{numcases}{x_{jt} = }
+1 \qquad \text{如果活动$j$在时间$t$完成}\notag\\
+0 \qquad \text{其他情况}\notag
+\end{numcases}
+
+$a_w:$ 类型$w$的资源需求量。特别的，由于模型用于求解阶段2，$W=2$，并且
+\begin{center}
+$a_1:$ 夹具内的工人需求量
+
+$a_2:$ 工作台的工人需求量
+\end{center}
+如此一来，阶段2的数学模型如下：
+\begin{align}
+&\label{equb:11} \min \quad \sum_{w=1}^W v_wa_w\\
+&\label{equb:12} \sum_{t=1}^T x_{jt} = 1,\qquad j = 1,...,J\\
+&\label{equb:13} \sum_{t = r_h + p_h}^{d_h}t\cdot x_{ht}\leqslant \sum_{t = r_h + p_h}^{d_j}(t - p_j)x_{jt},\qquad \forall (h,j) \in H\\
+&\label{equb:14} \sum_{j\in G}\sum_{b=t}^{\min\{t + p_j,T\}}c_{jk}x_{jb} \leqslant C_k,\qquad k = 1,...,K,\ t = 1,...,T\\
+&\label{equb:15} \sum_{j=1}^J\sum_{b=t}^{\min\{t + p_j,T\}}n_{jw}x_{jb} \leqslant a_w,\qquad w = 1,...,W,\ t = 1,...,T\\
+&\label{equb:16} x_{jt}\in \{0,1\},\ a_w\in Z^+,\ j = 1,...,J,\ t = 1,...,T,\ w = 1,...,W
+\end{align}
+在该模型中，目标函数(\ref{equb:11})最小化总人工成本，约束\eqref{equb:12}确保了每一个活动在水平时域中只调度过1次，约束\eqref{equb:13}确保各活动的先后关系，约束\eqref{equb:14}确保各资源的使用总和不超过其可利用值，\eqref{equb:15}确保各周期内的活动有充足的人工，\eqref{equb:16}参考决策变量的定义域。
+
+注意每个周期$t$，约束\eqref{equb:14}和(\ref{equb:15})的左侧考虑了所有活动$j$在周期$t$前开始，并在$t$完成，即在区间$[t,t+p_j-1]$内完成，如\reff{fig:notinparallelt}所示。
+\begin{figure}[h]
+\centering\caption{在不平行的持续时间$t$内的活动\label{fig:notinparallelt}}
+\includegraphics[width=8cm]{activitiesnotinparallel}
+\end{figure}
+如果在某个活动没有在周期$t$内处理，如$j'$和$j''$，那么它们不用在\eqref{equb:15}和(\ref{equb:15})的左边考虑。
+
+需要考虑以下参数：\\[3pt]
+\indent $EF_j:$ 活动$j$的最早可完成时间，表示在不考虑资源约束的先后关系；
+
+$LF_j$活动$j$的最迟完成时间，不考虑项目延迟、先后关系和资源限制。
+
+为防止某些活动的提交时间大于0，或者工期小于制造期(即防止与活动相关多架飞机，并且工期不同)，我们需要定义：\\[3pt]
+\indent $r_j:$ 活动$j$的可开始处理时间($r_j\geqslant EF_j - p_j$)；
+
+$d_j:$ 活动$j$的工期($d_j \leqslant LF_j$)。
+
+所以上述模型可以简单地通过删除\eqref{equb:13}并增加下面的约束进行修改：
+\begin{align}
+&\label{equb:17}\sum_{t = \max\{EF_h,r_h + p_h\}}^{\min\{LF_h - 1,d_h - 1\}}t\cdot x_{ht}\leqslant \sum_{t =  \max\{EF_h,r_h + p_h\}}^{\min\{LF_h - 1,d_h - 1\}}(t - p_j)x_{jt} \qquad \forall (h,j)\in H\\
+&\label{equb:18}x_{jt} = 0 \qquad t = 1,...,EF_j - 2,\ t = LF_j +1 ,...,T,\ j =1,..,J
+\end{align}
+其中，\eqref{equb:17}确保了所有活动的先后关系，约束\eqref{equb:18}确保了活动在其提交期和工期中被调度。这样可以在模型求解前消除已知值得变量，提高计算速度。
+
+\eqref{equb:11} -- (\ref{equb:16})可以在离散时间内简单地改编成\eqref{equb:1} -- (\ref{equb:9})。由于在阶段1对劳动力没有限制，\eqref{equb:15}可以去除，目标函数(\ref{equb:11})可以写作：
+\[ \centering\min\sum_{t=1}^T t\cdot x_{jt}
+\]
+其中$J$是先后关系网中的最后一个活动，然而，该模型并不完善，因为连续时间模型可以提供更短的计算运行时间。
+
+\ksection{阶段3}
+在阶段3，工人将分成两组，可在夹具内和工作台内操作的非专位组和只能在在工作台操作的专位组。此外，如阶段2模型所用到的参数，此处亦需考虑参数如下：\\[3pt]
+\indent $s_{jw}:$ 需要在夹具内操作的活动$j$所需的$w$型资源数量；
+
+$v_{jw}:$ 需要在工作台内操作的活动$j$所需的$w$型资源数量。
+
+本文所研究的$j$操作问题只由单工人完成，因此$s_{jw}$和$v_{jw}$都等于1。阶段3的决策变量如下：
+\begin{numcases}{x_{jt} = }
+1 \qquad \text{如果活动$j$恰好在时间$t$完成}\notag\\
+0 \qquad \text{其他情况}\notag
+\end{numcases}\\[3pt]
+\indent $a_w:$ 队伍$w$所需的工人数，在阶段3($W = 2$)：
+
+$a_1:$ 可以在工作台和夹具内操作的工人需求量；
+
+$a_2:$ 只能在工作台操作而工人需求量。
+
+需要注意的是，约束\eqref{equb:23}和(\ref{equb:24})引入了松弛变量$y_t$，表示在时间$t$可用于工作台的专位同人队伍冗余，阶段3的数学模型如下：
+\begin{align}
+&\label{equb:19} \min \qquad \sum_{w=1}^{W}v_wa_w\\
+&\label{equb:20} \sum_{t = 1}^T x_{jt}  = 1,\quad j = 1,...,J\\
+&\label{equb:21} \sum_{t = EF_h}^{LF_h -1}t\cdot x_{ht}\leqslant \sum_{t = EF_j}^{LF_j - 1}(t - p_j)x_{jt},\quad \forall (h,j) \in H\\
+&\label{equb:22} \sum_{j\in G}\sum_{b=t}^{\min\{t + p_j-1,T\}}c_{jk}x_{jb}\leqslant C_k,\quad k = 1,...,K,\ t = 1,...,T\\
+&\label{equb:23} \sum_{j\in G}\sum_{b=t}^{\min\{t + p_j-1,T\}}s_{jw}x_{jb} = a_w - y_t,\quad W = 1,\ t = 1,...,T\\
+&\label{equb:24} \sum_{j\in J\backslash G}\sum_{b=t}^{\min\{t + p_j-1,T\}}v_{jw}x_{jb} = a_w + y_t,\quad W = 2,\ t = 1,...,T\\
+&\label{equb:25} x_{jt} = 0,\qquad t = 1,...,EF_j - 2,\ t = LF_j +1 ,...,T,\ j =1,..,J\\
+&\label{equb:26} x_{jt}\in \{0,1\},\ a_w \in Z^+,\ y_t \geqslant 0,\ t = 1,...,T,\ w = 1,...,W
+\end{align}
+目标函数(\ref{equb:19})最小化可用工人的总成本，\eqref{equb:20}保证了所有活动只被调度一次，\eqref{equb:21}保证了所有活动遵循其先后关系，\eqref{equb:23}确保了夹具内工人数量足够，\eqref{equb:24}确保了工作台内工人数量足够，\eqref{equb:25}修正了已知变量，\eqref{equb:26}参考变量的定义域。
+注意在约束\eqref{equb:23}和(\ref{equb:24})中，$x_{jb},a_w,s_{jw},v_{jw}$为整数，保证了$y_t$的完整性。因此，\eqref{equb:26}中强调$y_t$是非负实数是必要的。
+
+\ksection{阶段4}
+在阶段4，装配组的所有工人可以在夹具和工作台内操作。由于工人间没有技能区别，为阶段2建立的数学模型可以用于这个阶段，在\eqref{equb:11} -- (\ref{equb:16})只要考虑一类工人($W = 1$)即可。这个阶段是学习曲线的最后阶段，所有工作都是多任务的。
+在这个阶段，需要考虑较小增长的生产率，有着较大的影响。最优化队伍规模要比前阶段更为重要，因为这个阶段大部分飞机已完工。
