@@ -5,7 +5,6 @@
  \phantomsection
  \addcontentsline{toc}{#1}{#2}
 }
-\AddEverypageHook{\special{pdf: put @thispage << /Group << /S /Transparency /I true /CS /DeviceRGB >> >>}}
 \begin{document}
 
 \input{preface/cover}      % 封面
@@ -39,6 +38,6 @@
 %%%%%%%%%% 附录 %%%%%%%%%%
 %\appendix
 \input{landt/translation}
-%\input{body/landt/original}
+\input{landt/original}
 
 \end{document}                                  % 结束全文
