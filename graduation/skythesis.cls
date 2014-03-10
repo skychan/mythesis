@@ -275,8 +275,8 @@
   \titlespacing{\subsection}{0pt}{0em}{0pt}
 \fi
 %%% 4级标题 DEPRECATED {
-\titleformat{\subsubsection}[hang]{\onequarterspacing \xiaosi\songti\bfseries}{\thesubsubsection}{1em}{}{}
-\titlespacing{\subsubsection}{0pt}{-1em}{0pt}
+\titleformat{\subsubsection}[hang]{\onequarterspacing \xiaosi\heiti}{\thesubsubsection}{1em}{}{}
+\titlespacing{\subsubsection}{0pt}{0em}{0pt}
 \titlecontents{subsubsection}[1.0ex]
         {}
         {\wuhao\hspace{3em}\thecontentslabel\hspace{1em}}
