@@ -49,7 +49,9 @@
 \RequirePackage{titlesec}                       % 控制标题的宏包
 \RequirePackage{titletoc}                       % 控制目录的宏包
 \RequirePackage{fancyhdr}                       % fancyhdr宏包 支持页眉和页脚的相关定义
-\RequirePackage[slantfont, CJKnumber, boldfont]{xeCJK}    %xeCJK中文粗体、斜体、数字支持，并提供将阿拉伯数字转换成中文数字的命令
+\RequirePackage[fntef]{ctexcap}
+%\RequirePackage{CJKnumber}
+%\RequirePackage[slantfont, CJKnumber, boldfont]{xeCJK}    %xeCJK中文粗体、斜体、数字支持，并提供将阿拉伯数字转换成中文数字的命令
 \RequirePackage{color}                          % 支持彩色
 %\RequirePackage[fleqn]{amsmath}
 \RequirePackage{amsmath,cases,amssymb}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
@@ -86,11 +88,11 @@
 \RequirePackage{txfonts}                        % 字体宏包
 \RequirePackage{bm}                             % 处理数学公式中的黑斜体的宏包
 \RequirePackage[amsmath,thmmarks,hyperref]{ntheorem}  % 定理类环境宏包，其中 amsmath 选项用来兼容 AMS LaTeX 的宏包
-\RequirePackage{CJKnumb}                       % 提供将阿拉伯数字转换成中文数字的命令
+%\RequirePackage{CJKnumb}                       % 提供将阿拉伯数字转换成中文数字的命令
 \RequirePackage{indentfirst}                    % 首行缩进宏包
 %\RequirePackage{CJKutf8}                       % 用在UTF8编码环境下，它可以自动调用CJK，同时针对UTF8编码作了设置。
 %\RequirePackage{hypbmsec}                      % 用来控制书签中标题显示内容
-\RequirePackage{CJKfntef}  %下划线宏包
+%\RequirePackage{CJKfntef}  %下划线宏包
 %\RequirePackage{microtype} %调整字距
 %\RequirePackage{times}
 % see issue #27
@@ -107,7 +109,7 @@
 %\ExplSyntaxOff
 \RequirePackage{fontspec,xunicode,xltxtra}      % XeLaTeX相关字体字库 
 %如果您的pdf制作中文书签有乱码使用如下命令，就可以解决了
-
+%\RequirePackage{ccmap}
 \RequirePackage{pdfpages}  %插入pdf文档
 \RequirePackage[xetex, unicode,
     pdfstartview=FitH,
@@ -153,25 +155,25 @@
 \setsansfont{Arial}
 \setmonofont{Courier New}
 
-\setCJKmainfont{SimSun}
-\setCJKsansfont{SimHei}
-\setCJKmonofont{SimSun}
+%\setCJKmainfont{SimSun}
+%\setCJKsansfont{SimHei}
+%\setCJKmonofont{SimSun}
 \punctstyle{hangmobanjiao}
 
-\setCJKfamilyfont{SongTi}{SimSun} % 更好印刷效果可换成 Adobe Heiti Std
-\DeclareRobustCommand{\songti}{\CJKfamily{SongTi}}     % 宋体
+%\setCJKfamilyfont{SongTi}{SimSun} % 更好印刷效果可换成 Adobe Heiti Std
+%\DeclareRobustCommand{\songti}{\CJKfamily{SongTi}}     % 宋体
 \setCJKfamilyfont{FangSong}{FangSong}
 \DeclareRobustCommand{\fangsong}{\CJKfamily{FangSong}} % 仿宋
-\setCJKfamilyfont{KaiShu}{KaiTi}
-\DeclareRobustCommand{\kaiti}{\CJKfamily{KaiShu}}      % 楷体
-\setCJKfamilyfont{HeiTi}{SimHei}
-\DeclareRobustCommand{\heiti}{\CJKfamily{HeiTi}}       % 黑体
-\setCJKfamilyfont{LiShu}{LiSu}
-\DeclareRobustCommand{\lishu}{\CJKfamily{LiShu}}       % 隶书
-\setCJKfamilyfont{YouYuan}{YouYuan}
-\DeclareRobustCommand{\youti}{\CJKfamily{YouYuan}}     % 幼圆
-\setCJKfamilyfont{STFangsong}{STFangsong}
-\DeclareRobustCommand{\stfangsong}{\CJKfamily{STFangsong}} % ST仿宋
+%\setCJKfamilyfont{KaiShu}{KaiTi}
+%\DeclareRobustCommand{\kaiti}{\CJKfamily{KaiShu}}      % 楷体
+%\setCJKfamilyfont{HeiTi}{SimHei}
+%\DeclareRobustCommand{\heiti}{\CJKfamily{HeiTi}}       % 黑体
+%\setCJKfamilyfont{LiShu}{LiSu}
+%\DeclareRobustCommand{\lishu}{\CJKfamily{LiShu}}       % 隶书
+%\setCJKfamilyfont{YouYuan}{YouYuan}
+%\DeclareRobustCommand{\youti}{\CJKfamily{YouYuan}}     % 幼圆
+%\setCJKfamilyfont{STFangsong}{STFangsong}
+%\DeclareRobustCommand{\stfangsong}{\CJKfamily{STFangsong}} % ST仿宋
 \setCJKfamilyfont{STZhongsong}{STZhongsong}
 \DeclareRobustCommand{\sfzhongsong}{\CJKfamily{STZhongsong}} % ST中宋
 \setCJKfamilyfont{STXingkai}{STXingkai}
@@ -219,8 +221,8 @@
 \setcounter{secnumdepth}{3} % 自动编号最大深度 到subsubsection
 \setcounter{tocdepth}{2} % 目录显示深度到 subsection
 
-\DeclareCaptionFont{songti}{\songti\xiaowu}
-\captionsetup{labelsep=quad,font=songti}
+\DeclareCaptionFont{songti}{\xiaowu}
+\captionsetup{labelsep=quad}
 
 %%%%%%%%%%%%%%%%%%%%
 %% 各级标题
@@ -229,26 +231,27 @@
 %% \titlecontents ToC
 %% http://mirror.bjtu.edu.cn/CTAN/macros/latex/contrib/titlesec/titlesec.pdf
 %%%%%%%%%%%%%%%%%%%%
-
+%\CTEXsetup[name = {第,章},number={\chinese{chapter}}]{chapter}
+\CTEXsetup[format = {\zihao{3}\bfseries}]{section}
 %%% 1级标题，二号，黑体，居中，加粗，段前段后18磅，1.25倍行距 {
 %\titleclass{\chapter}{straight}
-\titleformat{\chapter}[block]{\onequarterspacing  \erhao\heiti\filcenter\bfseries}{第\CJKnumber{\thechapter}章}{1em}{}{}
+\titleformat{\chapter}[block]{\onequarterspacing\zihao{2}\heiti\filcenter\bfseries}{第\chinese{chapter}章}{1em}{}{}
 \titlespacing{\chapter}{0pt}{-10pt}{30pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{chapter}[0.1ex]
         {}
-        {\wuhao\bfseries{第\CJKnumber{\thecontentslabel{}}章\hspace{1ex}}}
+        {\wuhao\bfseries{\thecontentslabel\hspace{1ex}}}
         {\wuhao\bfseries}
         {\wuhao\titlerule*[3pt]{.}\contentspage}
 %%% }
 \ifskypaper
    \titleclass{\chapter}{straight}  %%不换页！！
-   \titleformat{\chapter}[block]{\onequarterspacing  \sihao\heiti\bf}{\thechapter}{1ex}{}{}
+   \titleformat{\chapter}[block]{\onequarterspacing\sihao\heiti\bfseries}{\thechapter}{1ex}{}{}
 \titlespacing{\chapter}{0pt}{5pt}{5pt}
 \fi
 
 
 %%% 2级标题，三号，宋体，加粗，段前12磅，段后6磅，1.25倍行距 {
-\titleformat{\section}[hang]{\onequarterspacing \sanhao\songti\bfseries}{\thesection}{1em}{}{}
+\titleformat{\section}[hang]{\onequarterspacing \sanhao \bfseries}{\thesection}{1em}{}{}
 \titlespacing{\section}{0pt}{1em}{1em} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{section}[1.0ex]
         {}
@@ -262,7 +265,7 @@
 \fi
 
 %%% 3级标题，四号，宋体，加粗，段前６磅，1.5倍行距，建议不使用四级或更高级别目录、标题 {
-\titleformat{\subsection}[hang]{\onequarterspacing \sihao\songti\bfseries}{\thesubsection}{1em}{}{}
+\titleformat{\subsection}[hang]{\onequarterspacing \sihao \bfseries}{\thesubsection}{1em}{}{}
 \titlespacing{\subsection}{0pt}{0.5em}{0pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{subsection}[1.0ex]
         {}
@@ -293,7 +296,7 @@
 
 \newenvironment{abstractc}
 {
-    \titleformat{\chapter}[block]{ \filcenter \erhao\songti\bf}{}{0ex}{}{}
+    \titleformat{\chapter}[block]{ \filcenter \erhao \bf}{}{0ex}{}{}
     \setlength{\parindent}{2.9em}
     \titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
     \ifskypaper
@@ -374,11 +377,11 @@
 \setlength{\headheight}{12pt}
 \fancypagestyle{plain}{
   \fancyhf{}
-  \fancyhead[C]{\xiaowu\songti \headtitle}
+  \fancyhead[C]{\xiaowu  \headtitle}
   \fancyfoot[C]{\xiaowu\thepage}
 }
 \fancyhf{}
-\fancyhead[C]{\xiaowu\songti \headtitle}
+\fancyhead[C]{\xiaowu  \headtitle}
 \fancyfoot[C]{\xiaowu\thepage}
 %%% }
 
