@@ -232,10 +232,10 @@
 %% http://mirror.bjtu.edu.cn/CTAN/macros/latex/contrib/titlesec/titlesec.pdf
 %%%%%%%%%%%%%%%%%%%%
 %\CTEXsetup[name = {第,章},number={\chinese{chapter}}]{chapter}
-\CTEXsetup[format = {\zihao{3}\bfseries}]{section}
+\CTEXsetup[format = {\sanhao\bfseries}]{section}
 %%% 1级标题，二号，黑体，居中，加粗，段前段后18磅，1.25倍行距 {
 %\titleclass{\chapter}{straight}
-\titleformat{\chapter}[block]{\onequarterspacing\zihao{2}\heiti\filcenter\bfseries}{第\chinese{chapter}章}{1em}{}{}
+\titleformat{\chapter}[block]{\onequarterspacing\erhao\heiti\filcenter\bfseries}{第\chinese{chapter}章}{1em}{}{}
 \titlespacing{\chapter}{0pt}{-10pt}{30pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{chapter}[0.1ex]
         {}
@@ -251,7 +251,7 @@
 
 
 %%% 2级标题，三号，宋体，加粗，段前12磅，段后6磅，1.25倍行距 {
-\titleformat{\section}[hang]{\onequarterspacing \sanhao \bfseries}{\thesection}{1em}{}{}
+\titleformat{\section}[hang]{\onequarterspacing\sanhao\bfseries}{\thesection}{1em}{}{}
 \titlespacing{\section}{0pt}{1em}{1em} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{section}[1.0ex]
         {}
@@ -260,12 +260,13 @@
         {\wuhao\titlerule*[3pt]{.}\contentspage}
 %%% }
 \ifskypaper
-  \titleformat{\section}[hang]{\onequarterspacing  \xiaosi\heiti}{\thesection}{1em}{}{}
+  %\titleformat{\section}[hang]{\onequarterspacing\xiaosi\heiti}{\thesection}{1em}{}{}
+  \CTEXsetup[format = {\xiaosi\heiti}]{section}
   \titlespacing{\section}{0pt}{0em}{0em}
 \fi
 
 %%% 3级标题，四号，宋体，加粗，段前６磅，1.5倍行距，建议不使用四级或更高级别目录、标题 {
-\titleformat{\subsection}[hang]{\onequarterspacing \sihao \bfseries}{\thesubsection}{1em}{}{}
+\titleformat{\subsection}[hang]{\onequarterspacing\sihao\bfseries}{\thesubsection}{1em}{}{}
 \titlespacing{\subsection}{0pt}{0.5em}{0pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{subsection}[1.0ex]
         {}
@@ -274,11 +275,11 @@
         {\wuhao\titlerule*[3pt]{.}\contentspage}
 %%% }
 \ifskypaper
-  \titleformat{\subsection}[hang]{\onequarterspacing  \wuhao\heiti}{\thesubsection}{1em}{}{}
+  \titleformat{\subsection}[hang]{\onequarterspacing\wuhao\heiti}{\thesubsection}{1em}{}{}
   \titlespacing{\subsection}{0pt}{0em}{0pt}
 \fi
 %%% 4级标题 DEPRECATED {
-\titleformat{\subsubsection}[hang]{\onequarterspacing \xiaosi\heiti}{\thesubsubsection}{1em}{}{}
+\titleformat{\subsubsection}[hang]{\onequarterspacing\xiaosi\heiti}{\thesubsubsection}{1em}{}{}
 \titlespacing{\subsubsection}{0pt}{0em}{0pt}
 \titlecontents{subsubsection}[1.0ex]
         {}
@@ -296,7 +297,7 @@
 
 \newenvironment{abstractc}
 {
-    \titleformat{\chapter}[block]{ \filcenter \erhao \bf}{}{0ex}{}{}
+    \titleformat{\chapter}[block]{ \filcenter\erhao\bf}{}{0ex}{}{}
     \setlength{\parindent}{2.9em}
     \titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
     \ifskypaper
@@ -315,7 +316,7 @@
 %%% English Abstract and Keywords {
 \newenvironment{abstracte}
 {
-    \titleformat{\chapter}[block]{ \filcenter \sanhao}{}{1ex}{}{}
+    \titleformat{\chapter}[block]{\filcenter\sanhao}{}{1ex}{}{}
     \titlespacing{\chapter}{0pt}{3mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
     \chapter[Abstract]{\bf\Skytitlec}
 }{}
@@ -326,26 +327,14 @@
 }
 %%% }
 
-\newenvironment{transcript}{
-%  \setcounter{tocdepth}{-1} 
-  \wuhao\onequarterspacing
-  \begingroup
-  \let\cleardoublepage\relax %
-  \titleclass{\chapter}{straight}  %%不换页！！
-  \titleformat{\chapter}[block]{\singlespacing  \sihao\heiti\bf}{\thechapter}{1ex}{}{}
-  \titlespacing{\chapter}{0pt}{2em}{1em}
-  \titleformat{\section}[hang]{\singlespacing \xiaosi\heiti}{\thesection}{1em}{}{}
-  \titlespacing{\section}{0pt}{0.8em}{0.1em}
-  \titleformat{\subsection}[hang]{\singlespacing  \wuhao\heiti}{\thesubsection}{1em}{}{}
-  \titlespacing{\subsection}{0pt}{0.5em}{0.5em}
-}{\endgroup}
+
  
 
 \newenvironment{Abstract}{
    \newpage
    \setcounter{chapter}{0}
    \setstretch{1.2}
-   \titleformat{\chapter}[block]{\singlespacing \filcenter \sanhao\bf}{}{1ex}{}{}
+   \titleformat{\chapter}[block]{\singlespacing\filcenter\sanhao\bf}{}{1ex}{}{}
     \titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
 }{}
 \newcommand\keywords[1]{
