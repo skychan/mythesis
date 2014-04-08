@@ -231,12 +231,13 @@
 %% \titlecontents ToC
 %% http://mirror.bjtu.edu.cn/CTAN/macros/latex/contrib/titlesec/titlesec.pdf
 %%%%%%%%%%%%%%%%%%%%
-%\CTEXsetup[name = {第,章},number={\chinese{chapter}}]{chapter}
-\CTEXsetup[format = {\sanhao\bfseries}]{section}
+
+
 %%% 1级标题，二号，黑体，居中，加粗，段前段后18磅，1.25倍行距 {
 %\titleclass{\chapter}{straight}
-\titleformat{\chapter}[block]{\onequarterspacing\erhao\heiti\filcenter\bfseries}{第\chinese{chapter}章}{1em}{}{}
-\titlespacing{\chapter}{0pt}{-10pt}{30pt} % XXX 调整行距后@mckelvin 人工调的
+%\titleformat{\chapter}[block]{\onequarterspacing\erhao\heiti\filcenter\bfseries}{第\chinese{chapter}章}{1em}{}{}
+\CTEXsetup[name = {第,章},number={\chinese{chapter}},format = {\zihao{2}\bf\heiti\centering},nameformat = {\bf\heiti\zihao{2}},titleformat = {\bf\heiti\zihao{2}},numberformat = {\bf\heiti\zihao{2}},beforeskip = {-10pt},afterskip = 1em]{chapter}
+%\titlespacing{\chapter}{0pt}{-10pt}{30pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{chapter}[0.1ex]
         {}
         {\wuhao\bfseries{\thecontentslabel\hspace{1ex}}}
@@ -251,7 +252,8 @@
 
 
 %%% 2级标题，三号，宋体，加粗，段前12磅，段后6磅，1.25倍行距 {
-\titleformat{\section}[hang]{\onequarterspacing\sanhao\bfseries}{\thesection}{1em}{}{}
+\CTEXsetup[format = {\songti\sanhao\bfseries}]{section}
+%\titleformat{\section}[hang]{\onequarterspacing\sanhao\bfseries}{\thesection}{1em}{}{}
 \titlespacing{\section}{0pt}{1em}{1em} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{section}[1.0ex]
         {}
@@ -266,7 +268,7 @@
 \fi
 
 %%% 3级标题，四号，宋体，加粗，段前６磅，1.5倍行距，建议不使用四级或更高级别目录、标题 {
-\titleformat{\subsection}[hang]{\onequarterspacing\sihao\bfseries}{\thesubsection}{1em}{}{}
+\titleformat{\subsection}[hang]{\onequarterspacing\songti\sihao\bfseries}{\thesubsection}{1em}{}{}
 \titlespacing{\subsection}{0pt}{0.5em}{0pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{subsection}[1.0ex]
         {}
