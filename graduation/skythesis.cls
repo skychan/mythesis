@@ -155,7 +155,7 @@
 \setsansfont{Arial}
 \setmonofont{Courier New}
 
-%\setCJKmainfont{SimSun}
+%\setCJKmainfont{Adobe 宋体 Std}
 %\setCJKsansfont{SimHei}
 %\setCJKmonofont{SimSun}
 \punctstyle{hangmobanjiao}
@@ -246,8 +246,7 @@
 %%% }
 \ifskypaper
    %\titleclass{\chapter}{straight}  %%不换页！！
-   \CTEXsetup[name={,},format={\zihao{4}\bf\heiti},nameformat={\zihao{4}\bf\heiti},titleformat={\zihao{4}\bf\heiti},numberformat={\zihao{4}\bf\heiti},number = {\arabic{chapter}}]{chapter}
-   %\CTEXsetup[name = {第,章},number={\chinese{chapter}},format = {\zihao{2}\bf\heiti\centering},nameformat = {\bf\heiti\zihao{2}},titleformat = {\bf\heiti\zihao{2}},numberformat = {\bf\heiti\zihao{2}},beforeskip = {-10pt},afterskip = 1em]{chapter}
+   \CTEXsetup[name={,},format={\zihao{4}\bf\heiti},nameformat={\zihao{4}\bf\heiti},titleformat={\zihao{4}\bf\heiti},numberformat={\zihao{4}\bf\heiti},number = {\arabic{chapter}},beforeskip=5pt,afterskip=10pt]{chapter}
    %\titleformat{\chapter}[block]{\onequarterspacing\sihao\heiti\bfseries}{\thechapter}{1ex}{}{}
 %\titlespacing{\chapter}{0pt}{5pt}{5pt}
 \fi
@@ -302,7 +301,7 @@
 \newenvironment{abstractc}
 {
     %\titleformat{\chapter}[block]{ \filcenter\erhao\bf}{}{0ex}{}{}
-    \CTEXsetup[ format+= {\zihao{2}\centering\bf\songti}]{chapter}
+    \CTEXsetup[ number={},aftername={},name={,},format={\zihao{2}\centering\bf\songti},nameformat={\zihao{2}\centering\bf\songti},titleformat={\zihao{2}\centering\bf\songti},numberformat={\zihao{2}\centering\bf\songti}]{chapter}
     \setlength{\parindent}{2.9em}
     %\titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
     \ifskypaper
@@ -322,10 +321,11 @@
 \newenvironment{abstracte}
 {
     %\titleformat{\chapter}[block]{\filcenter\sanhao}{}{1ex}{}{}
-    \CTEXsetup[ format = {\zihao{2}\centering\bf}]{chapter}
+    \CTEXsetup[ number={},aftername={},name={,},format={\zihao{3}\centering\bf},nameformat={\zihao{3}\centering\bf},titleformat={\zihao{3}\centering\bf},numberformat={\zihao{3}\centering\bf}]{chapter}
     %\titlespacing{\chapter}{0pt}{3mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
     \chapter[Abstract]{\bf\Skytitlec}
-}{}
+
+}{\setcounter{chapter}{0}}
 \newcommand\keywordse[1]{\ifskythesis
 \vspace{1em}
 \fi \noindent%
@@ -337,12 +337,12 @@
  
 
 \newenvironment{Abstract}{
-   \newpage
-   \setcounter{chapter}{0}
+   \newpage   
    \setstretch{1.2}
+   \CTEXsetup[name={,},number={},format={\centering\songti\bfseries\zihao{3}},titleformat={\centering\songti\bfseries\zihao{3}},numberformat={\centering\songti\bfseries\zihao{3}},nameformat={\centering\songti\bfseries\zihao{3}},aftername={},beforeskip=-10pt,afterskip=0pt]{chapter}
    %\titleformat{\chapter}[block]{\singlespacing\filcenter\sanhao\bf}{}{1ex}{}{}
     %\titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
-}{}
+}{\setcounter{chapter}{0}}
 \newcommand\keywords[1]{
     \noindent%
     {\textbf{\sky@label@keywordsc}}{#1}%

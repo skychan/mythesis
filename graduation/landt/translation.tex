@@ -2,8 +2,8 @@
 % !TEX root = ..\Literature_Translation.tex
 %% 文献翻译中使用的标题
 \newcommand\kchapter[1]{\stepcounter{chapter}\chapter*{\the\value{chapter}#1}}
-\newcommand\ksection[1]{\vspace{-2.5em}\stepcounter{section}\section*{\xiaosi\the\value{chapter}.\the\value{section}#1}}
-\newcommand\ksubsection[1]{\vspace{-1.5em}\stepcounter{subsection}\subsection*{\wuhao\the\value{chapter}.\the\value{section}.\the\value{subsection}#1}}
+\newcommand\ksection[1]{\stepcounter{section}\section*{\xiaosi\the\value{chapter}.\the\value{section}#1}}
+\newcommand\ksubsection[1]{\stepcounter{subsection}\subsection*{\wuhao\the\value{chapter}.\the\value{section}.\the\value{subsection}#1}}
 
 %%文献翻译中需要的计数器
 \captionsetup{figurewithin=none,tablewithin=none}
@@ -18,19 +18,23 @@
 %  \setcounter{tocdepth}{-1} 
   \onequarterspacing
   \begingroup
-  \let\cleardoublepage\relax %
-  \titleclass{\chapter}{straight}  %%不换页！！
-  \titleformat{\chapter}[block]{\singlespacing\sihao\heiti\bf}{\thechapter}{1ex}{}{}
-  \titlespacing{\chapter}{0pt}{2em}{1em}
-  \titleformat{\section}[hang]{\singlespacing\xiaosi\heiti}{\thesection}{1em}{}{}
-  \titlespacing{\section}{0pt}{0.8em}{0.1em}
-  \titleformat{\subsection}[hang]{\singlespacing\wuhao\heiti}{\thesubsection}{1em}{}{}
-  \titlespacing{\subsection}{0pt}{0.5em}{0.5em}
+  \let\clearpage\relax %
+  \CTEXsetup[name={,},number=\arabic{chapter},format={\zihao{4}\heiti\bfseries},nameformat={\zihao{4}\heiti\bfseries},titleformat={\zihao{4}\heiti\bfseries},numberformat={\zihao{4}\heiti\bfseries},beforeskip=10pt,afterskip=10pt]{chapter}
+  \CTEXsetup[format={\zihao{-4}\heiti},nameformat={\zihao{-4}\heiti},titleformat={\zihao{-4}\heiti},numberformat={\zihao{-4}\heiti},beforeskip=0pt,afterskip=5pt]{section}
+  %\titleclass{\chapter}{straight}  %%不换页！！
+  %\titleformat{\chapter}[block]{\singlespacing\sihao\heiti\bfseries}{\thechapter}{1ex}{}{}
+  %\titlespacing{\chapter}{0pt}{2em}{1em}
+  %\titleformat{\section}[hang]{\singlespacing\xiaosi\heiti}{\thesection}{1em}{}{}
+  %\titlespacing{\section}{0pt}{0.8em}{0.1em}
+  %\titleformat{\subsection}[hang]{\singlespacing\wuhao\heiti}{\thesubsection}{1em}{}{}
+  %\titlespacing{\subsection}{0pt}{0.5em}{0.5em}
 }{\endgroup}
 \newpage
 \begin{transcript}
 	\kappendix[chapter]{文献翻译}
+
 	\input{landt/acasestudy}
+
 	\input{landt/aeronauticalindustry}
 \end{transcript}
 \clearpage
