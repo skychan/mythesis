@@ -11,3 +11,4 @@ del *.lof /s
 del *.lot /s
 del *.synctex.gz /s
 del *.synctex.gz(busy) /s
+del *.fdb_latexmk /s
