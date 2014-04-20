@@ -54,7 +54,8 @@
 %\RequirePackage[slantfont, CJKnumber, boldfont]{xeCJK}    %xeCJK中文粗体、斜体、数字支持，并提供将阿拉伯数字转换成中文数字的命令
 \RequirePackage{color}                          % 支持彩色
 %\RequirePackage[fleqn]{amsmath}
-\RequirePackage{amsmath,cases,amssymb}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
+\RequirePackage{amsmath,amssymb}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
+\RequirePackage{cases}
 \allowdisplaybreaks[2]
 \RequirePackage{amssymb}                        % 数学符号生成命令
 \RequirePackage{mathtools}
