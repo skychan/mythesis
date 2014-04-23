@@ -4,8 +4,20 @@
 上一章构建了多品种产品调度的数学模型，需要对其检验，而该模型求解是NP问题，需要设计相应算法来求解。
 \section{调度规则}
 
-\section{求解}
+\section{基本模型}
 
+\begin{figure}[h]
+\newcommand{\process}[1]{*++=[o][F]{\makebox[1.5em]{$#1$}}}
+\begin{equation*}
+\xymatrix{
+\process{p_{i,j_n}} \ar[r] \ar[d] & \process{p_j} \ar[d] \ar[r] & \cdots\ar[r] & \process{p_{n,j_m}} \ar[d]\\
+\process{p_i} \ar[r]\ar[d] & \process{p_{m,j_n}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{} \ar[d] \\
+\vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{}\ar[r]\ar[d] &\vdots \ar[d]\\
+\process{} \ar[r] & \process{} \ar[r] & \cdots\ar[r] & \process{} 
+}
+\end{equation*}
+\caption{haha}
+\end{figure}
 \subsection{初始解}
 
 \subsection{搜索}

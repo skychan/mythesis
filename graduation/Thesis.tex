@@ -3,7 +3,7 @@
 \documentclass[thesis]{skythesis}
 \graphicspath{{preface/figures/}{thesis/figures/}}  % 图路径
 \skip\footins = 5mm plus 4pt minus 2pt
-
+\usepackage[all,pdf]{xy}
 \begin{document}
 \include{preface/info}     % 个人信息
 \input{preface/cover}      % 封面
@@ -14,8 +14,8 @@
 %\begingroup % 在组内的chapter不换行
 %\let\clearpage\relax % chapter之后不换页
 
-\include{preface/absc}     % 中文摘要
-\include{preface/abse}     % English Abstract
+%\include{preface/absc}     % 中文摘要
+%\include{preface/abse}     % English Abstract
 {\pdfbookmark[0]{目~~录}{thesiscontent}
 \phantomsection
 \singlespacing\tableofcontents           % 中文目录
@@ -27,7 +27,7 @@
 \mainmatter
 \makeatletter
 %\include{body/intros}
-\input{thesis/intro}
+%\input{thesis/intro}
 \include{thesis/basicintro}
 \include{thesis/analysisandmodel}
 \include{thesis/algorithm}
@@ -41,7 +41,7 @@
 
 
 %%%%%%%%%% 参考文献 %%%%%%%%%%
-\bibliography{references/reference}
+%\bibliography{references/reference}
 %\nocite{*}   % 若将此命令屏蔽掉，则未引用的文献不会出现在文后的参考文献中。
 
 %%%%%%%%%% 致谢 %%%%%%%%%%
