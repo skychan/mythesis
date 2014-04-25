@@ -1,23 +1,47 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX root = ..\thesis.tex
 \chapter{算法设计}
-上一章构建了多品种产品调度的数学模型，需要对其检验，而该模型求解是NP问题，需要设计相应算法来求解。
-\section{调度规则}
+上一章构建了4个多品种产品调度的数学模型，需要对其检验，而这些模型求解是NP--Hard问题，需要设计相应算法来求解。在求解模型前，需要对订单(子单)处理时间计算，该问题也需通过算法设计求解。
+\section{处理时间函数}
+\eqref{equ:processing}为订单(子单)处理时间函数，由订单特点和作业数量确定，需要补充符号说明如下：\\[3pt]
+\begin{supertabular}{ll}
+$k$ & 作业标记，$k = 1,2,...,n_j$\\
+$m_j$ & 订单$j$的处理单元数量\\
+$i$ & 订单$j$的处理单元标记，$i = 1,2,...,m_j$\\
+$q_{k,i}$ & 作业$k$在处理单元$i$上的处理时间\\
+$c_{k,i}$ &作业$k$的在处理单元$i$上的完成时刻\\
+$c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\ 
+\end{supertabular}\\[3pt]
+其中不同作业在同处理单元上的处理时间相同，可以简记为$q_i$。
 
-\section{基本模型}
+由于订单和子单仅有作业数量的差别，故考虑订单的情况即可推广到子单。由于，产品体积小，可以假设处理单元间的缓冲空间足够用。订单在某条流水线上的作业可以看作是流水车间环境，没有换线时间，所以该问题可以记为：$Fm\mid \mid C_{\max}$，显而易见的是 $c_{j,\max} = c_{n_j,m_j}$。该问题的数学模型如下：
+\begin{gather}
+\min c_{n_j, m_j}\\[-2pt]
+\text{s.t.}\notag
+\end{gather}
+\begin{numcases}{}
+c_{1,1} = q_{1,1}\\
+c_{1,i} = \sum_{i=1}^{m_j} q_{1,i}\\
+c_{k,1} = c_{k-1,1} + q_{k,1} & $k = 2,3,...,n_j$\\
+c_{k,i} = \max(c_{k-1,i} ,c_{k,i-1}) &$k = 2,3,...,n_j, i = 2,3,...,m_j$\\
+q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
+\end{numcases}
 
+该问题可以用有向图的关键路径进行求解，如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
 \begin{figure}[h]
-\newcommand{\process}[1]{*++=[o][F]{\makebox[1.5em]{$#1$}}}
+\newcommand{\process}[1]{*++=[o][F]{\makebox[2em]{$#1$}}}
 \begin{equation*}
 \xymatrix{
-\process{p_{i,j_n}} \ar[r] \ar[d] & \process{p_j} \ar[d] \ar[r] & \cdots\ar[r] & \process{p_{n,j_m}} \ar[d]\\
-\process{p_i} \ar[r]\ar[d] & \process{p_{m,j_n}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{} \ar[d] \\
-\vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{}\ar[r]\ar[d] &\vdots \ar[d]\\
-\process{} \ar[r] & \process{} \ar[r] & \cdots\ar[r] & \process{} 
+\process{q_{1,1}} \ar[r] \ar[d] & \process{q_{1,2}} \ar[d] \ar[r] & \cdots\ar[r] & \process{q_{1,m_j}} \ar[d]\\
+\process{q_{2,1}} \ar[r]\ar[d] & \process{q_{2,2}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{q_{2,m_j}} \ar[d] \\
+\vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{q_{k,i}}\ar[r]\ar[d] &\vdots \ar[d]\\
+\process{q_{n_j,1}} \ar[r] & \process{q_{n_j,2}} \ar[r] & \cdots\ar[r] & \process{q_{n_j,m_j}} 
 }
 \end{equation*}
-\caption{haha}
+\caption{订单的作业处理有向图\label{fig:directedgraph}}
 \end{figure}
+
+\section{基本模型}
 \subsection{初始解}
 
 \subsection{搜索}
