@@ -27,7 +27,7 @@ c_{k,i} = \max(c_{k-1,i} ,c_{k,i-1}) &$k = 2,3,...,n_j, i = 2,3,...,m_j$\\
 q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
 \end{numcases}
 
-该问题可以用有向图的关键路径进行求解，如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
+该问题可以用有向图来表示，其关键路径即为所求解的计算历程。如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
 \begin{figure}[h]
 \newcommand{\process}[1]{*++=[o][F]{\makebox[2em]{$#1$}}}
 \begin{equation*}
@@ -40,6 +40,22 @@ q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
 \end{equation*}
 \caption{订单的作业处理有向图\label{fig:directedgraph}}
 \end{figure}
+
+\newcounter{algor}%\newcounter{exam}
+\theoremheaderfont{\heiti}
+\newtheorem{algori}[algor]{算法}%\newtheorem{exam}[exam]{示例}
+\begin{algori}
+处理时间函数生成算法
+\end{algori}
+\begin{asparaenum}
+\renewcommand{\labelenumi}{\bf Step\theenumi~}
+\item 初始化，输入作业数量$n$和所需处理单元数量$m$，然后输入各单元处理时间$q_1,q_2,...,q_m$；
+\item 计算$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，记$i = 1$；
+\item $i = i + 1, c_{1,i} = c_{1,i-1} + q_i$，记$k = 1$；
+\item $k = k + 1, c_{k,i} = \max(c_{k,i-1}, c_{k-1,i}) + q_i$；
+\item 如果$k<n$，执行\Step{3}，否则执行\Step{5}；
+\item 如果$i<m$，执行\Step{2}，否则结束算法。
+\end{asparaenum}
 
 \section{基本模型}
 \subsection{初始解}
