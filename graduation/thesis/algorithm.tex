@@ -20,14 +20,15 @@ $c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\
 \text{s.t.}\notag
 \end{gather}
 \begin{numcases}{}
-c_{1,1} = q_{1,1}\\
-c_{1,i} = \sum_{i=1}^{m_j} q_{1,i}\\
+c_{1,1} = q_{1,1}\label{equ:processtime1}\\
+c_{1,i} = \sum_{i=1}^{m_j} q_{1,i}\label{equ:processtime2}\\
 c_{k,1} = c_{k-1,1} + q_{k,1} & $k = 2,3,...,n_j$\\
 c_{k,i} = \max(c_{k-1,i} ,c_{k,i-1}) &$k = 2,3,...,n_j, i = 2,3,...,m_j$\\
 q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
 \end{numcases}
 
 该问题可以用有向图来表示，其关键路径即为所求解的计算历程。如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
+其中，\eqref{equ:processtime1}和(\ref{equ:processtime2})可以化简得到这个等式：$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，便于下面算法的初始化。
 \begin{figure}[h]
 \newcommand{\process}[1]{*++=[o][F]{\makebox[2em]{$#1$}}}
 \begin{equation*}
@@ -47,6 +48,7 @@ q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
 \begin{algori}
 处理时间函数生成算法
 \end{algori}
+
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
 \item 初始化，输入作业数量$n$和所需处理单元数量$m$，然后输入各单元处理时间$q_1,q_2,...,q_m$；
@@ -57,8 +59,42 @@ q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
 \item 如果$i<m$，执行\Step{2}，否则结束算法。
 \end{asparaenum}
 
-\section{基本模型}
+\section{分派规则}
+前文已提到的EDD规则和FCFS规则是常见的调度分派规则，在具体调度作业的时候，通常会先根据分派规则进行安排，所以分派规则便是作业安排的初始策略，然后再局部调整调度方案以进一步优化。一个周详的规则可能得到最优调度的初始解，显然简化了局部调整过程，然而极可能会需要巨大的思考空间和时间(比如枚举)。同样，过于直觉的规则将会增大后续调整的难度，所以制定分派规则时要作权衡。
+\subsection{基本规则}
+\begin{asparaenum}
+\item EDD(最早交货期)
+\suspend{asparaenum}
 
+EDD规则从工期角度出发，将作业按照交货时刻的先后进行排序，并按这个顺序进行生产处理。对于并行机环境，一旦某处理单元空闲，就可以即刻安排队列中的首个作业任务。这个规则适用于安排目标和工期相关的调度任务。
+\resume{asparaenum}
+\item WSPT(加权最短处理时间)
+\suspend{asparaenum}
+
+WSPT规则是SPT(最短处理时间)规则的一般化，从作业的处理时间出发，对以完工时刻为目标的调度任务较为合适。这个规则将处理作业按照$w_j/p_j$值非增的顺序排列，处理时间较长的作业被安排在较后的位置，从一定程度上减少了排队等待时间，并且可以证明WSPT规则对$1\mid \mid \sum w_jC_j$的调度是最优的\cite{pinedo}，然而在$Pm \mid \mid \sum w_jC_j$环境下并不一定是最优。
+
+\resume{asparaenum}
+\item MS(最小松弛)
+\end{asparaenum}
+
+MS规则通过描述作业的紧迫程度来进行作业调度，与前两者最大的区别在于，这个规则是动态的，即和系统时间$t$相关。作业根据$\max (d_j - p_j - t , 0)$的值非减的顺序排列，显然较为紧迫的作业会被安排在前面，并且不同的系统时间会影响排列的顺序，呈现动态的调度。该规则适用于安排目标和工期相关的调度任务。
+\subsection{复合规则}
+复合分派规则是综合了许多基本规则的一个表达式，各基本规则都有其各自的比例参数，用来确定这个规则对符合规则影响程度的比例，没有固定的形式，接下来举一例：ATC(明显滞后成本)规则。
+
+ATC规则综合了WSPT规则和MS规则，每当有空闲处理单元时，所有待调度作业按\eqref{equ:orderindexexample}计算其排序指数，选出具有最大指数值的作业进行处理。
+\begin{equation}
+I_j(t) = \frac{w_j}{p_j}\exp\left(-\frac{\max(d_j - p_j - t, 0)}{K\bar p}\right) \label{equ:orderindexexample}
+\end{equation}
+式中：
+
+\begin{tabular}{ll}
+$K$ & 规则比例参数\\
+$\bar p$ &剩余作业平均处理时间 
+\end{tabular}
+
+可以看出当$K \to \infty$时，$I_j(t) \to w_j/p_j$，此时ATC规则便转化为WSPT规则。当$K \to 0$时，若作业$j$将产生延期，即$\max(d_j - p_j -t , 0 ) = 0$，那么ATC规则也转化为WSPT规则，若作业不会产生延期，由于$d_j - p_j - t$的影响超过$w_j/p_j$，规则ATC将转化为MS规则。ATC规则可以较容易地应用到$Pm\mid\mid \sum w_jT_j$问题，其关键技术在于比例参数$K$的选取。
+\section{基本模型}
+基本模型由主要目标函数\eqref{equ:objmain}、次要目标函数\eqref{equ:objsecond}和约束条件\eqref{equ:basicst1} -- (\ref{equ:basicst7})组成
 \section{插单模型}
 
 \section{分单模型}

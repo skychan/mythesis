@@ -27,8 +27,12 @@ import sys
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		file_location = sys.argv[1].strip()
+		output = sys.argv[2].strip()
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
 		c = processtime(input_data)
-		print c
+		output_file = open(output,'w')
+		output_file.write(str(c))
+		output_file.close()
+		#print c
