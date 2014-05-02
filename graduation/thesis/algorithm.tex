@@ -10,7 +10,7 @@ $m_j$ & 订单$j$的处理单元数量\\
 $i$ & 订单$j$的处理单元标记，$i = 1,2,...,m_j$\\
 $q_{k,i}$ & 作业$k$在处理单元$i$上的处理时间\\
 $c_{k,i}$ &作业$k$的在处理单元$i$上的完成时刻\\
-$c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\ 
+$c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\
 \end{supertabular}\\[3pt]
 其中不同作业在同处理单元上的处理时间相同，可以简记为$q_i$。
 
@@ -36,7 +36,7 @@ q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
 \process{q_{1,1}} \ar[r] \ar[d] & \process{q_{1,2}} \ar[d] \ar[r] & \cdots\ar[r] & \process{q_{1,m_j}} \ar[d]\\
 \process{q_{2,1}} \ar[r]\ar[d] & \process{q_{2,2}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{q_{2,m_j}} \ar[d] \\
 \vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{q_{k,i}}\ar[r]\ar[d] &\vdots \ar[d]\\
-\process{q_{n_j,1}} \ar[r] & \process{q_{n_j,2}} \ar[r] & \cdots\ar[r] & \process{q_{n_j,m_j}} 
+\process{q_{n_j,1}} \ar[r] & \process{q_{n_j,2}} \ar[r] & \cdots\ar[r] & \process{q_{n_j,m_j}}
 }
 \end{equation*}
 \caption{订单的作业处理有向图\label{fig:directedgraph}}
@@ -71,7 +71,7 @@ EDD规则从工期角度出发，将作业按照交货时刻的先后进行排�
 \item WSPT(加权最短处理时间)
 \suspend{asparaenum}
 
-WSPT规则是SPT(最短处理时间)规则的一般化，从作业的处理时间出发，对以完工时刻为目标的调度任务较为合适。这个规则将处理作业按照$w_j/p_j$值非增的顺序排列，处理时间较长的作业被安排在较后的位置，从一定程度上减少了排队等待时间，并且可以证明WSPT规则对$1\mid \mid \sum w_jC_j$的调度是最优的\cite{pinedo}，然而在$Pm \mid \mid \sum w_jC_j$环境下并不一定是最优。
+WSPT规则是SPT(最短处理时间)规则的一般化，从作业的处理时间出发，对以完工时刻为目标的调度任务较为合适。这个规则将处理作业按照$w_j/p_j$值非增的顺序排列，处理时间较长的作业被安排在较后的位置，从一定程度上减少了排队等待时间，并且可以证明WSPT规则对$1\mid \mid \sum w_jC_j$的调度是最优的\cite{pinedo}，然而在$Pm \mid \mid \sum w_jC_j$ 环境下并不一定是最优。
 
 \resume{asparaenum}
 \item MS(最小松弛)
@@ -89,19 +89,26 @@ I_j(t) = \frac{w_j}{p_j}\exp\left(-\frac{\max(d_j - p_j - t, 0)}{K\bar p}\right)
 
 \begin{tabular}{ll}
 $K$ & 规则比例参数\\
-$\bar p$ &剩余作业平均处理时间 
+$\bar p$ &剩余作业平均处理时间
 \end{tabular}
 
 可以看出当$K \to \infty$时，$I_j(t) \to w_j/p_j$，此时ATC规则便转化为WSPT规则。当$K \to 0$时，若作业$j$将产生延期，即$\max(d_j - p_j -t , 0 ) = 0$，那么ATC规则也转化为WSPT规则，若作业不会产生延期，由于$d_j - p_j - t$的影响超过$w_j/p_j$，规则ATC将转化为MS规则。ATC规则可以较容易地应用到$Pm\mid\mid \sum w_jT_j$问题，其关键技术在于比例参数$K$的选取。
 \section{基本模型}
-基本模型由主要目标函数\eqref{equ:objmain}、次要目标函数\eqref{equ:objsecond}和约束条件\eqref{equ:basicst1} -- (\ref{equ:basicst7})组成
+基本模型由主要目标函数\eqref{equ:objmain}、次要目标函数\eqref{equ:objsecond}和约束条件\eqref{equ:basicst1} -- (\ref{equ:basicst7})组成，其
+\subsection{构造型算法}
+
+\subsection{改进型算法}
 \section{插单模型}
+\subsection{构造型算法}
 
+\subsection{改进型算法}
 \section{分单模型}
+\subsection{构造型算法}
 
-\subsection{初始解}
+\subsection{改进型算法}
+\section{综合模型}
+\subsection{构造型算法}
 
-\subsection{搜索}
-
+\subsection{改进型算法}
 
 \section{小结}
