@@ -20,7 +20,7 @@ $l$ & 流水线标记，$l = 1,2,...,m$\\
 $S_l$ & 流水线$l$上的订单调度\\
 $|S|$ & 调度$S$的订单数量\\
 $\overline S$ & 调度$S$中的订单集合\\
-$l_k$ & 调度$S_l$的第$k$项订单标记,，$k = 1,2,...,|S|$\\
+$l_k$ & 调度$S_l$的第$k$项订单标记,，$k = 1,2,...,|S_l|$\\
 $d_j$ & 订单$j$的交货时刻(工期)\\
 $t$ & 生产系统时间\\[3pt]
 \end{supertabular}
@@ -46,8 +46,8 @@ L_j = C_j - d_j
 \]
 进一步可定义其延迟和提前：
 \begin{align*}
-T_j & = \max(L_j,0)\\
-E_j & = \max(-L_j,0)
+T_j & = \max\{L_j,0\}\\
+E_j & = \max\{-L_j,0\}
 \end{align*}
 常见基本$\gamma$域有：\\[3pt]
 \begin{supertabular}{ll}
@@ -57,6 +57,7 @@ $\sum w_jT_j$ & 加权订单延迟时间总和 \\
 
 \section{基本模型}
 \subsection{基本假设}
+本课题研究所涉及的所有变量(除权重值外)皆为整数，便于后面将问题离散化。
 假设订单、订单包含的作业、订单涉及的处理单元以及流水线数量有限，
 订单中的每项作业均相同，相同处理单元布置在不同流水线上的处理能力不变，也就是说同订单中的作业在不同流水线的处理时刻相同。
 所有订单在系统时刻$t = 0$时下达，皆可开始生产处理，即$\forall r_j =0$，并且之后没有新的订单进入系统。
@@ -96,7 +97,7 @@ $\sum w_jT_j$ & 加权订单延迟时间总和 \\
 C_{l_1} = p_{l_1} & $l = 1,2,...,m$\label{equ:basicst3}\\
 C_{l_k} = C_{l_{k-1}} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:basicst4}\\
 p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst5}\\
-T_{l_k} = \max(0, C_{l_k} - d_{l_k}) & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst6}\\
+T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst6}\\
 p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst7}
 \end{numcases}
 
@@ -136,14 +137,15 @@ C_{l_1} = p_{l_1} + r_{l_1}& $l = 1,2,...,m$\label{equ:insertst3}\\
 C_{l_k} = \max(C_{l_{k-1}}, r_{l_k}) + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst4}\\
 p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst5}\\
 \sum_{l=1}^m\sum_{k=1}^{|S_l|} r_{l_k} > 0& $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst6}\\
-T_{l_k} = \max(0, C_{l_k} - d_{l_k}) & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst7}\\
+T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst7}\\
 p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}, r_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst8}
 \end{numcases}
 
 \section{分单模型}
 在基本假设中，订单一旦开始装配处理，就要不间断地处理完整个批量，然而这样的生产安排必然对提高产线利用率不利。考虑将订单拆分，将订单的作业分布在各流水线上，可以提高产线利用率，然而由于需要考虑切换准备，并不是拆分越多越好。此外，先前订单的完成时刻不再为定值，所以另外还需要设计其求解方法，这将在下一章中具体分析。
 \subsection{相关符号及说明}
-在基本模型基础上，需要补充或修改符号定义如下：\\[3pt]
+在基本模型基础上，需要补充或修改符号定义如下：%\\[3pt]
+
 \begin{supertabular}{ll}
 $n_j$ & 订单$j$的作业(需求)量\\
 $n_{j,l}$ & 订单$j$分配在流水线$l$上的作业数量\\
@@ -188,8 +190,8 @@ l_k = g(j, l)
 \sum_{l=1}^mn_{j,l} = n_j & $j = 1,2,...,n$ \label{equ:apartst2}\\
 C_{l_1} = s_{l_1} + p_{l_1} & $l = 1,2,...,m$\label{equ:apartst3}\\
 C_{l_k} = C_{l_{k-1}} + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:apartst4}\\
-C_j = \max_{1\le l\le m}(C_{j,l}) & $j = 1,2,...,n$\label{equ:apartst5}\\
-T_j = \max(0, C_j - d_j) & $j = 1,2,...,n$\label{equ:apartst6}\\
+C_j = \max_{1\le l\le m}\{C_{j,l}\} & $j = 1,2,...,n$\label{equ:apartst5}\\
+T_j = \max\{0, C_j - d_j\} & $j = 1,2,...,n$\label{equ:apartst6}\\
 p_{l_k}, s_{l_k}, d_j, wt_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m, j = 1,2,...,n$\label{equ:apartst7}
 \end{numcases}
 
@@ -205,9 +207,9 @@ p_{l_k}, s_{l_k}, d_j, wt_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m, j = 1,
 |S_l| \le n&$l = 1,2,...,m$\label{equ:apartst1}\\
 \sum_{l=1}^mn_{j,l} = n_j & $j = 1,2,...,n$ \label{equ:apartst2}\\
 C_{l_1} = s_{l_1} + p_{l_1} & $l = 1,2,...,m$\label{equ:apartst3}\\
-C_{l_k} = \max(C_{l_{k-1}}, r_{l_k}) + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:apartst4}\\
-C_j = \max_{1\le l\le m}(C_{j,l}) & $j = 1,2,...,n$\label{equ:apartst5}\\
-T_j = \max(0, C_j - d_j) & $j = 1,2,...,n$\label{equ:apartst6}\\
+C_{l_k} = \max\{C_{l_{k-1}}, r_{l_k}\} + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:apartst4}\\
+C_j = \max_{1\le l\le m}\{C_{j,l}\} & $j = 1,2,...,n$\label{equ:apartst5}\\
+T_j = \max\{0, C_j - d_j\} & $j = 1,2,...,n$\label{equ:apartst6}\\
 p_{l_k}, s_{l_k}, ,r_{l_k}, d_j, wt_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m, j = 1,2,...,n$\label{equ:apartst7}
 \end{numcases}
 
