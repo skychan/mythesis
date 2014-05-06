@@ -1,10 +1,13 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX root = ..\thesis.tex
+\newcommand{\jobunit}[1]{*+[F]{\makebox[1.5em]{$#1$}}}
+\newcommand{\process}[1]{*++=[o][F]{\makebox[2em]{$#1$}}}
 \chapter{算法设计}
-上一章构建了4个多品种产品调度的数学模型，需要对其检验，而这些模型求解是NP--Hard问题，需要设计相应算法来求解。在求解模型前，需要对订单(子单)处理时间计算，该问题也需通过算法设计求解。模型的具体求解算法可以分为构造型和改进型，前者从没有调度的情况开始，按一定分派规则逐渐安排作业，直至生成一个较好的调度；后者则是在前者的基础上，调整已有调度以改善目标。
+上一章构建了$2$个多品种产品调度的数学模型，需要对其检验，而这些模型求解是NP--Hard问题，需要设计相应算法来求解。在求解模型前，需要对订单处理时间计算，该问题也需通过算法设计求解。模型的具体求解算法可以分为构造型和改进型，前者从没有调度的情况开始，按一定分派规则逐渐安排作业，直至生成一个较好的调度；后者则是在前者的基础上，调整已有调度以改善目标。
 \section{处理时间函数}
-\eqref{equ:processing}为订单(子单)处理时间函数，由订单特点和作业数量确定，需要补充符号说明如下：\\[3pt]
+前一章提到，各订单的处理时间与被处理的流水线无关，只与其所含作业数量相关，因此可将订单的处理时间看作是关于订单本身及其所含作业数量的函数，记为$p_j = g(j,n_j)$，其中$n_j$为订单$j$所含的作业数量。此外，仍需要补充符号说明如下：\\[3pt]
 \begin{supertabular}{ll}
+$n_j$ & 订单$j$所含的作业数量\\
 $k$ & 作业标记，$k = 1,2,...,n_j$\\
 $m_j$ & 订单$j$的处理单元数量\\
 $i$ & 订单$j$的处理单元标记，$i = 1,2,...,m_j$\\
@@ -30,7 +33,6 @@ q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
 该问题可以用有向图来表示，其关键路径即为所求解的计算历程。如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
 其中，\eqref{equ:processtime1}和(\ref{equ:processtime2})可以化简得到这个等式：$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，便于下面算法的初始化。
 \begin{figure}[h]
-\newcommand{\process}[1]{*++=[o][F]{\makebox[2em]{$#1$}}}
 \begin{equation*}
 \xymatrix{
 \process{q_{1,1}} \ar[r] \ar[d] & \process{q_{1,2}} \ar[d] \ar[r] & \cdots\ar[r] & \process{q_{1,m_j}} \ar[d]\\
@@ -77,7 +79,7 @@ WSPT规则是SPT(最短处理时间)规则的一般化，从作业的处理时�
 \item MS(最小松弛)
 \end{asparaenum}
 
-MS规则通过描述作业的紧迫程度来进行作业调度，与前两者最大的区别在于，这个规则是动态的，即和系统时间$t$相关。作业根据$\max (d_j - p_j - t , 0)$的值非减的顺序排列，显然较为紧迫的作业会被安排在前面，并且不同的系统时间会影响排列的顺序，呈现动态的调度。该规则适用于安排目标和工期相关的调度任务。
+MS规则通过描述作业的紧迫程度来进行作业调度，与前两者最大的区别在于，这个规则是动态的，即和系统时间$t$相关。作业根据$\max \{d_j - p_j - t , 0\}$的值非减的顺序排列，显然较为紧迫的作业会被安排在前面，并且不同的系统时间会影响排列的顺序，呈现动态的调度。该规则适用于安排目标和工期相关的调度任务。
 \subsection{复合规则}
 复合分派规则是综合了许多基本规则的一个表达式，各基本规则都有其各自的比例参数，用来确定这个规则对符合规则影响程度的比例，没有固定的形式，接下来举一例：ATC(明显滞后成本)规则。
 
@@ -95,17 +97,18 @@ $\bar p$ &剩余作业平均处理时间
 可以看出当$K \to \infty$时，$I_j(t) \to w_j/p_j$，此时ATC规则便转化为WSPT规则。当$K \to 0$时，若作业$j$将产生延期，即$\max(d_j - p_j -t , 0 ) = 0$，那么ATC规则也转化为WSPT规则，若作业不会产生延期，由于$d_j - p_j - t$的影响超过$w_j/p_j$，规则ATC将转化为MS规则。ATC规则可以较容易地应用到$Pm\mid\mid \sum w_jT_j$问题，其关键技术在于比例参数$K$的选取。
 
 \section{基本模型}
-基本模型由主要目标函数\eqref{equ:objmain}、次要目标函数\eqref{equ:objsecond}和约束条件\eqref{equ:basicst1} -- (\ref{equ:basicst7})组成，其最优调度的求解包括初始可行解与解的改进，分别在构造型和改进型算法中详述。
+基本模型由目标函数\eqref{equ:objmain}和约束条件\eqref{equ:basicst1} -- (\ref{equ:basicst7})组成，其最优调度的求解包括初始可行解与解的改进，分别在构造型和改进型算法中详述。
 \subsection{构造算法}
 构造算法的主要内容是确定分派规则，虽然不能保证得到最优调度，但却有着很高的执行性，便于计划安排。基本模型的主要目标为加权时延迟间总和，采用ATC规则能得到较优调度，关键在于比例参数的选取，相关的方法也有很多，例如回归分析、机器学习等。本课题将该规则得到的调度作为改进算法的初始解，所以不需要在该参数上过多深究，可以采用$K = 2$作为推荐值\cite{bilge2007tabu}。
 
-针对基本模型的实际情况，调度中的作业为各订单，并用整合处理时间作为各订单的处理时间，这样可以不考虑切换准备时间。此外，后续的改进算法要用到构造算法的相关信息，需要记录被调度的订单序列。为了方便描述这个算法，记
+针对基本模型的实际情况，调度中的作业为各订单，并用整合处理时间作为各订单的处理时间，这样可以不考虑切换准备时间。此外，后续的改进算法要用到构造算法的相关信息，需要记录被调度的订单序列。为了方便描述这个算法，记：
 
 \begin{tabular}{ll}
 $J$ & 待调度订单集合\\
 $L$ & 已调度的订单记录序列，其集合记为$\overline{L}$\\
-$a_l$ & 产线运行状态，处理订单时$a_l = 1$，否则$a_l = 0$，$(l = 1,2,...,m)$\\
-$t_l$ & 产线$l$的预计正在处理订单的完成时刻，$(l = 1,2,...,m)$
+$a_l$ & 流水线运行状态，处理订单时$a_l = 1$，否则$a_l = 0$，$(l = 1,2,...,m)$\\
+$t_l$ & 流水线$l$的预计正在处理订单的完成时刻，$(l = 1,2,...,m)$\\
+$G(S)$& 调度$S$的目标函数值
 \end{tabular}
 
 \begin{algori}
@@ -113,49 +116,110 @@ $t_l$ & 产线$l$的预计正在处理订单的完成时刻，$(l = 1,2,...,m)$
 
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0 (l = 1,2,...,m)$，根据\eqref{equ:processing}和\refa{alg:processtime}计算各订单处理时间$p'_j = f(j, n_j)$，进一步得到整合订单处理时间$p_j = p'_j + s_j(j = 1,2,...,n)$，置系统时间$t = 0$；
+\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0 (l = 1,2,...,m)$，根据和\refa{alg:processtime}计算各订单处理时间$p'_j = f(j, n_j)$，进一步得到整合订单处理时间$p_j = p'_j + s_j(j = 1,2,...,n)$，置系统时间$t = 0$；
 \item 若存在$a_l = 0$，记$l^* = \displaystyle\min_{a_l = 0}\{l\}$，执行\Step{3}，否则执行\Step{4}；
-\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$j^*$，使得$I_{j^*}(t) = \displaystyle\max_{j\in J}\{I_j(t)\}$，将订单$j^*$安排入产线$l^*$进行处理，记入调度$S_{l^*}$，$\overline{S_{l^*}}=\overline{S_{l^*}}\bigcup \{j^*\}$, $J = J -\{j^*\}$，记录调度订单序列$\overline{L} = \overline{L} \bigcup \{j^*\}$，更新产线预计空闲时刻$t_{l^*} = t + p_{j^*}$，修改产线状态$a_{l^*} = 1$。若$J = \varnothing$，所有订单调度完毕，终止算法，否则执行\Step{2}
-\item 记$lt$使得 $t_{lt} = \displaystyle\min_{1\le l\le m}\{t_l\}$，修改产线状态$a_{lt} = 0$，并更新系统时间$t = t_{lt}$，执行\Step{2}
+\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$j^*$，使得$I_{j^*}(t) = \displaystyle\max_{j\in J}\{I_j(t)\}$，将订单$j^*$安排入流水线$l^*$进行处理，记入调度$S_{l^*}$，$\overline{S_{l^*}}=\overline{S_{l^*}}\bigcup \{j^*\}$, $J = J -\{j^*\}$，记录调度订单序列$\overline{L} = \overline{L} \bigcup \{j^*\}$，更新流水线预计空闲时刻$t_{l^*} = t + p_{j^*}$，修改流水线状态$a_{l^*} = 1$。若$J = \varnothing$，所有订单调度完毕，终止算法，否则执行\Step{2}
+\item 记$lt$使得 $t_{lt} = \displaystyle\min_{1\le l\le m}\{t_l\}$，修改流水线状态$a_{lt} = 0$，并更新系统时间$t = t_{lt}$，执行\Step{2}
 \end{asparaenum}
 \end{algori}
 
 \subsection{改进算法}
-尽管\refa{alg:basicconstruct}得到了较优的调度，然而还可以通过元启发式算法(例如区域搜索)进一步改进，其关键步骤是领域和交换的定义。通常并行机环境的改进算法分为两个阶段，机器内部的作业序列改变和机器间的作业改派，这两个过程交替进行\cite{史烨2011}，然而这个方法十分费时，但简化内部改进则又影响解的质量。本节将提出一种新的领域结构，巧妙地避免了前面的问题。
+构造算法得到的初始解需要进行改进，为了尽可能得到较优解，需要采用一些启发式(元启发式)算法，区域搜索是一类较为有效并且操作简便的算法，其主要的两个步骤是领域的定义与移动选择。对于多机环境，一般采用分阶段的交替算法。此外，本文提出的一种虚拟序列算法克服了交替算法的一些劣势。
 
-显而易见的是，由\refa{alg:basicconstruct}得到的调度，对于每条产线来说，其处理的订单都按照ATC规则排序，若直接对其进行区域搜索，则是不全面的考虑。所以本节将对由前面构造算法得到的记录序列$L$进行领域定义。
-\section{插单模型}
-\subsection{构造算法}
+\subsubsection{领域定义}
+为了后面相关算法的描述，需要先定义领域。考虑第一种情况，某机器上有共$4$项作业(标记为$1,2,3,4$)，其初始调度$S^{(0)}$安排如\reff{fig:4example}所示，
+\begin{figure}[h]
+\begin{equation*}
+\xymatrix{
+\jobunit{1} \ar[r] & \jobunit{2} \ar[r] &\jobunit{3} \ar[r] &\jobunit{4}
+}
+\end{equation*}
+\caption{$4$项作业的初始调度$S^{(0)}$示例\label{fig:4example}}
+\end{figure}
+箭头方向为作业处理的顺序方向。交换$S^{(0)}$中相邻两项作业的顺序，可以得到一个新的调度$S^{(1)}$，显然此例中$S^{(1)}$有如\reff{fig:3neighbors}所示的$3$种可能。这三个不同的调度构成了调度$S^{(0)}$的领域，而确定其中的一个作为$S^{(1)}$便是一次移动选择。至此，机器内的领域及移动定义完毕。
 
-\subsection{改进算法}
-\section{分单模型}
-\subsection{构造算法}
+\begin{figure}[h]
+\centering
+\vspace{1.5em}
+\subfloat[交换$1,2$]{
+\xymatrix{
+\jobunit{2} \ar[r] & \jobunit{1} \ar[r] &\jobunit{3} \ar[r] &\jobunit{4}
+}}\\
+\subfloat[交换$2,3$]{
+\xymatrix{
+\jobunit{1} \ar[r] & \jobunit{3} \ar[r] &\jobunit{2} \ar[r] &\jobunit{4}
+}}\\
+\subfloat[交换$3,4$]{
+\xymatrix{
+\jobunit{1} \ar[r] & \jobunit{2} \ar[r] &\jobunit{4} \ar[r] &\jobunit{3}
+}}
+\caption{$S^{(0)}$的$3$个相邻调度\label{fig:3neighbors}}
+\end{figure}
 
-\subsection{改进算法}
-\section{综合模型}
-\subsection{构造算法}
+接下来考虑另一种情况，在多机环境下，机器间的作业移动。如果只是简单的从某个机器上挑选某个作业移动到另一个机器的某个位置，这样定义的领域容量约为$2\sum\sum n_i\times n_j$($n_i,n_j$为机器$i,j$上的作业数量)，不但会和前一种情况的领域重叠，其过大的容量对搜索来说也是不合理的。所以机器间的领域及移动要按照具体情况来设计定义。
 
-\subsection{改进算法}
+\subsubsection{交替算法}
+通常并行机环境的改进算法分为两个阶段，机器内部的作业序列改变和机器间的作业改派，这两个过程交替进行\cite{史烨2011}，然而这个方法十分费时，但简化内部改进则又影响解的质量。本节将提出一种新的领域结构，巧妙地避免了前面的问题。
+一般来说，由ATC规则所得到的该模型的初始解是较优解，甚至可能是最优解，如果需要对其改进，需要从两个方面来考虑。一个是流水线内部订单序列的调整，另一个是流水线间的订单调整，这两种调整涉及两种元启发式算法，需要交替使用。
+\begin{asparaenum}
+\item 内部调整
+\suspend{asparaenum}
 
-\section{小结}
-
-
-一般来说，由ATC规则所得到的该模型的初始解是较优解，甚至可能是最优解，如果需要对其改进，需要从两个方面来考虑。一个是产线内部订单序列的调整，另一个是产线间的订单调整，这两种调整涉及两种元启发式算法，需要交替使用。
-\subsubsection{内部调整}
-产线内部调整可将作是$1\mid\mid \sum w_jT_j$问题，可以简单运用ATC规则达到较好解，不同与前面的并行机环境，单机环境下，对产线$l$使用ATC调度作业的具体算法如下。
+流水线内部调整可将作是$1\mid\mid \sum w_jT_j$问题，可以简单运用ATC规则达到较好解，不同与前面的并行机环境，单机环境下，对流水线$l$使用ATC调度作业的具体算法如下。
 
 \begin{algori}
 基本模型ATC规则调度改进算法
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化。$J = \overline{S_l}$，根据\eqref{equ:processing}和\refa{alg:processtime}计算各订单处理时间$p'_{l_k} = f({l_k}, n_{l_k})$，进一步得到整合订单处理时间$p_{l_k} = p'_{l_k} + s_{l_k}(k = 1,2,...,n_l)$，置系统时间$t = 0$；
+\item 初始化。$J = \overline{S_l}$，根据和\refa{alg:processtime}计算各订单处理时间$p'_{l_k} = f({l_k}, |S_l|)$，进一步得到整合订单处理时间$p_{l_k} = p'_{l_k} + s_{l_k}(k = 1,2,...,|S_l|)$，置系统时间$t = 0$；
 %\item 若$a_l = 0$，执行\Step{3}，否则执行\Step{4}；
-\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$l_k^*$，使得$I_{l_k^*}(t) = \displaystyle\max_{l_k\in J}\{I_{l_k}(t)\}$，将订单$l_k^*$进行安排处理，$J = J -\{l_k^*\}$，更新产线预计空闲时刻$t_{l} = t + p_{l_k^*}$，修改产线状态$a_{l} = 1$。若$J = \varnothing$，该产线上的订单调度完毕，终止算法，否则执行\Step{3}；
+\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$l_k^*$，使得$I_{l_k^*}(t) = \displaystyle\max_{l_k\in J}\{I_{l_k}(t)\}$，将订单$l_k^*$进行安排处理，$J = J -\{l_k^*\}$，更新流水线预计空闲时刻$t_{l} = t + p_{l_k^*}$，修改流水线状态$a_{l} = 1$。若$J = \varnothing$，该流水线上的订单调度完毕，终止算法，否则执行\Step{3}；
 \item 更新系统时间$t = t + p_{l_k^*}$，执行\Step{2}。
 \end{asparaenum}
 \end{algori}
 
-也可以用元启发式算法中的区域搜索对产线$l$进行改进。在基本模型的环境下，禁忌搜索算法可以较好地跳出局部最优，提高解的质量。作为区域搜索，领域的定义
-\subsubsection{之间调整}
+也可以对流水线$l$采用区域搜索的方法改进进行，该流水线上的调度领域和前面的机器内部领域类似，作业的序列就相当于流水线上订单的序列，初始调度$S_l^{(0)}$由\refa{alg:basicconstruct}得到，如\ref{fig:initlschedule}。
+\begin{figure}[h]
+\begin{equation*}
+\xymatrix{
+\jobunit{l_1} \ar[r] & \jobunit{l_2} \ar[r]&\cdots\ar[r] &\jobunit{l_{|S_l|}}
+}
+\end{equation*}
+\caption{流水线的初始调度$S_l^{(0)}$\label{fig:initlschedule}}
+\end{figure}
+
+
+
+\resume{asparaenum}
+\item 之间调整
+\suspend{asparaenum}
+
+领域定义
 采用模拟退火算法
-\subsubsection{交替改进}
+\resume{asparaenum}
+\item 交替改进
+\end{asparaenum}
+
+456454
+\subsubsection{虚拟序列算法}
+尽管\refa{alg:basicconstruct}得到了较优的调度，然而还可以通过元启发式算法(例如区域搜索)进一步改进，其关键步骤是领域和交换的定义。
+
+显而易见的是，由\refa{alg:basicconstruct}得到的调度，对于每条流水线来说，其处理的订单都按照ATC规则排序，若直接对其进行区域搜索，则是不全面的考虑。所以本节将对由前面构造算法得到的记录序列$L$进行领域定义。
+
+
+
+\section{插单模型}
+\subsection{构造算法}
+
+\subsection{改进算法}
+
+
+\section{小结}
+
+tikz 作图
+\begin{figure}[h]
+\centering
+\begin{tikzpicture}
+\draw (0,0) rectangle (0.3,1.00);
+\end{tikzpicture}
+\end{figure}
