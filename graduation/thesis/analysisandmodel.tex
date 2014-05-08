@@ -197,17 +197,17 @@ Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
 \begin{numcases}{}
 \sum_{l=1}^m |S_l| = n\label{equ:insertst1}\\
 \bigcup_{l=1}^m \overline{S_l} = N\label{equ:insertst2}\\
-\sum_{l=1}^m\sum_{k=1}^{|S_l|} w_{l_k}= 1\\
-\sum_{l=1}^m\sum_{k=1}^{|S_l|} wc_{l_k}= 1\\
-\lambda_1 + \lambda_2 = 1\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} w_{l_k}= 1\label{equ:insertst3}\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} wc_{l_k}= 1\label{equ:insertst4}\\
+\lambda_1 + \lambda_2 = 1\label{equ:insertst5}\\
 C_{l_1} = f_{l_1} + s_{l_1} + p_{l_1}& $l = 1,2,...,m$\label{equ:insertst3}\\
-C_{l_k} = C_{l_{k-1}} + f_{l_k} + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst4}\\
-p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst5}\\
-\sum_{l=1}^m\sum_{k=1}^{|S_l|} r_{l_k} > 0& $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst6}\\
-L_{l_k} = C_{l_k} - d{l_k}& $k = 1,2,...,|S_l|, l = 1,2,...,m$\\
-T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst7}\\
-E_{l_k} = \max\{d_{l_k} - C_{l_k}, 0\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\\
-s_{l_k}, d_{l_k}, w_{l_k}, wc_{l_k}, \lambda_1, \lambda_2, r_{l_k}\ge 0, \sigma >0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst8}
+C_{l_k} = C_{l_{k-1}} + f_{l_k} + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst6}\\
+p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst7}\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} r_{l_k} > 0& $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst8}\\
+L_{l_k} = C_{l_k} - d{l_k}& $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst9}\\
+T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst10}\\
+E_{l_k} = \max\{d_{l_k} - C_{l_k}, 0\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst11}\\
+s_{l_k}, d_{l_k}, w_{l_k}, wc_{l_k}, \lambda_1, \lambda_2, r_{l_k}\ge 0, \sigma >0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst12}
 \end{numcases}
 \end{figure}
 
