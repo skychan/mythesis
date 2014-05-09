@@ -128,10 +128,10 @@ $NR$ &交替次数
 
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0 (l = 1,2,...,m)$，根据和\refa{alg:processtime}计算各订单处理时间$p'_j = g(j, n_j)$，进一步得到整合订单处理时间$p_j = p'_j + s_j, (j = 1,2,...,n)$，置系统时间$t = 0$；
+\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0, (l = 1,2,...,m)$，根据和\refa{alg:processtime}计算各订单处理时间$p'_j = g(j, n_j)$，进一步得到整合订单处理时间$p_j = p'_j + s_j, (j = 1,2,...,n)$，置系统时间$t = 0$；
 \item 若存在$a_l = 0$，记$l^* = \displaystyle\min_{a_l = 0}\{l\}$，执行\Step{3}，否则执行\Step{4}；
-\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$j^*$，使得$I_{j^*}(t) = \displaystyle\max_{j\in J}\{I_j(t)\}$，将订单$j^*$安排入流水线$l^*$进行处理，记入调度$S_{l^*}$，$\overline{S_{l^*}}=\overline{S_{l^*}}\bigcup \{j^*\}$, $J = J -\{j^*\}$，记录调度订单序列$\overline{L} = \overline{L} \bigcup \{j^*\}$，更新流水线预计空闲时刻$t_{l^*} = t + p_{j^*}$，修改流水线状态$a_{l^*} = 1$。若$J = \varnothing$，所有订单调度完毕，终止算法，否则执行\Step{2}
-\item 记$lt$使得 $t_{lt} = \displaystyle\min_{1\le l\le m}\{t_l\}$，修改流水线状态$a_{lt} = 0$，并更新系统时间$t = t_{lt}$，执行\Step{2}
+\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$j^*$，使得$I_{j^*}(t) = \displaystyle\max_{j\in J}\{I_j(t)\}$，将订单$j^*$安排入流水线$l^*$进行处理，记入调度$S_{l^*}$，$\overline{S_{l^*}}=\overline{S_{l^*}}\bigcup \{j^*\}$, $J = J -\{j^*\}$，记录调度订单序列$\overline{L} = \overline{L} \bigcup \{j^*\}$，更新流水线预计空闲时刻$t_{l^*} = t + p_{j^*}$，修改流水线状态$a_{l^*} = 1$。若$J = \varnothing$，所有订单调度完毕，终止算法，否则执行\Step{2}；
+\item 记$lt$使得 $t_{lt} = \displaystyle\min_{1\le l\le m}\{t_l\}$，修改流水线状态$a_{lt} = 0$，并更新系统时间$t = t_{lt}$，执行\Step{2}。
 \end{asparaenum}
 \end{algori}
 
@@ -177,14 +177,13 @@ $NR$ &交替次数
 \item 内部调整
 \suspend{asparaenum}
 
-流水线内部调整可将作是$1\mid\mid \sum w_jT_j$问题，可以简单运用ATC规则达到较好解，不同与前面的并行机环境，单机环境下，对流水线$l$使用ATC调度作业的具体算法如下。
+流水线内部调整是$1\mid\mid \sum w_jT_j$问题的一种扩展，可以简单运用ATC规则达到较好解，不同与前面的并行机环境，单机环境下，对流水线$l$使用ATC调度作业的具体算法如下。
 
 \begin{algori}
 基本模型ATC规则调度改进算法
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
 \item 初始化。$J = \overline{S_l}$，根据和\refa{alg:processtime}计算各订单处理时间$p'_{l_k} = g({l_k}, |S_l|)$，进一步得到整合订单处理时间$p_{l_k} = p'_{l_k} + s_{l_k}(k = 1,2,...,|S_l|)$，置系统时间$t = 0$；
-%\item 若$a_l = 0$，执行\Step{3}，否则执行\Step{4}；
 \item 根据\eqref{equ:orderindexexample}，选取预备调度订单$l_k^*$，使得$I_{l_k^*}(t) = \displaystyle\max_{l_k\in J}\{I_{l_k}(t)\}$，将订单$l_k^*$进行安排处理，$J = J -\{l_k^*\}$，更新流水线预计空闲时刻$t_{l} = t + p_{l_k^*}$，修改流水线状态$a_{l} = 1$。若$J = \varnothing$，该流水线上的订单调度完毕，终止算法，否则执行\Step{3}；
 \item 更新系统时间$t = t + p_{l_k^*}$，执行\Step{2}。
 \end{asparaenum}
@@ -201,7 +200,7 @@ $NR$ &交替次数
 \end{figure}
 这样一来，对于每条流水线的内部调整改进，每次生成的调度都有$|S_l|-1$个相邻的调度可供移动，并以相邻订单对$(l_j, l_k)$来表示解的一次移动。若每次都向着目标值改进最大的方向移动，则可能陷入局部最优解。可以采用一些机制避免此类情况发生，不同的机制原理便产生了不同的元启发式搜索算法。根据基本模型的特征，本文将采用改进过的禁忌所搜算法，它的机理是在移动选择时，为了不落入局部最优的循环而有意识地避开，需要设定禁忌列表$TL$及其长度$NL$，通常禁忌列表满时候，采用FIFO规则将项目出栈。基本模型下，流水线$l$的内部调整禁忌搜索总结如下。
 \begin{algori}
-基本模型内部调整禁忌搜索算法
+内部调整禁忌搜索算法
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
 \item 初始化。设定迭代次数$N_I$，清空禁忌列表$TL$，设定列表长度$NL$，将构造算法所得的调度作为初始调度，并记为当前最优调度，$S^{(0)} = S^{(1)} = S_l$，并置$k = 1$；
@@ -219,7 +218,7 @@ $NR$ &交替次数
 
 前面的部分说明了流水线内的订单调度改进，然而即使所有流水线都按照其相应的最优调度进行生产处理，从全局来看，这样的调度安排未必就是最优，这主要是由流水线使用不均衡引起的，这种不均衡性只能通过流水线之间的订单交换或重派来改变。将流水线$a$上的订单$a_j$重新安排在流水线$b$上的操作称为\textbf{订单重派}，两流水线间的订单交换可以看作是这两条流水线互相订单重派。因此，全局调度关于流水线之间的相邻移动可以定义为某订单重派。
 
-为提高流水线均衡性，订单重派策略为：从具有最大目标值$H(S_l)$的流水线中选取具有最大函数值$h(l_k)$的作业，将其重派至具有最小目标值的流水线上调度末端，因此需要定义流水线$l$的函数值与各订单的函数值，根据\eqref{equ:objmain}可得两函数值的定义：
+为提高流水线均衡性，订单重派策略为：从具有最大目标值$H(S_l)$的流水线中选取具有最大函数值$h(l_k)$的作业，将其重派至具有最小目标值的流水线上调度末端，因此需要定义流水线$l$的函数贡献值与各订单的函数贡献值，根据\eqref{equ:objmain}可得两贡献值值的定义：
 \begin{align}
 H(S_l) &= \lambda_t\sum_{k=1}^{|S_l|} wt_{l_k}T_{l_k} + \lambda_c\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\label{equ:linefunct}\\
 h(l_k) &= \lambda_t wt_{l_k}T_{l_k} + \lambda_c wc_{l_k}C_{l_k}
@@ -227,11 +226,11 @@ h(l_k) &= \lambda_t wt_{l_k}T_{l_k} + \lambda_c wc_{l_k}C_{l_k}
 \end{align}
 这个策略可以用一个确定性的算法得到。
 \begin{algori}
-流水线之间订单重派算法\label{alg:basicbetween}
+流水线之间订单重派算法\label{alg:between}
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 根据\eqref{equ:linefunct}选出具有最大值与最小值的流水线，记为$l^+, l^-$；
-\item 根据\eqref{equ:itemfunct}选出$S_{l^+}$中具有最大值的订单$l^+_{k^*}$，并将其添入流水线$l^-$的调度$S_{l^-}$末端。
+\item 计算各流水线的$H(S_l)$值，选出具有最大值与最小值的流水线，记为$l^+, l^-$；
+\item 计算流水线$l^+$的调度$S_{l^+}$中具有最大$h(l_k)$值的订单$l^+_{k^*}$，并将其添入流水线$l^-$的调度$S_{l^-}$末端。
 \end{asparaenum}
 \end{algori}
 
@@ -246,7 +245,7 @@ h(l_k) &= \lambda_t wt_{l_k}T_{l_k} + \lambda_c wc_{l_k}C_{l_k}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
 \item 运用\refa{alg:basicconstruct}建立流水线全局调度初始解；
 \item 运用\refa{alg:intertabu}改进所有流水线的初始调度，设定交替次数$NR$，置$k = 1$；
-\item 运用\refa{alg:basicbetween}重派订单，并将被派单的流水线记为$l^*$；
+\item 运用\refa{alg:between}重派订单，并将被派单的流水线记为$l^*$；
 \item 运用\refa{alg:intertabu}对流水线$l^*$进行调整改进；
 \item 置$k = k+1$，若$k\le NR$，执行\Step{3}，否则终止算法。
 \end{asparaenum}
@@ -289,22 +288,21 @@ h(l_k) &= \lambda_t wt_{l_k}T_{l_k} + \lambda_c wc_{l_k}C_{l_k}
 \end{algori}
 可以看出，一个调度的邻域容量不是一个定值，会随着调度结构的改变而改变。
 
-对于虚拟序列，可以直接使用禁忌搜索，不过由于虚拟序列长度要远大于任一流水线的调度序列长度，跳出局部最优需要的步骤可能会很多，可以考虑将其结合变动邻域搜索(VNS)来直接切换邻域结构，当然这么做也可能会跳出含有最优解的邻域分支。
 \begin{algori}
-虚拟序列VN - Tabu 搜索算法
+虚拟序列禁忌搜索算法
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 运用\refa{alg:basicconstruct}建立流水线全局调度初始解，得到虚拟序列$L$及其初始调度$S^{(0)}$，并将其作为目前最优调度，将其邻域集合$\overline{S^{(c)}}$中的调度按函数值的非减排列，记为$S_{[1]},S_{[2]},...,S_{[|S^{(c)}|]}$，置$i = 1$。设定禁忌搜索迭代次数$N_I$，设定列表长度$NL$，并置特赦调度$A = S^{(0)}$；
-\item 若$i \le |S^{(c)}|$，置$S^{(1)} = S_{[i]}$，清空禁忌列表$TL$，置$k = 1$，否则终止算法；
+\item 运用\refa{alg:basicconstruct}建立流水线全局调度初始解，得到虚拟序列$L$及其初始调度$S^{(0)}$，并将其作为目前最优调度。设定禁忌搜索迭代次数$N_I$，设定列表长度$NL$，并置特赦调度$A = S^{(0)}$；
+\item 置$S^{(1)} = S_{(0)}$，清空禁忌列表$TL$，置$k = 1$；
 \item 根据\refa{alg:vituralneighbor}中的邻域生成算法，检查禁忌列表中的订单对，若它们别安排在不同的流水线，则只对其交换位置的移动禁忌；若移动后的调度为特赦调度，一样认定为可行移动。计算$S^{(k)}$中所有可行移动组成的邻域，选取它们中具有最小函数值调度的移动，记该订单对为$(L_j^*, L_k^*)$，所得调度记为$S^*$，并置$S^{(k+1)} = S^*$；
 \item 若相邻移动所得调度属于$S^+$型，则将$(L_j^*, L_k^*)$入栈禁忌列表，若列表容量已满，则按FIFO规则出栈最早的相邻移动；
 \item 若$G(S^*) < G(S^{(0)})$，置$S^{(0)} = S^*$；
-\item 置$k = k + 1$，若连续$10$次采用没有更新$S^{(0)}$，则置$i = i+1$，执行\Step{2}，否则若$k\le N_I$，执行\Step{3}，否则终止算法。
+\item 置$k = k + 1$，若$k\le N_I$，执行\Step{3}，否则终止算法，$S^{(0)}$为最终所得调度。
 \end{asparaenum}
 \end{algori}
 
 \section{陆续模型}
-陆续模型由目标函数\eqref{equ:insertobj}和约束条件\eqref{equ:insertst1} -- (\ref{equ:insertst12})组成，与基本模型类似，其最优调度的求解包括初始可行解与解的改进，分别在构造型和改进型算法中详述。
+陆续模型由目标函数\eqref{equ:insertobj}和约束条件\eqref{equ:insertst1} -- (\ref{equ:insertst13})组成，与基本模型类似，其最优调度的求解包括初始可行解与解的改进，分别在构造型和改进型算法中详述。
 \subsection{构造算法}
 基本模型的构造算法基于ATC分派规则，因为其主要目标是加权延迟时间和的变形，而陆续模型是基本模型的更为一般的形式，主要是进一步考虑了切换准备时间\footnote{基本模型中也考虑切换准备时间，只是由于该模型的特性，可以将其与订单处理时间合并成整合处理时间，以简化模型求解。而陆续模型需要分开考虑这两个时间}和订单进入系统时刻。可以继续使用ATC 规则，然而本节将要使用其推广形式中的一种：ATCS\footnote{ATCS规则是专门为$1\mid s_j\mid\sum w_jT_j$问题所设计的} (考虑准备时间的明显滞后成本)。
 
@@ -348,10 +346,74 @@ $K_1, K_2$在确定之前，需要对作业制造时间$C_{\max}$进行估计，
 K_2 = \frac{\tau}{2\sqrt{\eta}}
 \]
 
-同基本模型算法类似，运用ATCS 规则时，调度中的作业为各订单，
+同基本模型算法类似，运用ATCS 规则时，调度中的作业为各订单，当有流水线空闲的时候，即可根据\eqref{equ:orderindexexample2}安排订单进入相应流水线进行处理，与基本模型不同，陆续模型在安排订单的时候，需要预估流水线的闲置时间。
+\begin{algori}
+陆续模型的ATCS 规则调度构造算法\label{alg:continuecconstruct}
+
+\begin{asparaenum}
+\renewcommand{\labelenumi}{\bf Step\theenumi~}
+\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0, C_{l_0} = 0, (l = 1,2,...,m)\footnote{$C_{l_0}$是人为定义的边界量，便于后续算法的初始情况}$，根据和\refa{alg:processtime}计算各订单处理时间$p_j = g(j, n_j), (j = 1,2,...,n)$，置系统时间$t = 0$；
+\item 若存在$a_l = 0$，记$l^* = \displaystyle\min_{a_l = 0}\{l\}$，执行\Step{3}，否则执行\Step{5}；
+\item 根据\eqref{equ:orderindexexample2}，选取预备调度订单$j^*$，使得$I_{j^*}(t) = \displaystyle\max_{j\in J}\{I_j(t)\}$，将订单$j^*$安排入流水线$l^*$进行处理，记入调度$S_{l^*}$，$\overline{S_{l^*}}=\overline{S_{l^*}}\bigcup \{j^*\}$, $J = J -\{j^*\}$，记录调度订单序列$\overline{L} = \overline{L} \bigcup \{j^*\}$；
+\item 置$k = |S_{l^*}|$，对于流水线$l^*$，将订单$j^*$标记为$l^*_k$，预估订单$l^*_k$开始处理前的流水线闲置时间$f_{j^*} = f_{l^*_k} = \max\{r_{l^*_k} - s_{l^*_k}- C_{l^*_{k-1}}, 0\}$，更新流水线预计空闲时刻$t_{l^*} = t + p_{j^*} + s_{j^*} + f_{j^*}$，修改流水线状态$a_{l^*} = 1$。若$J = \varnothing$，所有订单调度完毕，终止算法，否则执行\Step{2}；
+\item 记$lt$使得 $t_{lt} = \displaystyle\min_{1\le l\le m}\{t_l\}$，修改流水线状态$a_{lt} = 0$，并更新系统时间$t = t_{lt}$，执行\Step{2}。
+\end{asparaenum}
+\end{algori}
+
 \subsection{改进算法}
+与基本模型的改进算法类似，陆续模型的改进算法可以通过两阶段的交替算法，也可以直接使用虚拟序列算法。
+\subsubsection{交替算法}
+交替算法分为内部调整和之间调整，由于陆续模型的特点，其算法和基本模型的略有不同，下面进行分述。
+\begin{asparaenum}
+\item 内部调整
+\suspend{asparaenum}
 
+各流水线的作业内部调整可以简单实用ATCS 规则，但该规则最为合适的问题环境与本模型有一些差别，为了得到较好的调度效果，可以采用禁忌搜索来调整调度。其算法基本和\refa{alg:intertabu}一致，其区别仅在目标函数上，将其替换即可。
 
+\resume{asparaenum}
+\item 之间调整
+\suspend{asparaenum}
+
+流水线之间的调整在于订单重派，而订单重派则的依据是流水线和订单对目标函数的贡献值，需要根据\eqref{equ:insertobj}来重新定义这两个贡献值函数：
+\begin{align}
+H(S_l) &= \lambda_1\frac{\sum_{k=1}^{|S_l|}w_{l_k}^2L_{l_k}^2}{Ru_l} + \lambda_2 \exp\left(-\frac{Rb}{\sigma}\right)\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\label{equ:lineinsertfunct}\\
+h(l_k) &= \lambda_1\frac{w_{l_k}^2L_{l_k}^2}{Ru_l} + \lambda_2 \exp\left(-\frac{Rb}{\sigma}\right)wc_{l_k}C_{l_k}
+\label{equ:iteminsertfunct}
+\end{align}
+
+然后应用\refa{alg:between}可以得到陆续模型的流水线之间的调度调整。
+\resume{asparaenum}
+\item 交替算法
+\end{asparaenum}
+
+在得到初始调度之后，首先要对每条流水线进行内部调整，然后结合流水线的内部和之间调整，并交替这两个步骤。
+\begin{algori}
+陆续模型交替算法\label{alg:inturncontinue}
+\begin{asparaenum}
+\renewcommand{\labelenumi}{\bf Step\theenumi~}
+\item 运用\refa{alg:continuecconstruct}建立流水线全局调度初始解；
+\item 运用\refa{alg:intertabu}改进所有流水线的初始调度，设定交替次数$NR$，置$k = 1$；
+\item 运用\refa{alg:between}重派订单，并将被派单的流水线记为$l^*$；
+\item 运用\refa{alg:intertabu}对流水线$l^*$进行调整改进；
+\item 置$k = k+1$，若$k\le NR$，执行\Step{3}，否则终止算法。
+\end{asparaenum}
+\end{algori}
+
+\subsubsection{虚拟序列算法}
+基本模型中已经阐述并应用了虚拟序列，并设计了相应的算法，虚拟序列同样也适用于陆续模型。
+对于虚拟序列，可以像基本模型一样，直接使用禁忌搜索，不过由于虚拟序列长度要远大于任一流水线的调度序列长度，跳出局部最优需要的步骤可能会很多，可以考虑将其结合变动邻域搜索(VNS)来直接切换邻域结构，当然这么做也可能会跳出含有最优解的邻域分支。
+\begin{algori}
+虚拟序列VN - Tabu 搜索算法
+\begin{asparaenum}
+\renewcommand{\labelenumi}{\bf Step\theenumi~}
+\item 运用\refa{alg:continuecconstruct}建立流水线全局调度初始解，得到虚拟序列$L$及其初始调度$S^{(0)}$，并将其作为目前最优调度，将其邻域集合$\overline{S^{(c)}}$中的调度按函数值的非减排列，记为$S_{[1]},S_{[2]},...,S_{[|S^{(c)}|]}$，置$i = 1$。设定禁忌搜索迭代次数$N_I$，设定列表长度$NL$，并置特赦调度$A = S^{(0)}$；
+\item 若$i \le |S^{(c)}|$，置$S^{(1)} = S_{[i]}$，清空禁忌列表$TL$，置$k = 1$，否则终止算法；
+\item 根据\refa{alg:vituralneighbor}中的邻域生成算法，检查禁忌列表中的订单对，若它们别安排在不同的流水线，则只对其交换位置的移动禁忌；若移动后的调度为特赦调度，一样认定为可行移动。计算$S^{(k)}$中所有可行移动组成的邻域，选取它们中具有最小函数值调度的移动，记该订单对为$(L_j^*, L_k^*)$，所得调度记为$S^*$，并置$S^{(k+1)} = S^*$；
+\item 若相邻移动所得调度属于$S^+$型，则将$(L_j^*, L_k^*)$入栈禁忌列表，若列表容量已满，则按FIFO规则出栈最早的相邻移动；
+\item 若$G(S^*) < G(S^{(0)})$，置$S^{(0)} = S^*$；
+\item 置$k = k + 1$，若连续$10$次采用没有更新$S^{(0)}$，则置$i = i+1$，执行\Step{2}，否则若$k\le N_I$，执行\Step{3}，否则终止算法，$S^{(0)}$为最终所得调度。
+\end{asparaenum}
+\end{algori}
 \section{小结}
 
 tikz 作图
