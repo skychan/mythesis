@@ -86,7 +86,7 @@ MS规则通过描述作业的紧迫程度来进行作业调度，与前两者最
 
 ATC规则综合了WSPT规则和MS规则，每当有空闲处理单元时，所有待调度作业按\eqref{equ:orderindexexample}计算其排序指数，选出具有最大指数值的作业进行处理。
 \begin{equation}
-I_j(t) = \frac{w_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\right) \label{equ:orderindexexample}
+I_j(t) = \frac{wt_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\right) \label{equ:orderindexexample}
 \end{equation}
 式中：
 
@@ -95,7 +95,7 @@ $K$ & 规则比例参数\\
 $\bar p$ &剩余作业平均处理时间
 \end{tabular}
 
-可以看出当$K \to \infty$时，$I_j(t) \to w_j/p_j$，此时ATC规则便转化为WSPT规则。当$K \to 0$时，若作业$j$将产生延期，即$\max(d_j - p_j -t , 0 ) = 0$，那么ATC规则也转化为WSPT规则，若作业不会产生延期，由于$d_j - p_j - t$的影响超过$w_j/p_j$，规则ATC将转化为MS规则。ATC规则可以较容易地应用到$Pm\mid\mid \sum w_jT_j$问题，其关键技术在于比例参数$K$的选取。
+可以看出当$K \to \infty$时，$I_j(t) \to w_j/p_j$，此时ATC规则便转化为WSPT规则。当$K \to 0$时，若作业$j$将产生延期，即$\max(d_j - p_j -t , 0 ) = 0$，那么ATC规则也转化为WSPT规则，若作业不会产生延期，由于$d_j - p_j - t$的影响超过$w_j/p_j$，规则ATC将转化为MS规则。ATC规则可以较容易地应用到$Pm\mid\mid \sum w_jT_j$问题。
 
 \section{基本模型}
 基本模型由目标函数\eqref{equ:objmain}和约束条件\eqref{equ:basicst1} -- (\ref{equ:basicst7})组成，其最优调度的求解包括初始可行解与解的改进，分别在构造型和改进型算法中详述。

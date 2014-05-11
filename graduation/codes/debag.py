@@ -1,3 +1,7 @@
+import sys,pprint
+sys.path.append(".\\functions")
+import hello
+import basi
 def processtime(input_data):
 	data = input_data.split('\n')
 	first_line = data[0].split()
@@ -21,7 +25,7 @@ def processtime(input_data):
 			c[k] = max(c[k],c[k-1])+q[i]
 	return c[-1]
 
-
+r = basi.release(4)
 
 import sys
 if __name__ == '__main__':
@@ -35,4 +39,7 @@ if __name__ == '__main__':
 		output_file = open(output,'w')
 		output_file.write(str(c))
 		output_file.close()
-		#print c
+		hello.test()
+		hello.hello()
+		pprint.pprint(sys.path)
+		print r

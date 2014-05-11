@@ -1,6 +1,6 @@
+from __future__ import division
 import math #use the math module
 import random
-from __future__ import division
 # define the obj function
 #def Goal(wt,wc):
 
@@ -15,18 +15,17 @@ def Idx(time, p , due_dates, wt):
 
 # generate the job release time
 def release(n):
+	r = [None]*n
 	for j in xrange(n):
-		r[j] = random.randrange(x)
+		r[j] = random.randrange(10)/5
 	return r
 # generate the job due dates
 
 
 # generate the weights for Tardiness and Completion
-def weights(n):
-	for j in xrange(n):
-		
+#def weights(n):
+#	for j in xrange(n):
 
-
-NL = 2  # the list length of Tabu list
-TL = [None]*NL
-S_0 = S
+#NL = 2  # the list length of Tabu list
+#TL = [None]*NL
+#S_0 = S
