@@ -4,13 +4,13 @@ cls
 echo quick debag your example
 echo ----------------
 echo 0. exit
-echo 1. problem 1
+echo 1. basic model
 echo 2. problem 2
 echo 3. problem 3
 echo 4. problem 4
 echo 5. problem 5
 echo 6. problem 6
-echo 7. other data
+echo 7. generate data
 echo 8. submit
 echo ----------------
 set /p num="your choice: "
@@ -29,42 +29,43 @@ goto start
 
 :1
 cls
-python debag.py ./data/gc_50_3
+set /p data="your data: "
+python basicmodel.py ./data/"%data%"
 echo work down!
 pause
 goto start
 
 :2
 cls
-python debag.py ./data/gc_70_7
+python experiment_data.py ./data/gc_70_7
 echo work down!
 pause
 goto start
 
 :3
 cls
-python debag.py ./data/gc_100_5
+python experiment_data.py ./data/gc_100_5
 echo work down!
 pause
 goto start
 
 :4
 cls
-python debag.py ./data/gc_250_9
+python experiment_data.py ./data/gc_250_9
 echo work down!
 pause
 goto start
 
 :5
 cls
-python debag.py ./data/gc_500_1
+python experiment_data.py ./data/gc_500_1
 echo work down!
 pause
 goto start
 
 :6
 cls
-python debag.py ./data/gc_1000_5
+python experiment_data.py ./data/gc_1000_5
 echo work down!
 pause
 goto start
@@ -72,19 +73,7 @@ goto start
 :other
 cls
 set /p data="your data: "
-set /p result="your result: "
-python debag.py ./data/"%data%" ./result/"%result%"
-echo work down!
-pause
-goto start
-
-echo work down!
-pause
-goto start
-
-:submit
-cls
-python submit.py
+python experiment_data.py ./data/"%data%"
 echo work down!
 pause
 goto start

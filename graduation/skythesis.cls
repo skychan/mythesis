@@ -129,7 +129,7 @@
 \RequirePackage{calc}
 \RequirePackage{setspace}
 \RequirePackage{listings} %插入代码
-\RequirePackage{xcolor} %代码高亮
+\RequirePackage[dvipsnames]{xcolor} %代码高亮
 
 %% 代码高亮设置
 \lstset{numbers=left, %设置行号位置

@@ -5,10 +5,10 @@ import random
 #define the ordering index
 def Idx(time, p , due_dates, wt):
 	n = len(p)
-	Idx_value = [None]*n
+	Idx_value = []
 	average = sum(p)/n
 	for j in xrange(n):
-		Idx_value[j] = wt[j]/p[j]*math.exp(-max(due_dates[j]-p[j]-t,0)/2/average)
+		Idx_value.append(wt[j]/p[j]*math.exp(-max(due_dates[j]-p[j]-time,0)/2/average))
 	return Idx_value
 
 # generate the poisson var
@@ -83,22 +83,13 @@ def due_date_r(r,p):
 		d[j] = r[j] + 2*p[j] + random.randrange(-delta,delta)
 	return d
 
-# generate the job due dates without release time
-def due_date(p):
-	n = len(p)
-	flow_jobs = int(n/6/3)
-	d = [None]*n
-	for j in xrange(n):
-		d[j] = random.randrange(2*flow_jobs*p[j],4*flow_jobs*p[j])
-	return d
-
 # generate the weights for Tardiness and Completion, just input the init
 def weights(n,init):
 	w  = [init]
-	for j in xrange(n):
-		w.append(random.randrange(2*init))
-	ws = sum(w)
-	for j in xrange(n):
-		w[j] = w[j]/ws
+	for j in xrange(1,n):
+		w.append(random.randrange(1,2*init))
+#	ws = sum(w)
+#	for j in xrange(n):
+#		w[j] = w[j]/ws
 	random.shuffle(w)
 	return w

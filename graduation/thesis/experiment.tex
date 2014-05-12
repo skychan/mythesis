@@ -4,8 +4,40 @@
 本章将对上一章的算法进行评估，通过设计相关计算实验，建立评价体系，具体评估各算法的效果及其适用规模。然后根据实验结果，为研究对象制定合适的调度方案。
 \section{算法评价体系}
 
-\section{实验设计}
+到达时间：Poisson分布
+处理时间：负指数分布(指数分布)、艾尔朗分布
 
+由\reft{tab:2jobshopinfo}，流水线的数量可以是$5,6,7$，产品品种的范围是$29\~ 777$，所以合理的作业数量为$30,50,100,200,500,1000$
+，作业处理时间单位为转换过的 $t.u.$，由于每个订单的作业批量都比较大，所以订单处理时间单位为$500 t.u.$
+产品特点是体积小，而每个订单所含的产品数量，即需要考虑的作业数量大，一般在$1000\~ 2000$左右
+\section{实验设计}
+\lstset{	basicstyle = \small\ttfamily,
+	keywordstyle = \color{blue}\bfseries,
+	stringstyle = \color{red},
+	emph = {solve},
+	emphstyle = \color{Green}\bfseries,
+	commentstyle = \color{CadetBlue}
+	}
+\begin{lstlisting}[language = Python]
+def solve(input_data):
+	data = input_data.split('\n')		# load data
+	n = len(data)		
+	N = range(n)
+
+
+
+import sys
+if __name__ == '__main__':
+	if len(sys.argv) > 1:
+		file_location = sys.argv[1].strip()
+		output = sys.argv[2].strip()
+		input_data_file = open(file_location, 'r')
+		input_data = ''.join(input_data_file.readlines())
+		input_data_file.close()
+		solve(input_data)
+
+
+\end{lstlisting}
 
 \section{结果及评估}
 
