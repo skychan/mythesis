@@ -28,5 +28,7 @@
 *.thm
 *.swp
 *.swo
+*.pyc
 graduation/*.pdf
 graduation/literature
+graduation/codes/result
