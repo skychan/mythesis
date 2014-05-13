@@ -180,11 +180,11 @@ $NR$ &交替次数
 流水线内部调整是$1\mid\mid \sum w_jT_j$问题的一种扩展，可以简单运用ATC规则达到较好解，不同与前面的并行机环境，单机环境下，对流水线$l$使用ATC调度作业的具体算法如下。
 
 \begin{algori}
-基本模型ATC规则调度改进算法
+基本模型ATC规则调度改进算法\label{alg:atcinner}
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化。$J = \overline{S_l}$，根据和\refa{alg:processtime}计算各订单处理时间$p'_{l_k} = g({l_k}, |S_l|)$，进一步得到整合订单处理时间$p_{l_k} = p'_{l_k} + s_{l_k}(k = 1,2,...,|S_l|)$，置系统时间$t = 0$；
-\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$l_k^*$，使得$I_{l_k^*}(t) = \displaystyle\max_{l_k\in J}\{I_{l_k}(t)\}$，将订单$l_k^*$进行安排处理，$J = J -\{l_k^*\}$，更新流水线预计空闲时刻$t_{l} = t + p_{l_k^*}$，修改流水线状态$a_{l} = 1$。若$J = \varnothing$，该流水线上的订单调度完毕，终止算法，否则执行\Step{3}；
+\item 初始化。$J = \overline{S_l}$，根据和\refa{alg:processtime}计算各订单处理时间$p'_{l_k} = g({l_k}, |S_l|)$，进一步得到整合订单处理时间$p_{l_k} = p'_{l_k} + s_{l_k}(k = 1,2,...,|S_l|)$，置系统时间$t = 0$，重置$\overline{S_l} = \varnothing$；
+\item 根据\eqref{equ:orderindexexample}，选取预备调度订单$l_k^*$，使得$I_{l_k^*}(t) = \displaystyle\max_{l_k\in J}\{I_{l_k}(t)\}$，将订单$l_k^*$进行安排处理，$J = J -\{l_k^*\}$，将该订单排入该流水线的调度$\overline{S_l} = \overline{S_l}\bigcup \{l_k^*\} $。若$J = \varnothing$，该流水线上的订单调度完毕，终止算法，否则执行\Step{3}；
 \item 更新系统时间$t = t + p_{l_k^*}$，执行\Step{2}。
 \end{asparaenum}
 \end{algori}
@@ -244,9 +244,9 @@ h(l_k) &= \lambda_t wt_{l_k}T_{l_k} + \lambda_c wc_{l_k}C_{l_k}
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
 \item 运用\refa{alg:basicconstruct}建立流水线全局调度初始解；
-\item 运用\refa{alg:intertabu}改进所有流水线的初始调度，设定交替次数$NR$，置$k = 1$；
+\item 运用\refa{alg:intertabu}(或\refa{alg:atcinner})改进所有流水线的初始调度，设定交替次数$NR$，置$k = 1$；
 \item 运用\refa{alg:between}重派订单，并将被派单的流水线记为$l^*$；
-\item 运用\refa{alg:intertabu}对流水线$l^*$进行调整改进；
+\item 运用\refa{alg:intertabu}(或\refa{alg:atcinner})对流水线$l^*$进行调整改进；
 \item 置$k = k+1$，若$k\le NR$，执行\Step{3}，否则终止算法。
 \end{asparaenum}
 \end{algori}

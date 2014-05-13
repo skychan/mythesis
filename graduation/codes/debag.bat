@@ -4,12 +4,12 @@ cls
 echo quick debag your example
 echo ----------------
 echo 0. exit
-echo 1. basic model
-echo 2. problem 2
-echo 3. problem 3
-echo 4. problem 4
-echo 5. problem 5
-echo 6. problem 6
+echo 1. basic model with ATC take-turns algorithm
+echo 2. basic model with Tabu Search algorithm
+echo 3. basic model with virtual list algorithm
+echo 4. contiunous model with ATCS take-turns algorithm
+echo 5. contiunous model with Tabu Search algorithm
+echo 6. contiunous model with virtual list algorithm
 echo 7. generate data
 echo 8. submit
 echo ----------------
@@ -30,14 +30,15 @@ goto start
 :1
 cls
 set /p data="your data: "
-python basicmodel.py ./data/"%data%"
+python basicatc.py ./data/"%data%"
 echo work down!
 pause
 goto start
 
 :2
 cls
-python experiment_data.py ./data/gc_70_7
+set /p data="your data: "
+python basictabu.py ./data/"%data%"
 echo work down!
 pause
 goto start

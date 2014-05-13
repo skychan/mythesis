@@ -93,3 +93,122 @@ def weights(n,init):
 #		w[j] = w[j]/ws
 	random.shuffle(w)
 	return w
+
+
+# define the Lateness
+def late(complete_time,items):
+	n = len(complete_time)
+	lateness = []
+	for j in xrange(n):
+		item = items[j]
+		lateness.append(complete_time[j] - item.due)
+	return lateness
+
+# define the Tardiness
+def tard(lateness):
+	if type(lateness) == int:
+		lateness = [lateness]
+	n = len(lateness)
+	tardiness = []
+	for j in xrange(n):
+		temp = lateness[j]
+		if temp < 0:
+			tardiness.append(0)
+		else:
+			tardiness.append(temp)
+	return tardiness
+
+# define the Earliness
+def early(lateness):
+	n = len(lateness)
+	earliness = []
+	for j in xrange(n):
+		temp = - lateness[j]
+		if temp < 0:
+			earliness.append(0)
+		else:
+			earliness.append(temp)
+	return earliness
+
+def initialization(items,n,m):
+	J = range(n)
+	S = []
+	a = []
+	tl = []
+	L = []
+	c = [None]*n
+	for l in xrange(m):
+		S.append([])
+		a.append(0)
+		tl.append(0)
+	t = 0
+	while J:
+		if 0 in a:
+			l_star = a.index(0)
+			p,d,wt = [],[],[]
+			for j in J:				
+				item = items[j]
+				p.append(item.process)
+				d.append(item.due)
+				wt.append(item.wt)
+			orderidx = Idx(t,p,d,wt)
+			j_star = J[orderidx.index(max(orderidx))]
+			S[l_star].append(j_star)
+			J.remove(j_star)
+			L.append(j_star)
+			tl[l_star] = t + items[j_star].process
+			c[j_star] = tl[l_star]
+			a[l_star] = 1
+		else:
+			t_star = min(tl)
+			for l in xrange(m):
+				if tl[l] == t_star:
+					a[l] = 0
+			t = t_star
+	return S,L,c
+
+def H(item_values,S):
+	line_values = [item_values[j] for j in S]
+	value = sum(line_values)
+	return value
+
+def reorder(items,S,line_values,item_values):
+	l_p = line_values.index(max(line_values))
+	l_m = line_values.index(min(line_values))
+	s_p = S[l_p]
+	s_m = S[l_m]
+	temp_value = [item_values[j] for j in s_p]
+	j_star = s_p[temp_value.index(max(temp_value))]
+	s_p.remove(j_star)
+	s_m.append(j_star)
+	return l_p, l_m
+
+def innerswap(S,id1,id2):
+	K = S[:]
+	temp = K[id1]
+	K[id1] = K[id2]
+	K[id2] = temp
+	return K
+
+def pairsets(S):
+	pair = []
+	n = len(S)
+	for i in xrange(n-1):
+		pair.append(set([S[i],S[i+1]]))
+	return pair
+
+def changewise(set_1,set_2):		# set_1 is the changed set while set_2 is not
+	newset = (set_1|set_2) - (set_1&set_2)
+	return newset
+
+def pairsets_update(pairs,change_set):
+	idx = pairs.index(change_set)
+	n = len(pairs)
+	if n != 1:
+		if idx == 0:
+			pairs[1] = changewise(pairs[0],pairs[1])
+		elif idx == n-1:
+			pairs[-2] = changewise(pairs[-1],pairs[-2])
+		else:
+			pairs[idx-1] = changewise(pairs[idx],pairs[idx-1])
+			pairs[idx+1] = changewise(pairs[idx],pairs[idx+1])
