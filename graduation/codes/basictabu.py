@@ -114,8 +114,8 @@ def solve(input_data):
 
 	print 'Initial values done!'
 
-	N = 10
-	NL = 2
+	N = 500
+	NL = 38
 	for l in xrange(m):
 		delta,S[l]= tabu(N,NL,S[l],items,completion,tardiness)
 		G += delta
@@ -123,24 +123,43 @@ def solve(input_data):
 	completion,tardiness,item_values = value_generator(S,items)
 	print G
 	print 'Initial Tabu Search done!'
-	print S
-	NR = 100
+	n = len(items)
+	co = [None]*n
+	for s in S:
+		t = 0
+		for j in s:
+			t += items[j].process
+			co[j] = t
+	la = generate.late(co,items)
+	ta = generate.tard(la)
+	v = []
+	for j in xrange(len(items)):
+		item = items[j]
+		wt,wc = item.wt,item.wc
+		t,c = ta[j],co[j]
+		value = h(t,c,wt,wc)
+		v.append(value)
+	print sum(v)
+
+	NR = 3
 	value = G
 	S_temp = [None]*m
 	for l in xrange(m):
 		S_temp[l] = S[l][:]
 	line_values_temp = line_values[:]
 	item_values_temp = item_values[:]
-
+	print line_values_temp
 	for k in xrange(NR):		
 		l_p,l_m = generate.reorder(items,S_temp,line_values_temp,item_values_temp)
 		completion_temp,tardiness_temp,item_values_temp = value_generator(S_temp,items)
+		line_values_temp[l_p] = generate.H(item_values_temp,S_temp[l_p])
+		line_values_temp[l_m] = generate.H(item_values_temp,S_temp[l_m])
 		delta_p,S_temp[l_p] = tabu(N,NL,S_temp[l_p],items,completion_temp,tardiness_temp)
-		delta_m,S_temp[l_m] = tabu(N,NL,S_temp[l_m],items,completion_temp,tardiness_temp)
+		delta_m,S_temp[l_m] = tabu(N,NL,S_temp[l_m],items,completion_temp,tardiness_temp)	
 		line_values_temp[l_p] += delta_p
 		line_values_temp[l_m] += delta_m
+		value = generate.H(item_values_temp,L)
 		value = value + delta_m + delta_p
-		print S_temp
 		print value,G
 		if value < G:
 			G = value
@@ -149,6 +168,25 @@ def solve(input_data):
 			for l in xrange(m):
 				S[l] = S_temp[l][:]
 		print 'hello:' + str(k)
+	GG = generate.H(item_values,L)
+	print GG
+	n = len(items)
+	co = [None]*n
+	for s in S:
+		t = 0
+		for j in s:
+			t += items[j].process
+			co[j] = t
+	la = generate.late(co,items)
+	ta = generate.tard(la)
+	v = []
+	for j in xrange(len(items)):
+		item = items[j]
+		wt,wc = item.wt,item.wc
+		t,c = ta[j],co[j]
+		value = h(t,c,wt,wc)
+		v.append(value)
+	print sum(v)
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:

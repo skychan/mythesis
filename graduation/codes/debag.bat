@@ -45,14 +45,16 @@ goto start
 
 :3
 cls
-python experiment_data.py ./data/gc_100_5
+set /p data="your data: "
+python basicvirtual.py ./data/"%data%"
 echo work down!
 pause
 goto start
 
 :4
 cls
-python experiment_data.py ./data/gc_250_9
+set /p data="your data: "
+python continueatcs.py ./data/"%data%"
 echo work down!
 pause
 goto start

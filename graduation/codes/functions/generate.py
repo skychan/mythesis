@@ -1,6 +1,7 @@
 from __future__ import division
 import math
 import random
+import basicvirtual
 
 #define the ordering index
 def Idx(time, p , due_dates, wt):
@@ -111,23 +112,19 @@ def tard(lateness):
 	n = len(lateness)
 	tardiness = []
 	for j in xrange(n):
-		temp = lateness[j]
-		if temp < 0:
-			tardiness.append(0)
-		else:
-			tardiness.append(temp)
+		temp = max(lateness[j],0)
+		tardiness.append(temp)
 	return tardiness
 
 # define the Earliness
 def early(lateness):
+	if type(lateness) == int:
+		lateness = [lateness]
 	n = len(lateness)
 	earliness = []
 	for j in xrange(n):
-		temp = - lateness[j]
-		if temp < 0:
-			earliness.append(0)
-		else:
-			earliness.append(temp)
+		temp = max(-lateness[j],0)
+		earliness.append(temp)
 	return earliness
 
 def initialization(items,n,m):
@@ -212,3 +209,65 @@ def pairsets_update(pairs,change_set):
 		else:
 			pairs[idx-1] = changewise(pairs[idx],pairs[idx-1])
 			pairs[idx+1] = changewise(pairs[idx],pairs[idx+1])
+
+def find_job(job,S):
+	n = len(S)
+	for l in xrange(n):
+		if job in S[l]:
+			l_star = l
+	return l_star
+
+# this function is to verify if the algorithm is right, also can use it to generate value in a silly way ^_^
+def verify(S,items):
+	n = len(items)
+	completion = [None]*n
+	for s in S:
+		t = 0
+		for j in s:
+			t += items[j].process
+			completion[j] = t
+	lateness = late(completion,items)
+	tardiness = tard(lateness)
+	item_values = []
+	for j in xrange(len(items)):
+		item = items[j]
+		wt,wc = item.wt,item.wc
+		t,c = tardiness[j],completion[j]
+		value = basicvirtual.h(t,c,wt,wc)
+		item_values.append(value)
+	return completion,tardiness,item_values
+
+# the continuous model needs more functions
+
+def balance_rate(completion,S):
+	c_max = []
+	for s in S:
+		c_max.append(completion[s[-1]])
+	m = len(c_max)
+	Rb = sum(c_max)/(m*max(c_max))
+	return Rb,c_max
+
+def idle(items,completion,S):
+	n = len(items)
+	item_free = [None]*n
+	for s in S:
+		k = 0
+		for j in s:
+			if k == 0:
+				item_free[j] = max(items[j].release - items[j].setup,0)
+			else:
+				i = s[k-1]
+				item_free[j] = max(items[j].release - items[j].setup - completion[i] ,0)
+			k+=1
+	return item_free
+
+def idle_rate(items,completion,c_max,S):
+	item_free = idle(items,completion,S)
+	Ru = []
+	l = 0
+	for s in S:
+		v = [item_free[j] for j in s]
+		Ru.append(1 - sum(v)/c_max[l])
+		l += 1
+	return Ru
+
