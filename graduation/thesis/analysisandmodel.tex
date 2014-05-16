@@ -68,6 +68,7 @@ $\sum w_jT_j$ & 加权订单延迟时间总和 \\
 所有作业均完成的订单方可交付
 
 \subsection{目标函数}
+多品种多装配线轮番装配调度优化模型
 本课题期望通过合理调度，达到提高流水线利用率、减少浪费、缩短制造期、提高应变能力、减少库存、降低生产成本等目标，这些目标有着内在联系，所以在设计目标函数的时候，不必把每样都列入其中，比如最小化完成时刻在一定程度上相当于最大化处理单元利用率，进一步可以暗示最大化流水线利用率。
 
 对于基本模型，可以考虑满足工期和提高流水线利用率，其中满足工期为主要目标，可用加权延迟时间和$\sum wt_jT_j$，流水线利用率为次要目标，可用加权完成总时刻和$\sum wc_jC_j$。其中$wt_j, wc_j$分别为订单$j$的延迟和完工权重。两目标的重要程度可以体现在目标权重系数$\lambda$上。
@@ -172,11 +173,11 @@ Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
 根据这个式子的特点，可将其改写成等价形式：
 
 \[
-\min \quad \sum_{j = 1}^n w_j^2L_j^2
+\min \quad \sum_{j = 1}^n \sqrt{w_j^2L_j^2}
 \]
 由于主要目标和工期的关联很大，容易受其牵制而安排出利用率不高的调度，故需将产线利用率考虑其中，并从流水线的角度来考虑，则主要需改写成\eqref{equ:insertmainobj}。
 \begin{equation}
-\min \quad \sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}w_{l_k}^2L_{l_k}^2}{Ru_l}\label{equ:insertmainobj}
+\min \quad \sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l}\label{equ:insertmainobj}
 \end{equation}
 
 此外，需要考虑流水线的平衡性，可以综合入次要目标加权完成总和当中，其形式可以有很多种，为了体现提高流水线平衡性的重要，可以这样设计：
@@ -187,7 +188,7 @@ Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
 
 式中$\sigma$是比例参数，其值越大，对目标值影响越大，表明均衡性越为重要，需要根据生产管理人员的决策来确定。与基本模型类似，主要和次要目标可以通过目标权重系数$\lambda$上，然后进行帕累托分析。结合\eqref{equ:insertmainobj}与(\ref{equ:insertsecondobj})得到本模型的目标函数：
 \begin{equation}
-\min \quad \lambda_1\sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}w_{l_k}^2L_{l_k}^2}{Ru_l} + \lambda_2 \exp\left(-\frac{Rb}{\sigma}\right)\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
+\min \quad \lambda_1\sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l} + \lambda_2 \exp\left(-\frac{Rb}{\sigma}\right)\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
 \label{equ:insertobj}
 \end{equation}
 

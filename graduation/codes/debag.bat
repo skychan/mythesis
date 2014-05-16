@@ -61,7 +61,8 @@ goto start
 
 :5
 cls
-python experiment_data.py ./data/gc_500_1
+set /p data="your data: "
+python continuetabu.py ./data/"%data%"
 echo work down!
 pause
 goto start

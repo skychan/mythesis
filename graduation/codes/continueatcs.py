@@ -1,36 +1,53 @@
 import sys
+import math
 sys.path.append(".\\functions")
 import generate
 from collections import namedtuple
 Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
-def  h(tardiness,completion,wt,wc):			# define the contribution of one item for the obj function
-	value = lambda1*wt*tardiness + lambda2*wc*completion
-	return value
 lambda1 = 0.6
 lambda2 = 0.4
+sigma = 0.5
+def  h(S,completion,items,lambda1,lambda2):			# define the contribution of one item for the obj function
+	n = len(items)
+	lateness = generate.late(completion,items)
+	value = [None]*n
+	for s in S:
+		for j in s:
+#			value[j] = lambda1*(math.sqrt(items[j].wt*lateness[j]**2)) + lambda2*items[j].wc*completion[j]**8
+			value[j] = completion[j] + 4*lateness[j]
+	return value
 
-def ATCS(items,S):
+def ATCS(items,S,m):
 	J = S[:]
 	S = []
 	t = 0
 	c = []
+	n = len(items)
+	f = []
+	k_1,k_2 = generate.estimate(m,items)
 	while J:
 		p = [items[j].process for j in J]
+		r = [items[j].release for j in J]
 		d = [items[j].due for j in J]
+		s = [items[j].setup for j in J]
 		wt = [items[j].wt for j in J]
-		orderidx = generate.Idx(t,p,d,wt)
+		orderidx = generate.Idx_c(t,p,s,d,wt,k_1,k_2)
 		j_star = J[orderidx.index(max(orderidx))]
 		S.append(j_star)
 		J.remove(j_star)
-		t = t + items[j_star].process
+		if len(S) == 1:
+			f.append(max(items[j_star].release - items[j_star].setup,0))
+		else:
+			f.append(max(items[j_star].release - items[j_star].setup - c[ -1],0))
+		t = t + items[j_star].process + items[j_star].setup + f[-1]
 		c.append(t)
 	return S,c
-
 
 def solve(input_data):
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1							# get the amount of items
+	m = 5
 	items = []	
 	for j in xrange(n):
 		data = Data[j]
@@ -43,24 +60,10 @@ def solve(input_data):
 		wc = int(parts[5])						# get the completion weights
 		items.append(Item(p,r,s,d,wt,wc))			# combine those item data
 	print 'Data loaded!'	
-	S,L,completion = generate.initialization(items,n,5)
+	S,L,completion,item_free = generate.initialization_c(items,n,m)
 	print 'Initialization done!'
-
-	lateness = generate.late(completion,items)
-	tardiness = generate.tard(lateness)
-	item_values = []
-	for j in xrange(n):
-		item = items[j]
-		wt,wc = item.wt,item.wc
-		t,c = tardiness[j],completion[j]
-		value = h(t,c,wt,wc)
-		item_values.append(value)
-	G = generate.H(item_values,L)
-	line_values = []
-	for s in S:
-		value = generate.H(item_values,s)
-		line_values.append(value)
-	print 'Initial values done!'
+	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
+	print 'Initialization values done!'
 	print G
 
 #	f = open(".\\result\\result_" +str(load),'w')
@@ -73,34 +76,24 @@ def solve(input_data):
 #	for k in range(len(S)):
 #		g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
 #	g.write('let us check\n')
-	NR = 100
+	print line_values
+	NR = 20
+	item_values = h(S,completion,items,lambda1,lambda2)
 	for k in xrange(NR):
 #		g.write(str(k)+':\n')
 		l_p,l_m = generate.reorder(items,S,line_values,item_values)
-		S[l_p],c_p = ATCS(items,S[l_p])
-		S[l_m],c_m = ATCS(items,S[l_m])
-		for j in S[l_p]:
-			completion[j] = c_p.pop(0)
-			c = completion[j]
-			item = items[j]
-			wt,wc = item.wt,item.wc
-			late = completion[j] - item.due
-			t = generate.tard(late)
-			item_values[j] = h(t[0],c,wt,wc)
-		for j in S[l_m]:
-			completion[j] = c_m.pop(0)
-			c = completion[j]
-			item = items[j]
-			wt,wc = item.wt,item.wc
-			late = completion[j] - item.due
-			t = generate.tard(late)
-			item_values[j] = h(t[0],c,wt,wc)
-		delta_p = generate.H(item_values,S[l_p]) - line_values[l_p]
-		delta_m = generate.H(item_values,S[l_m]) - line_values[l_m]
-		line_values[l_p] += delta_p
-		line_values[l_m] += delta_m
-		G = G + delta_m + delta_p
+		print l_p,l_m
+		S[l_p],c_p = ATCS(items,S[l_p],m)
+		S[l_m],c_m = ATCS(items,S[l_m],m)
+		S_pm = S[l_p] + S[l_m]
+		c = c_p + c_m
+		for j in S_pm:
+			completion[j] = c.pop(0)
+		line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
+		print line_values
+		print G
 	print G
+	
 #		for k in range(len(S)):
 #			g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
 #	g.close()
