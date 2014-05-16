@@ -69,7 +69,8 @@ goto start
 
 :6
 cls
-python experiment_data.py ./data/gc_1000_5
+set /p data="your data: "
+python continuevirtual.py ./data/"%data%"
 echo work down!
 pause
 goto start

@@ -2,52 +2,23 @@ import sys
 import math
 sys.path.append(".\\functions")
 import generate
+import continueatcs
 from collections import namedtuple
 Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
 lambda1 = 0.6
 lambda2 = 0.4
 sigma = 0.5
-def  h(S,completion,items,lambda1,lambda2):			# define the contribution of one item for the obj function
-	n = len(items)
-	lateness = generate.late(completion,items)
-	value = [None]*n
-	for s in S:
-		for j in s:
-#			value[j] = lambda1*(math.sqrt(items[j].wt*lateness[j]**2)) + lambda2*items[j].wc*completion[j]**8
-			value[j] = completion[j] + 4*lateness[j]
-	return value
 
-def complete_time(S,items):
-	n = len(items)
-	c = [None]*n
-	for s in S:
-		t = 0
-		for j in s:
-			t += items[j].process
-			c[j] = t
-	return c
-
-def value_generator(S,items):
-	completion = complete_time(S,items)
-	lateness = generate.late(completion,items)
-	tardiness = generate.tard(lateness)
-	item_values = []
-	for j in xrange(len(items)):
-		item = items[j]
-		wt,wc = item.wt,item.wc
-		t,c = tardiness[j],completion[j]
-		value = h(t,c,wt,wc)
-		item_values.append(value)
-	return completion,tardiness,item_values
-	
-
-def tabu(N,NL,S,items,G,completion,lambda1,lambda2,sigma):
+def tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma):
 	TL = [None]*NL
-	pairs = generate.pairsets(S)
+	pairs = generate.pairsets(S[l])
 	completion_temp = completion[:]
+	line_values_temp = line_values[:]
 	G_star = G
-	S_star = S[:]
+	S_star = []
+	for s in S:
+		S_star.append(s[:])
 	for k in xrange(N):
 		test_G = []
 		test_S = []
@@ -57,27 +28,30 @@ def tabu(N,NL,S,items,G,completion,lambda1,lambda2,sigma):
 				job = list(s)
 				a = job[0]
 				b = job[1]
-				a_idx = S.index(a)
-				b_idex = S.index(b)
-				S_temp = generate.innerswap(S,a_idx,b_idex)
-				line_values_temp,G_temp = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
+				a_idx = S_star[l].index(a)
+				b_idex = S_star[l].index(b)
+				S_temp = generate.innerswap(S_star[l],a_idx,b_idex)
+				line_values_temp,G_temp = generate.Goal(completion_temp,items,S_star,lambda1,lambda2,sigma)
 				if test_G == [] or G_temp < test_G:
 					test_G = G_temp
 					test_S = S_temp[:]
-					test_values = line_values_temp[:]
 					a_star = a
 					b_star = b
 		if test_G == []:
 			break
 		change_set = set([a_star,b_star])
 		generate.pairsets_update(pairs,change_set)
+		S_star[l] = test_S[:]
+		completion_temp,line_values_temp = continueatcs.complete_time(S_star,items,lambda1,lambda2,sigma)
 		TL.pop(0)
 		TL.append(change_set)
 		if test_G < G_star:
 			G_star = test_G
-			S_star = test_S[:]
+			S[l] = test_S[:]
 			line_values = line_values_temp[:]
-	return G_star,S_star,line_values
+			completion = completion_temp[:]
+			line_values = line_values_temp[:]
+	return G_star,S,line_values
 
 def solve(input_data):
 	Data = input_data.split('\n')					# load data
@@ -99,19 +73,27 @@ def solve(input_data):
 	print 'Initialization done!'
 	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
 	print 'Initialization values done!'
-	print G
+	print G,S,line_values
 
-	NR = 1
-	N = 10
-	NL = 2
-	item_values = h(S,completion,items,lambda1,lambda2)
+	NR = 10
+	N = 100
+	NL = 20
+	item_values = continueatcs.h(S,completion,items,lambda1,lambda2,sigma)
+	G_star = G
+	S_star =[]
+	for s in S:
+		S_star.append(s[:])
+#	print item_values
 	for k in xrange(NR):
-		l_p,l_m = generate.reorder(items,S,line_values,item_values)
-		print l_p,l_m
-		G_star,S_star,line_values = tabu(N,NL,S[l_p],items,G,completion,lambda1,lambda2,sigma)
-		G_star,S_star,line_values = tabu(N,NL,S[l_m],items,G_star,completion,lambda1,lambda2,sigma)
+		l_p,l_m = generate.reorder(items,S_star,line_values,item_values)
+		completion,line_values = continueatcs.complete_time(S_star,items,lambda1,lambda2,sigma)
+		G_star,S_star,line_values = tabu(N,NL,S_star,l_p,items,G_star,completion,line_values,lambda1,lambda2,sigma)
+#		print S_star,line_values
+		G_star,S_star,line_values = tabu(N,NL,S_star,l_m,items,G_star,completion,line_values,lambda1,lambda2,sigma)
+		item_values = continueatcs.h(S_star,completion,items,lambda1,lambda2,sigma)
+#		print S_star,line_values
 
-	print G
+	print G_star
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:

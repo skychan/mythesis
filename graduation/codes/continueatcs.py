@@ -8,15 +8,38 @@ Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 lambda1 = 0.6
 lambda2 = 0.4
 sigma = 0.5
-def  h(S,completion,items,lambda1,lambda2):			# define the contribution of one item for the obj function
+def  h(S,completion,items,lambda1,lambda2,sigma):			# define the contribution of one item for the obj function
 	n = len(items)
 	lateness = generate.late(completion,items)
 	value = [None]*n
+	Rb,c_max = generate.balance_rate(completion,S)
+	Ru = generate.idle_rate(items,completion,c_max,S)
 	for s in S:
+		l = S.index(s)
 		for j in s:
-#			value[j] = lambda1*(math.sqrt(items[j].wt*lateness[j]**2)) + lambda2*items[j].wc*completion[j]**8
-			value[j] = completion[j] + 4*lateness[j]
+			value[j] = lambda1*(math.fabs(items[j].wt*lateness[j]))/Ru[l] + lambda2*items[j].wc*completion[j]*math.exp(-Rb/sigma)
 	return value
+
+def complete_time(S,items,lambda1,lambda2,sigma):
+	n = len(items)
+	c = [None]*n
+	f = [None]*n
+	for s in S:
+		t = 0
+		for j in s:
+			item = items[j]
+			if s.index(j) == 0:
+				f[j] = max(item.release - item.setup,0)
+			else:
+				f[j] = max(item.release - item.setup - c[s[s.index(j)-1]],0)
+			t += item.process + item.setup + f[j]
+			c[j] = t
+	item_values = h(S,c,items,lambda1,lambda2,sigma)
+	line_values = []
+	for s in S:
+		v = [item_values[j] for j in s]
+		line_values.append(sum(v))
+	return c,line_values
 
 def ATCS(items,S,m):
 	J = S[:]
@@ -78,18 +101,16 @@ def solve(input_data):
 #	g.write('let us check\n')
 	print line_values
 	NR = 20
-	item_values = h(S,completion,items,lambda1,lambda2)
+	item_values = h(S,completion,items,lambda1,lambda2,sigma)
 	for k in xrange(NR):
 #		g.write(str(k)+':\n')
 		l_p,l_m = generate.reorder(items,S,line_values,item_values)
 		print l_p,l_m
 		S[l_p],c_p = ATCS(items,S[l_p],m)
 		S[l_m],c_m = ATCS(items,S[l_m],m)
-		S_pm = S[l_p] + S[l_m]
-		c = c_p + c_m
-		for j in S_pm:
-			completion[j] = c.pop(0)
-		line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
+		completion,line_values = complete_time(S,items,lambda1,lambda2,sigma)
+		item_values = h(S,completion,items,lambda1,lambda2,sigma)
+		G = sum(line_values)
 		print line_values
 		print G
 	print G
