@@ -3,6 +3,7 @@ import math
 sys.path.append(".\\functions")
 import generate
 from collections import namedtuple
+import test1
 Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
 lambda1 = 0.6

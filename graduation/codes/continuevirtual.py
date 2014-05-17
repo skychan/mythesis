@@ -1,23 +1,15 @@
 import sys
 sys.path.append(".\\functions")
 import generate
-import basictabu
+import continueatcs
+import continuetabu
 import random
 from collections import namedtuple
-Item = namedtuple("Item", ['process','due','wt','wc'])
+Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
-def  h(tardiness,completion,wt,wc):			# define the contribution of one item for the obj function
-	value = lambda1*wt*tardiness + lambda2*wc*completion
-	return value
 lambda1 = 0.6
 lambda2 = 0.4
-def complete_time(S,items):
-	c = []
-	t = 0
-	for j in S:		
-		t += items[j].process
-		c.append(t)
-	return c
+sigma = 0.5
 
 def value_generator(S,items):
 	completion = complete_time(S,items)
@@ -33,73 +25,70 @@ def value_generator(S,items):
 		item_values.append(value)
 	return completion,tardiness,item_values
 
-def same_delta(a,b,items,completion,tardiness):
-	delta_c_a = - items[b].process
-	delta_c_b = items[a].process
-	delta_t_a =  max(completion[a] + delta_c_a - items[a].due ,0) - tardiness[a]
-	delta_t_b = max(completion[a] - items[b].due,0) - tardiness[b]
-	wt_a,wt_b,wc_a,wc_b = items[a].wt,items[b].wt,items[a].wc,items[b].wc
-	delta_a = h(delta_t_a,delta_c_a,wt_a,wc_a)
-	delta_b = h(delta_t_b,delta_c_b,wt_b,wc_b)
-	return delta_a,delta_b
+def same_S(S,l,a_idx,b_idx):
+	S_t = []
+	for s in S:
+		S_t.append(s[:])
+	S_t[l] = generate.innerswap(S_t[l],a_idx,b_idx)
+	return S_t
 
-def diff_delta(S_x,items,line_value):
-	c, t, v = value_generator(S_x,items)
-	new_value = sum(v)
-	delta = new_value - line_value
-	return c,t,v,delta
+def test_G(items,S,lambda1,lambda2,sigma):
+	c_temp,v_temp = continueatcs.complete_time(S,items,lambda1,lambda2,sigma)
+	_,G = generate.Goal(c_temp,items,S,lambda1,lambda2,sigma)
+	return G
 
-def delta1(S,l_a,l_b,a,b_idx,item_values,items,line_values):
-	S_I_1 = S[l_a][:]
-	S_I_2 = S[l_b][:]
-	S_I_2.insert(b_idx,a)
-	S_I_1.remove(a)
-	c_I_1,t_I_1,v_I_1,delta_I_1 = diff_delta(S_I_1,items,line_values[l_a])
-	c_I_2,t_I_2,v_I_2,delta_I_2 = diff_delta(S_I_2,items,line_values[l_b])
-	delta_I = delta_I_1 + delta_I_2
-	return S_I_1,S_I_2,c_I_1,c_I_2,t_I_1,t_I_2,v_I_1,v_I_2,c_I_2,delta_I
+def diff1_S(S,l_a,l_b,a,b_idx):
+	S_t = []
+	for s in S:
+		S_t.append(s[:])
+	S_1 = S_t[l_a][:]
+	S_2 = S_t[l_b][:]
+	S_2.insert(b_idx,a)
+	S_1.remove(a)
+	S_t[l_a] = S_1
+	S_t[l_b] = S_2
+	return S_t
 
-def delta2(S,l_a,l_b,b,a_idx,item_values,items,line_values):
-	S_II_1 = S[l_a][:]
-	S_II_2 = S[l_b][:]
-	S_II_1.insert(a_idx + 1,b)
-	S_II_2.remove(b)
-	c_II_1,t_II_1,v_II_1,delta_II_1 = diff_delta(S_II_1,items,line_values[l_a])
-	c_II_2,t_II_2,v_II_2,delta_II_2 = diff_delta(S_II_2,items,line_values[l_b])
-	delta_II = delta_II_1 + delta_II_2
-	return S_II_1,S_II_2,c_II_1,c_II_2,t_II_1,t_II_2,v_II_1,v_II_2,delta_II
-	
-def delta3(S,l_a,l_b,a,b,a_idx,b_idx,item_values,items,line_values):
-	S_III_1 = S[l_a][:]
-	S_III_2 = S[l_b][:]
-	S_III_1.insert(a_idx,b)
-	S_III_1.remove(a)
-	S_III_2.insert(b_idx,a)
-	S_III_2.remove(b)
-	c_III_1,t_III_1,v_III_1,delta_III_1 = diff_delta(S_III_1,items,line_values[l_a])
-	c_III_2,t_III_2,v_III_2,delta_III_2 = diff_delta(S_III_2,items,line_values[l_b])
-	delta_III = delta_III_1 + delta_III_2
-	return S_III_1,S_III_2,c_III_1,c_III_2,t_III_1,t_III_2,v_III_1,v_III_2,delta_III
+def diff2_S(S,l_a,l_b,b,a_idx):
+	S_t = []
+	for s in S:
+		S_t.append(s[:])
+	S_1 = S[l_a][:]
+	S_2 = S[l_b][:]
+	S_1.insert(a_idx + 1,b)
+	S_2.remove(b)
+	S_t[l_a] = S_1
+	S_t[l_b] = S_2	
+	return S_t
 
-def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
+def diff3_S(S,l_a,l_b,a,b,a_idx,b_idx):
+	S_t = []
+	for s in S:
+		S_t.append(s[:])
+	S_1 = S[l_a][:]
+	S_2 = S[l_b][:]
+	S_1.insert(a_idx,b)
+	S_1.remove(a)
+	S_2.insert(b_idx,a)
+	S_2.remove(b)
+	S_t[l_a] = S_1
+	S_t[l_b] = S_2	
+	return S_t
+
+def tabu(N,NL,S,L,items,G,lambda1,lambda2,sigma):
 	TL = [None]*NL
 	from_same = []
 	from_diff = []
 	pairs = generate.pairsets(L)
-	completion_temp = completion[:]
-	tardiness_temp = tardiness[:]
-	line_values_temp = line_values[:]
-	item_values_temp = item_values[:]
-	delta_star = 0
-	Delta = 0
+	G_star = G
 	L_star = L[:]
-	m = len(S)
-	S_star = [None]*m
-	for l in xrange(m):
-		S_star[l] = S[l][:]
+#	m = len(S)
+#	S_star = [None]*m
+#	for l in xrange(m):
+#		S_star[l] = S[l][:]
 	# backup all the var
 	for k in xrange(N):
-		delta = []
+		G_test = 0
 		issame = 0
 		isdiff = 0
 		out = 0
@@ -116,54 +105,50 @@ def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
 			b_idx = S[l_b].index(b)
 			if s not in TL:
 				if l_a == l_b:
-					delta_a,delta_b = same_delta(a,b,items,completion_temp,tardiness_temp)
-					delta_h = delta_a + delta_b
+					# a <--> b
+					S_temp = same_S(S,l_a,a_idx,b_idx)
+					G_temp = test_G(items,S_temp,lambda1,lambda2,sigma)
 				else:
-					# delta_I
-					S_I_1,S_I_2,c_I_1,c_I_2,t_I_1,t_I_2,v_I_1,v_I_2,c_I_2,delta_I = delta1(S,l_a,l_b,a,b_idx,item_values,items,line_values_temp)
-					# delta_II
-					S_II_1,S_II_2,c_II_1,c_II_2,t_II_1,t_II_2,v_II_1,v_II_2,delta_II = delta2(S,l_a,l_b,b,a_idx,item_values,items,line_values_temp)			
-					# delta_III
-					S_III_1,S_III_2,c_III_1,c_III_2,t_III_1,t_III_2,v_III_1,v_III_2,delta_III = delta3(S,l_a,l_b,a,b,a_idx,b_idx,item_values,items,line_values_temp)
+					# a -> b's
+					S_temp_1 = diff1_S(S,l_a,l_b,a,b_idx)
+					G_temp_1 = test_G(items,S_temp_1,lambda1,lambda2,sigma)
+					# b -> a's
+					S_temp_2 = diff2_S(S,l_a,l_b,b,a_idx)
+					G_temp_2 = test_G(items,S_temp_2,lambda1,lambda2,sigma)		
+					# a <--> b
+					S_temp_3 = diff3_S(S,l_a,l_b,a,b,a_idx,b_idx)
+					G_temp_3 = test_G(items,S_temp_3,lambda1,lambda2,sigma)
 
-					delta_h = min(delta_I,delta_II,delta_III)
+					G_temp = min(G_temp_1,G_temp_2,G_temp_3)
 			elif s in from_same:
 				break
 			else:
-				# delta_I
-				S_I_1,S_I_2,c_I_1,c_I_2,t_I_1,t_I_2,v_I_1,v_I_2,c_I_2,delta_I = delta1(S,l_a,l_b,a,b_idx,item_values,items,line_values_temp)				
-				# delta_II
-				S_II_1,S_II_2,c_II_1,c_II_2,t_II_1,t_II_2,v_II_1,v_II_2,delta_II = delta2(S,l_a,l_b,b,a_idx,item_values,items,line_values_temp)
-				delta_h = min(delta_I,delta_II)
+				# a -> b's
+				S_temp_1 = diff1_S(S,l_a,l_b,a,b_idx)
+				G_temp_1 = test_G(items,S_temp_1,lambda1,lambda2,sigma)
+				# b -> a's
+				S_temp_2 = diff2_S(S,l_a,l_b,b,a_idx)
+				G_temp_2 = test_G(items,S_temp_2,lambda1,lambda2,sigma)	
+				G_temp = min(G_temp_1,G_temp_2)
 
-			if delta == [] or delta_h < delta:
-				delta = delta_h
+			if G_test == 0 or G_temp < G_test:
+				G_test = G_temp
 				a_temp,b_temp = a,b
 				l_a_temp,l_b_temp = l_a,l_b
 				if l_a == l_b:
-					S1_temp = S[l_a][:]
-					S1_temp = generate.innerswap(S1_temp,a_idx,b_idx)
-					c1_temp,t1_temp,v1_temp = value_generator(S1_temp,items)
-					S2_temp = []
-					c2_temp,t2_temp,v2_temp = [],[],[]
+					S_star = S_temp
 					issame,isdiff = 1,0
 				else:
-					if delta == delta_I:
-						c1_temp,t1_temp,v1_temp = c_I_1,t_I_1,v_I_1
-						c2_temp,t2_temp,v2_temp = c_I_2,t_I_2,v_I_2
-						S1_temp,S2_temp = S_I_1,S_I_2
+					if G_temp == G_temp_1:
+						S_star = S_temp_1
 						issame,isdiff = 0,0
-					elif delta == delta_II:
-						c1_temp,t1_temp,v1_temp = c_II_1,t_II_1,v_II_1
-						c2_temp,t2_temp,v2_temp = c_II_2,t_II_2,v_II_2
-						S1_temp,S2_temp = S_II_1,S_II_2
+					elif G_temp == G_temp_2:
+						S_star = S_temp_2
 						issame,isdiff = 0,0
-					elif delta == delta_III:
-						c1_temp,t1_temp,v1_temp = c_III_1,t_III_1,v_III_1
-						c2_temp,t2_temp,v2_temp = c_III_2,t_III_2,v_III_2
-						S1_temp,S2_temp = S_III_1,S_III_2
+					elif G_temp == G_temp_3:
+						S_star = S_temp_3
 						issame,isdiff = 0,1
-		if delta == []:
+		if G_test == 0:
 			break
 		L = generate.innerswap(L,L.index(a_temp),L.index(b_temp))
 		pairs = generate.pairsets(L)
@@ -183,33 +168,17 @@ def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
 		elif change_set in TL:
 			TL[TL.index(change_set)] = None
 			from_diff.remove(change_set)
-		c_temp = c1_temp + c2_temp
-		t_temp = t1_temp + t2_temp
-		v_temp = v1_temp + v2_temp
-		i = 0
-		for j in S1_temp + S2_temp:
-			completion_temp[j] = c_temp[i]
-			tardiness_temp[j] = t_temp[i]
-			item_values_temp[j] = v_temp[i]
-			i+=1
-		S[l_a_temp] = S1_temp[:]
-		line_values_temp[l_a_temp] = sum(v1_temp)
-		if l_a_temp != l_b_temp:
-			S[l_b_temp] = S2_temp[:]
-			line_values_temp[l_b_temp] = sum(v2_temp)
-		Delta += delta
+		S = S_star
+		G = G_test
+		print G
 		print 'k =  ' +str(k)
-		if Delta < delta_star:
-			delta_star = Delta
-			for l in xrange(m):
-				S_star[l] = S[l][:]
+		if G < G_star:
+			G_star = G
+			S_c = []
+			for s in S:
+				S_c.append(s[:]) 
 			L_star = L[:]
-			line_values = line_values_temp[:]
-			item_values = item_values_temp[:]
-			completion = completion_temp[:]
-			tardiness = tardiness_temp[:]
-		print Delta, delta_star
-	return delta_star,S_star,L_star,line_values,item_values,completion,tardiness
+	return G_star,S_c
 
 def solve(input_data,N,NL):
 	Data = input_data.split('\n')					# load data
@@ -219,48 +188,32 @@ def solve(input_data,N,NL):
 		data = Data[j]
 		parts = data.split()
 		p = int(parts[0])					# get the process time
+		r = int(parts[1])
 		s = int(parts[2])						# get the setup time
 		d = int(parts[3])					# get the due date
 		wt = int(parts[4])					# get the tardiness weights
 		wc = int(parts[5])					# get the completion weights
-		items.append(Item(p+s,d,wt,wc))			# combine those item data
+		items.append(Item(p,r,s,d,wt,wc))			# combine those item data
 	print 'Data loaded!'	
 	m = 5
-	S,L,completion = generate.initialization(items,n,m)
-	lateness = generate.late(completion,items)
-	tardiness = generate.tard(lateness)
-	item_values = []
-	for j in xrange(len(items)):
-		item = items[j]
-		wt,wc = item.wt,item.wc
-		t,c = tardiness[j],completion[j]
-		value = h(t,c,wt,wc)
-		item_values.append(value)
+	S,L,completion,item_free = generate.initialization_c(items,n,m)
 	print 'Initialization done!'
-
-	G = generate.H(item_values,L)
-	line_values = []
-	for s in S:
-		value = generate.H(item_values,s)
-		line_values.append(value)
-
+	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
 	print 'Initial values done!'
-	for l in xrange(m):
-		delta,S[l]= basictabu.tabu(144,NL,S[l],items,completion,tardiness)
-		G += delta
-		line_values[l] += delta
-	completion,tardiness,item_values = generate.verify(S,items)
-	print 'Initial Tabu Search Done!'
-	print sum(item_values)
 
-	delta,S,L,line_values,item_values,completion,tardiness = tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values)
-	G += delta
+	# initial tabu
+	Nt = 144
+	for l in xrange(m):
+		G,S,line_values,completion = continuetabu.tabu(Nt,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma)
+	print 'Initial Tabu Search Done!'
+
+	G,S = tabu(N,NL,S,L,items,G,lambda1,lambda2,sigma)
 	print G
 	print 'Virtual Tabu Search done!'
 
-	completion,tardiness,item_values = generate.verify(S,items)
-	print 'while the verify way is:  ' +str(sum(item_values))
-	return G
+#	completion,tardiness,item_values = generate.verify(S,items)
+#	print 'while the verify way is:  ' +str(sum(item_values))
+#	return G
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:

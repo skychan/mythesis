@@ -31,7 +31,7 @@ def tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma):
 				a_idx = S_star[l].index(a)
 				b_idex = S_star[l].index(b)
 				S_temp = generate.innerswap(S_star[l],a_idx,b_idex)
-				line_values_temp,G_temp = generate.Goal(completion_temp,items,S_star,lambda1,lambda2,sigma)
+				_,G_temp = generate.Goal(completion_temp,items,S_star,lambda1,lambda2,sigma)
 				if test_G == [] or G_temp < test_G:
 					test_G = G_temp
 					test_S = S_temp[:]
@@ -51,7 +51,7 @@ def tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma):
 			line_values = line_values_temp[:]
 			completion = completion_temp[:]
 			line_values = line_values_temp[:]
-	return G_star,S,line_values
+	return G_star,S,line_values,completion
 
 def solve(input_data):
 	Data = input_data.split('\n')					# load data
@@ -87,9 +87,9 @@ def solve(input_data):
 	for k in xrange(NR):
 		l_p,l_m = generate.reorder(items,S_star,line_values,item_values)
 		completion,line_values = continueatcs.complete_time(S_star,items,lambda1,lambda2,sigma)
-		G_star,S_star,line_values = tabu(N,NL,S_star,l_p,items,G_star,completion,line_values,lambda1,lambda2,sigma)
+		G_star,S_star,line_values,completion = tabu(N,NL,S_star,l_p,items,G_star,completion,line_values,lambda1,lambda2,sigma)
 #		print S_star,line_values
-		G_star,S_star,line_values = tabu(N,NL,S_star,l_m,items,G_star,completion,line_values,lambda1,lambda2,sigma)
+		G_star,S_star,line_values,completion = tabu(N,NL,S_star,l_m,items,G_star,completion,line_values,lambda1,lambda2,sigma)
 		item_values = continueatcs.h(S_star,completion,items,lambda1,lambda2,sigma)
 #		print S_star,line_values
 

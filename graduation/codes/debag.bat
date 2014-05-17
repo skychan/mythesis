@@ -11,7 +11,6 @@ echo 4. contiunous model with ATCS take-turns algorithm
 echo 5. contiunous model with Tabu Search algorithm
 echo 6. contiunous model with virtual list algorithm
 echo 7. generate data
-echo 8. submit
 echo ----------------
 set /p num="your choice: "
 if "%num%"=="1" goto 1
@@ -21,7 +20,6 @@ if "%num%"=="4" goto 4
 if "%num%"=="5" goto 5
 if "%num%"=="6" goto 6
 if "%num%"=="7" goto other
-if "%num%"=="8" goto submit
 if "%num%"=="0" goto exit
 echo wrong choice！
 pause
