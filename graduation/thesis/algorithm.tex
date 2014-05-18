@@ -2,65 +2,12 @@
 % !TEX root = ..\thesis.tex
 \newcommand{\jobunit}[1]{*+[F]{\makebox[1.5em]{$#1$}}}
 \newcommand{\process}[1]{*++=[o][F]{\makebox[2em]{$#1$}}}
-\newcounter{local}
-\chapter{算法设计}
-上一章构建了$2$个多品种产品调度的数学模型，需要对其检验，而这些模型求解是NP--Hard问题，需要设计相应算法来求解。在求解模型前，需要对订单处理时间计算，该问题也需通过算法设计求解。模型的具体求解算法可以分为构造型和改进型，前者从没有调度的情况开始，按一定分派规则逐渐安排作业，直至生成一个较好的调度；后者则是在前者的基础上，调整已有调度以改善目标。
-\section{处理时间函数}
-前一章提到，各订单的处理时间与被处理的流水线无关，只与其所含作业数量相关，因此可将订单的处理时间看作是关于订单本身及其所含作业数量的函数，记为$p_j = g(j,n_j)$，其中$n_j$为订单$j$所含的作业数量。此外，仍需要补充符号说明如下：\\[3pt]
-\begin{supertabular}{ll}
-$n_j$ & 订单$j$所含的作业数量\\
-$k$ & 作业标记，$k = 1,2,...,n_j$\\
-$m_j$ & 订单$j$的处理单元数量\\
-$i$ & 订单$j$的处理单元标记，$i = 1,2,...,m_j$\\
-$q_{k,i}$ & 作业$k$在处理单元$i$上的处理时间\\
-$c_{k,i}$ &作业$k$的在处理单元$i$上的完成时刻\\
-$c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\
-\end{supertabular}\\[3pt]
-其中不同作业在同处理单元上的处理时间相同，可以简记为$q_i$。
-
-由于订单和子单仅有作业数量的差别，故考虑订单的情况即可推广到子单。由于，产品体积小，可以假设处理单元间的缓冲空间足够用。订单在某条流水线上的作业可以看作是流水车间环境，没有换线时间，所以该问题可以记为：$Fm\mid \mid C_{\max}$，显而易见的是 $c_{j,\max} = c_{n_j,m_j}$。该问题的数学模型如下：
-\begin{gather}
-\min c_{n_j, m_j}\\[-2pt]
-\text{s.t.}\notag
-\end{gather}
-\begin{numcases}{}
-c_{1,1} = q_{1,1}\label{equ:processtime1}\\
-c_{1,i} = \sum_{i=1}^{m_j} q_{1,i}\label{equ:processtime2}\\
-c_{k,1} = c_{k-1,1} + q_{k,1} & $k = 2,3,...,n_j$\\
-c_{k,i} = \max\{c_{k-1,i} ,c_{k,i-1}\} &$k = 2,3,...,n_j, i = 2,3,...,m_j$\\
-q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
-\end{numcases}
-
-该问题可以用有向图来表示，其关键路径即为所求解的计算历程。如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
-其中，\eqref{equ:processtime1}和(\ref{equ:processtime2})可以化简得到这个等式：$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，便于下面算法的初始化。
-\begin{figure}[h]
-\begin{equation*}
-\xymatrix{
-\process{q_{1,1}} \ar[r] \ar[d] & \process{q_{1,2}} \ar[d] \ar[r] & \cdots\ar[r] & \process{q_{1,m_j}} \ar[d]\\
-\process{q_{2,1}} \ar[r]\ar[d] & \process{q_{2,2}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{q_{2,m_j}} \ar[d] \\
-\vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{q_{k,i}}\ar[r]\ar[d] &\vdots \ar[d]\\
-\process{q_{n_j,1}} \ar[r] & \process{q_{n_j,2}} \ar[r] & \cdots\ar[r] & \process{q_{n_j,m_j}}
-}
-\end{equation*}
-\caption{订单的作业处理有向图\label{fig:directedgraph}}
-\end{figure}
-
 \newcounter{algor}%\newcounter{exam}
 \theoremheaderfont{\heiti}
 \newtheorem{algori}[algor]{算法}%\newtheorem{exam}[exam]{示例}
-\begin{algori}
-处理时间函数值生成算法\label{alg:processtime}
-
-\begin{asparaenum}
-\renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化，输入作业数量$n$和所需处理单元数量$m$，然后输入各单元处理时间$q_1,q_2,...,q_m$；
-\item 计算$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，记$i = 1$；
-\item $i = i + 1, c_{1,i} = c_{1,i-1} + q_i$，记$k = 1$；
-\item $k = k + 1, c_{k,i} = \max\{c_{k,i-1}, c_{k-1,i}\} + q_i$；
-\item 如果$k<n$，执行\Step{3}，否则执行\Step{5}；
-\item 如果$i<m$，执行\Step{2}，否则结束算法。
-\end{asparaenum}
-\end{algori}
+\newcounter{local}
+\chapter{算法设计}
+上一章构建了$2$个多品种产品调度的数学模型，需要对其检验，而这些模型求解是NP--Hard问题，需要设计相应算法来求解。在求解模型前，需要对订单处理时间计算，该问题也需通过算法设计求解。模型的具体求解算法可以分为构造型和改进型，前者从没有调度的情况开始，按一定分派规则逐渐安排作业，直至生成一个较好的调度；后者则是在前者的基础上，调整已有调度以改善目标。
 
 \section{分派规则}
 前文已提到的EDD规则和FCFS规则是常见的调度分派规则，在具体调度作业的时候，通常会先根据分派规则进行安排，所以分派规则便是作业安排的初始策略，然后再局部调整调度方案以进一步优化。一个周详的规则可能得到最优调度的初始解，显然简化了局部调整过程，然而极可能会需要巨大的思考空间和时间(比如枚举)。同样，过于直觉的规则将会增大后续调整的难度，所以制定分派规则时要作权衡。
@@ -414,6 +361,53 @@ h(l_k) &= \lambda_1\frac{\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l} + \lambda_2 \exp\left(
 \item 置$k = k + 1$，若连续$10$次采用没有更新$S^{(0)}$，则置$i = i+1$，执行\Step{2}，否则若$k\le N_I$，执行\Step{3}，否则终止算法，$S^{(0)}$为最终所得调度。
 \end{asparaenum}
 \end{algori}
+\section{订单处理时间计算}
+前一章提到，各订单的处理时间与被处理的流水线无关，只与其所含作业数量相关，因此可将订单的处理时间看作是关于订单本身及其所含作业数量的函数，记为$p_j = g(j,n_j)$，其中$n_j$为订单$j$所含的作业数量。此外，仍需要补充符号说明如下：\\[3pt]
+\begin{supertabular}{ll}
+$n_j$ & 订单$j$所含的作业数量\\
+$k$ & 作业标记，$k = 1,2,...,n_j$\\
+$m_j$ & 订单$j$的处理单元数量\\
+$i$ & 订单$j$的处理单元标记，$i = 1,2,...,m_j$\\
+$q_{k,i}$ & 作业$k$在处理单元$i$上的处理时间\\
+$c_{k,i}$ &作业$k$的在处理单元$i$上的完成时刻\\
+$c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\
+\end{supertabular}\\[3pt]
+其中不同作业在同处理单元上的处理时间相同，可以简记为$q_i$。
+
+由于订单和子单仅有作业数量的差别，故考虑订单的情况即可推广到子单。由于，产品体积小，可以假设处理单元间的缓冲空间足够用。订单在某条流水线上的作业可以看作是流水车间环境，没有换线时间，所以该问题可以记为：$Fm\mid \mid C_{\max}$，显而易见的是 $c_{j,\max} = c_{n_j,m_j}$。该问题的数学模型如下：
+\begin{gather}
+\min c_{n_j, m_j}\\[-2pt]
+\text{s.t.}\notag
+\end{gather}
+\begin{numcases}{}
+c_{1,1} = q_{1,1}\label{equ:processtime1}\\
+c_{1,i} = \sum_{i=1}^{m_j} q_{1,i}\label{equ:processtime2}\\
+c_{k,1} = c_{k-1,1} + q_{k,1} & $k = 2,3,...,n_j$\\
+c_{k,i} = \max\{c_{k-1,i} ,c_{k,i-1}\} &$k = 2,3,...,n_j, i = 2,3,...,m_j$\\
+q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
+\end{numcases}
+
+该问题可以用有向图来表示，其关键路径即为所求解的计算历程。如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
+其中，\eqref{equ:processtime1}和(\ref{equ:processtime2})可以化简得到这个等式：$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，便于下面算法的初始化。
+\begin{figure}[h]
+\begin{equation*}
+\xymatrix{
+\process{q_{1,1}} \ar[r] \ar[d] & \process{q_{1,2}} \ar[d] \ar[r] & \cdots\ar[r] & \process{q_{1,m_j}} \ar[d]\\
+\process{q_{2,1}} \ar[r]\ar[d] & \process{q_{2,2}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{q_{2,m_j}} \ar[d] \\
+\vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{q_{k,i}}\ar[r]\ar[d] &\vdots \ar[d]\\
+\process{q_{n_j,1}} \ar[r] & \process{q_{n_j,2}} \ar[r] & \cdots\ar[r] & \process{q_{n_j,m_j}}
+}
+\end{equation*}
+\caption{订单的作业处理有向图\label{fig:directedgraph}}
+\end{figure}
+
+也可以从生产节拍的角度来得到订单的装配处理时间。由于订单中的作业是相同的，所以生产节拍为订单的瓶颈工序，即$\displaystyle tt_j = \max_{1\le i\le m_j}\{q_i\}$，也就是说，除了首项作业的处理时间为各工序处理时间总和，其余作业皆按节拍完成，那么订单$j$的装配处理时间为：
+\[
+p_j = \sum_{i = 1}^{m_j}q_i + (n_j - 1)tt_j
+\]
+
+
+
 \section{小结}
 
 tikz 作图
