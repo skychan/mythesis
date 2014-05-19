@@ -94,6 +94,7 @@ def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
 	Delta = 0
 	L_star = L[:]
 	m = len(S)
+	f = open(".\\result\\NL",'w')	
 	S_star = [None]*m
 	for l in xrange(m):
 		S_star[l] = S[l][:]
@@ -208,7 +209,9 @@ def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
 			item_values = item_values_temp[:]
 			completion = completion_temp[:]
 			tardiness = tardiness_temp[:]
-		print Delta, delta_star
+			f.write(str(k+1) +'  '+ str(delta_star) +'\n')
+		print Delta, delta_star		
+	f.close()
 	return delta_star,S_star,L_star,line_values,item_values,completion,tardiness
 
 def solve(input_data,N,NL):
@@ -246,14 +249,14 @@ def solve(input_data,N,NL):
 
 	print 'Initial values done!'
 	for l in xrange(m):
-		delta,S[l]= basictabu.tabu(144,NL,S[l],items,completion,tardiness)
+		delta,S[l]= basictabu.tabu(N,NL,S[l],items,completion,tardiness)
 		G += delta
 		line_values[l] += delta
 	completion,tardiness,item_values = generate.verify(S,items)
 	print 'Initial Tabu Search Done!'
 	print sum(item_values)
 
-	delta,S,L,line_values,item_values,completion,tardiness = tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values)
+	delta,S,L,line_values,item_values,completion,tardiness = tabu(0,NL,S,L,items, completion,tardiness,line_values,item_values)
 	G += delta
 	print G
 	print 'Virtual Tabu Search done!'
@@ -269,9 +272,10 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		N = 2000
-		f = open(".\\result\\NL",'w')	
-		for NL in range(6,7):
+		N = 200
+		g = open(".\\result\\NL_1000",'w')
+		for NL in xrange(25,45,1):
 			G = solve(input_data,N,NL)
-			f.write('NL = ' +str(NL) + '  G = '+str(G) +'\n')
-		f.close()
+			g.write(str(NL) + ' ' + str(G) +'\n')
+			print NL
+		g.close()

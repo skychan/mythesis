@@ -116,9 +116,6 @@ def weights(n,init):
 	w  = [init]
 	for j in xrange(1,n):
 		w.append(random.randrange(1,2*init))
-#	ws = sum(w)
-#	for j in xrange(n):
-#		w[j] = w[j]/ws
 	random.shuffle(w)
 	return w
 

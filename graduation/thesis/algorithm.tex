@@ -46,12 +46,57 @@ $\bar p$ &剩余作业平均处理时间
 
 \section{基本模型}
 基本模型由目标函数\eqref{equ:objmain}和约束条件\eqref{equ:basicst1} -- (\ref{equ:basicst7})组成，其最优调度的求解包括初始可行解与解的改进，分别在构造型和改进型算法中详述。
+\section{订单处理时间计算}
+前一章提到，各订单的处理时间与被处理的流水线无关，只与其所含作业数量相关，因此可将订单的处理时间看作是关于订单本身及其所含作业数量的函数，记为$p_j = g(j,n_j)$，其中$n_j$为订单$j$所含的作业数量。此外，仍需要补充符号说明如下：\\[3pt]
+\begin{supertabular}{ll}
+$n_j$ & 订单$j$所含的作业数量\\
+$k$ & 作业标记，$k = 1,2,...,n_j$\\
+$m_j$ & 订单$j$的处理单元数量\\
+$i$ & 订单$j$的处理单元标记，$i = 1,2,...,m_j$\\
+$q_{k,i}$ & 作业$k$在处理单元$i$上的处理时间\\
+$c_{k,i}$ &作业$k$的在处理单元$i$上的完成时刻\\
+$c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\
+\end{supertabular}\\[3pt]
+其中不同作业在同处理单元上的处理时间相同，可以简记为$q_i$。
+
+由于订单和子单仅有作业数量的差别，故考虑订单的情况即可推广到子单。由于，产品体积小，可以假设处理单元间的缓冲空间足够用。订单在某条流水线上的作业可以看作是流水车间环境，没有换线时间，所以该问题可以记为：$Fm\mid \mid C_{\max}$，显而易见的是 $c_{j,\max} = c_{n_j,m_j}$。该问题的数学模型如下：
+\begin{gather}
+\min c_{n_j, m_j}\\[-2pt]
+\text{s.t.}\notag
+\end{gather}
+\begin{numcases}{}
+c_{1,1} = q_{1,1}\label{equ:processtime1}\\
+c_{1,i} = \sum_{i=1}^{m_j} q_{1,i}\label{equ:processtime2}\\
+c_{k,1} = c_{k-1,1} + q_{k,1} & $k = 2,3,...,n_j$\\
+c_{k,i} = \max\{c_{k-1,i} ,c_{k,i-1}\} &$k = 2,3,...,n_j, i = 2,3,...,m_j$\\
+q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
+\end{numcases}
+
+该问题可以用有向图来表示，其关键路径即为所求解的计算历程。如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
+其中，\eqref{equ:processtime1}和(\ref{equ:processtime2})可以化简得到这个等式：$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，便于下面算法的初始化。
+\begin{figure}[h]
+\begin{equation*}
+\xymatrix{
+\process{q_{1,1}} \ar[r] \ar[d] & \process{q_{1,2}} \ar[d] \ar[r] & \cdots\ar[r] & \process{q_{1,m_j}} \ar[d]\\
+\process{q_{2,1}} \ar[r]\ar[d] & \process{q_{2,2}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{q_{2,m_j}} \ar[d] \\
+\vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{q_{k,i}}\ar[r]\ar[d] &\vdots \ar[d]\\
+\process{q_{n_j,1}} \ar[r] & \process{q_{n_j,2}} \ar[r] & \cdots\ar[r] & \process{q_{n_j,m_j}}
+}
+\end{equation*}
+\caption{订单的作业处理有向图\label{fig:directedgraph}}
+\end{figure}
+
+也可以从生产节拍的角度来得到订单的装配处理时间。由于订单中的作业是相同的，所以生产节拍为订单的瓶颈工序，即$\displaystyle tt_j = \max_{1\le i\le m_j}\{q_i\}$，也就是说，除了首项作业的处理时间为各工序处理时间总和，其余作业皆按节拍完成，那么订单$j$的装配处理时间为：
+\begin{equation}
+p_j = \sum_{i = 1}^{m_j}q_i + (n_j - 1)tt_j
+\label{equ:processtime}
+\end{equation}
 \subsection{构造算法}
 构造算法的主要内容是确定分派规则，虽然不能保证得到最优调度，但却有着很高的执行性，便于计划安排。基本模型的目标函数主要成分是为加权时延迟间总和，采用ATC规则能得到较优调度\footnote{准确来说，ATC规则较为适用于$1\mid\mid \sum w_jT_j$ 问题，对于$Pm\mid\mid \sum w_jT_j$也能得到质量很高的解，虽然这个规则运用于基本模型所涉及的问题效果不一定如这两个确切的问题，但足够作为后续改进的初始调度}，关键在于比例参数的选取，相关的方法也有很多，例如回归分析、机器学习等。本课题将该规则得到的调度作为改进算法的初始解，所以不需要在该参数上过多深究，可以采用$K = 2$作为推荐值\cite{bilge2007tabu}。
 
 针对基本模型的实际情况，调度中的作业为各订单，并用整合处理时间作为各订单的处理时间，这样可以不考虑切换准备时间。此外，后续的改进算法要用到构造算法的相关信息，需要记录被调度的订单序列。为了方便描述这个算法以及后续算法，需要扩充符号说明如下：
 
-\begin{tabular}{ll}
+\begin{supertabular}{ll}
 $J$ & 待调度订单集合\\
 $L$ & 已调度的订单记录序列，其集合记为$\overline{L}$\\
 $L_j$ & 订单记录序列的第$j$项作业，$(j = 1,2,...,n)$\\
@@ -67,15 +112,15 @@ $|S^{(c)}|$& 邻域容量，即相邻调度的数量\\
 $TL$ & 禁忌列表\\
 $NL$ &禁忌列表长度\\
 $A$ & 特赦解\\
-$NR$ &交替次数
-\end{tabular}
+$NR$ &交替次数\\
+\end{supertabular}
 
 \begin{algori}
 基本模型ATC规则调度构造算法\label{alg:basicconstruct}
 
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0, (l = 1,2,...,m)$，根据和\refa{alg:processtime}计算各订单处理时间$p'_j = g(j, n_j)$，进一步得到整合订单处理时间$p_j = p'_j + s_j, (j = 1,2,...,n)$，置系统时间$t = 0$；
+\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0, (l = 1,2,...,m)$，根据和\eqref{equ:processtime}计算各订单处理时间$p'_j = g(j, n_j)$，进一步得到整合订单处理时间$p_j = p'_j + s_j, (j = 1,2,...,n)$，置系统时间$t = 0$；
 \item 若存在$a_l = 0$，记$l^* = \displaystyle\min_{a_l = 0}\{l\}$，执行\Step{3}，否则执行\Step{4}；
 \item 根据\eqref{equ:orderindexexample}，选取预备调度订单$j^*$，使得$I_{j^*}(t) = \displaystyle\max_{j\in J}\{I_j(t)\}$，将订单$j^*$安排入流水线$l^*$进行处理，记入调度$S_{l^*}$，$\overline{S_{l^*}}=\overline{S_{l^*}}\bigcup \{j^*\}$, $J = J -\{j^*\}$，记录调度订单序列$\overline{L} = \overline{L} \bigcup \{j^*\}$，更新流水线预计空闲时刻$t_{l^*} = t + p_{j^*}$，修改流水线状态$a_{l^*} = 1$。若$J = \varnothing$，所有订单调度完毕，终止算法，否则执行\Step{2}；
 \item 记$lt$使得 $t_{lt} = \displaystyle\min_{1\le l\le m}\{t_l\}$，修改流水线状态$a_{lt} = 0$，并更新系统时间$t = t_{lt}$，执行\Step{2}。
@@ -130,7 +175,7 @@ $NR$ &交替次数
 基本模型ATC规则调度改进算法\label{alg:atcinner}
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化。$J = \overline{S_l}$，根据和\refa{alg:processtime}计算各订单处理时间$p'_{l_k} = g({l_k}, |S_l|)$，进一步得到整合订单处理时间$p_{l_k} = p'_{l_k} + s_{l_k}(k = 1,2,...,|S_l|)$，置系统时间$t = 0$，重置$\overline{S_l} = \varnothing$；
+\item 初始化。$J = \overline{S_l}$，根据和\eqref{equ:processtime}计算各订单处理时间$p'_{l_k} = g({l_k}, |S_l|)$，进一步得到整合订单处理时间$p_{l_k} = p'_{l_k} + s_{l_k}(k = 1,2,...,|S_l|)$，置系统时间$t = 0$，重置$\overline{S_l} = \varnothing$；
 \item 根据\eqref{equ:orderindexexample}，选取预备调度订单$l_k^*$，使得$I_{l_k^*}(t) = \displaystyle\max_{l_k\in J}\{I_{l_k}(t)\}$，将订单$l_k^*$进行安排处理，$J = J -\{l_k^*\}$，将该订单排入该流水线的调度$\overline{S_l} = \overline{S_l}\bigcup \{l_k^*\} $。若$J = \varnothing$，该流水线上的订单调度完毕，终止算法，否则执行\Step{3}；
 \item 更新系统时间$t = t + p_{l_k^*}$，执行\Step{2}。
 \end{asparaenum}
@@ -236,7 +281,7 @@ h(l_k) &= \lambda_t wt_{l_k}T_{l_k} + \lambda_c wc_{l_k}C_{l_k}
 可以看出，一个调度的邻域容量不是一个定值，会随着调度结构的改变而改变。
 
 \begin{algori}
-虚拟序列禁忌搜索算法
+虚拟序列禁忌搜索算法\label{alg:basicvirtual}
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
 \item 运用\refa{alg:basicconstruct}建立流水线全局调度初始解，得到虚拟序列$L$及其初始调度$S^{(0)}$，并将其作为目前最优调度。设定禁忌搜索迭代次数$N_I$，设定列表长度$NL$，并置特赦调度$A = S^{(0)}$；
@@ -299,7 +344,7 @@ K_2 = \frac{\tau}{2\sqrt{\eta}}
 
 \begin{asparaenum}
 \renewcommand{\labelenumi}{\bf Step\theenumi~}
-\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0, C_{l_0} = 0, (l = 1,2,...,m)\footnote{$C_{l_0}$是人为定义的边界量，便于后续算法的初始情况}$，根据和\refa{alg:processtime}计算各订单处理时间$p_j = g(j, n_j), (j = 1,2,...,n)$，置系统时间$t = 0$；
+\item 初始化。$J = N, \overline{L} = \varnothing$, $t_l = 0, \overline{S_l} = \varnothing, a_l=0, C_{l_0} = 0, (l = 1,2,...,m)\footnote{$C_{l_0}$是人为定义的边界量，便于后续算法的初始情况}$，根据和\eqref{equ:processtime}计算各订单处理时间$p_j = g(j, n_j), (j = 1,2,...,n)$，置系统时间$t = 0$；
 \item 若存在$a_l = 0$，记$l^* = \displaystyle\min_{a_l = 0}\{l\}$，执行\Step{3}，否则执行\Step{5}；
 \item 根据\eqref{equ:orderindexexample2}，选取预备调度订单$j^*$，使得$I_{j^*}(t) = \displaystyle\max_{j\in J}\{I_j(t)\}$，将订单$j^*$安排入流水线$l^*$进行处理，记入调度$S_{l^*}$，$\overline{S_{l^*}}=\overline{S_{l^*}}\bigcup \{j^*\}$, $J = J -\{j^*\}$，记录调度订单序列$\overline{L} = \overline{L} \bigcup \{j^*\}$；
 \item 置$k = |S_{l^*}|$，对于流水线$l^*$，将订单$j^*$标记为$l^*_k$，预估订单$l^*_k$开始处理前的流水线闲置时间$f_{j^*} = f_{l^*_k} = \max\{r_{l^*_k} - s_{l^*_k}- C_{l^*_{k-1}}, 0\}$，更新流水线预计空闲时刻$t_{l^*} = t + p_{j^*} + s_{j^*} + f_{j^*}$，修改流水线状态$a_{l^*} = 1$。若$J = \varnothing$，所有订单调度完毕，终止算法，否则执行\Step{2}；
@@ -361,52 +406,6 @@ h(l_k) &= \lambda_1\frac{\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l} + \lambda_2 \exp\left(
 \item 置$k = k + 1$，若连续$10$次采用没有更新$S^{(0)}$，则置$i = i+1$，执行\Step{2}，否则若$k\le N_I$，执行\Step{3}，否则终止算法，$S^{(0)}$为最终所得调度。
 \end{asparaenum}
 \end{algori}
-\section{订单处理时间计算}
-前一章提到，各订单的处理时间与被处理的流水线无关，只与其所含作业数量相关，因此可将订单的处理时间看作是关于订单本身及其所含作业数量的函数，记为$p_j = g(j,n_j)$，其中$n_j$为订单$j$所含的作业数量。此外，仍需要补充符号说明如下：\\[3pt]
-\begin{supertabular}{ll}
-$n_j$ & 订单$j$所含的作业数量\\
-$k$ & 作业标记，$k = 1,2,...,n_j$\\
-$m_j$ & 订单$j$的处理单元数量\\
-$i$ & 订单$j$的处理单元标记，$i = 1,2,...,m_j$\\
-$q_{k,i}$ & 作业$k$在处理单元$i$上的处理时间\\
-$c_{k,i}$ &作业$k$的在处理单元$i$上的完成时刻\\
-$c_{j,\max}$ & 订单$j$中所有作业的制造期，即$\max(c_k)$\\
-\end{supertabular}\\[3pt]
-其中不同作业在同处理单元上的处理时间相同，可以简记为$q_i$。
-
-由于订单和子单仅有作业数量的差别，故考虑订单的情况即可推广到子单。由于，产品体积小，可以假设处理单元间的缓冲空间足够用。订单在某条流水线上的作业可以看作是流水车间环境，没有换线时间，所以该问题可以记为：$Fm\mid \mid C_{\max}$，显而易见的是 $c_{j,\max} = c_{n_j,m_j}$。该问题的数学模型如下：
-\begin{gather}
-\min c_{n_j, m_j}\\[-2pt]
-\text{s.t.}\notag
-\end{gather}
-\begin{numcases}{}
-c_{1,1} = q_{1,1}\label{equ:processtime1}\\
-c_{1,i} = \sum_{i=1}^{m_j} q_{1,i}\label{equ:processtime2}\\
-c_{k,1} = c_{k-1,1} + q_{k,1} & $k = 2,3,...,n_j$\\
-c_{k,i} = \max\{c_{k-1,i} ,c_{k,i-1}\} &$k = 2,3,...,n_j, i = 2,3,...,m_j$\\
-q_{k,i}  = q_i & $k = 1,2,...,n_j, i = 1,2,...,m_j$
-\end{numcases}
-
-该问题可以用有向图来表示，其关键路径即为所求解的计算历程。如\ref{fig:directedgraph}所示，每个节点内表示作业的处理时间，横向表示作业处理顺序，纵向表示不同的处理单元，由左上角开始，按照有向弧的方向进入节点，计算出右下节点的时间即为订单处理时间。
-其中，\eqref{equ:processtime1}和(\ref{equ:processtime2})可以化简得到这个等式：$c_{k,1} = k\cdot q_1,(k = 1,2,...,n)$，便于下面算法的初始化。
-\begin{figure}[h]
-\begin{equation*}
-\xymatrix{
-\process{q_{1,1}} \ar[r] \ar[d] & \process{q_{1,2}} \ar[d] \ar[r] & \cdots\ar[r] & \process{q_{1,m_j}} \ar[d]\\
-\process{q_{2,1}} \ar[r]\ar[d] & \process{q_{2,2}} \ar[d]\ar[r] & \cdots \ar[r] \ar[d]& \process{q_{2,m_j}} \ar[d] \\
-\vdots\ar[d] & \vdots \ar[d]\ar[r] & \process{q_{k,i}}\ar[r]\ar[d] &\vdots \ar[d]\\
-\process{q_{n_j,1}} \ar[r] & \process{q_{n_j,2}} \ar[r] & \cdots\ar[r] & \process{q_{n_j,m_j}}
-}
-\end{equation*}
-\caption{订单的作业处理有向图\label{fig:directedgraph}}
-\end{figure}
-
-也可以从生产节拍的角度来得到订单的装配处理时间。由于订单中的作业是相同的，所以生产节拍为订单的瓶颈工序，即$\displaystyle tt_j = \max_{1\le i\le m_j}\{q_i\}$，也就是说，除了首项作业的处理时间为各工序处理时间总和，其余作业皆按节拍完成，那么订单$j$的装配处理时间为：
-\[
-p_j = \sum_{i = 1}^{m_j}q_i + (n_j - 1)tt_j
-\]
-
-
 
 \section{小结}
 
