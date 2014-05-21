@@ -2,8 +2,9 @@
 % !TEX root = ..\thesis.tex
 \chapter{计算实验及算法评估}
 本章将对上一章的算法进行评估，通过设计相关计算实验，建立评价体系，具体评估各算法的效果及其适用规模。然后根据实验结果，为研究对象制定合适的调度方案。
-
 \section{实验设计}
+为了评估上一章所提出的算法的运行效果，以及给出所得调度方案，供决策者选择，所有的算法都用Python 语言编写，并在2.20GHz i3 CPU，5.84GB RAM，Windows 8 的个人计算机上运行。
+
 实验设计分为两个主要部分，一个是装配生产信息的生成，包括订单数量、流水线数量、各订单切换准备时间、个订单进入系统时间及其所含作业的信息；另一个是相关参数的确定，包括迭代次数、禁忌列表长度的等。
 \subsection{生产装配信息生成}
 生产装配信息皆由随机数产生，主要包括订单及其作业的数量信息、时间信息及惩罚系数，需要给出适当的取值范围及分布。
@@ -57,6 +58,7 @@
     \end{tabular}
   \label{tab:20itemsdata}
 \end{table}
+
 \subsection{相关参数确定}
 使用调度规则(ATC/ATCS)的交替算法所含的相关参数为交替次数$NR$，由于该算法收敛速度很快，该参数无需特别设定，一般取$NR = 30$就基本稳定在最佳的两个结果之间交替。
 
@@ -68,10 +70,29 @@
 \caption{$100$件订单的目标函数值和相关参数的关系}
 \end{figure}
 
-可以看出$NL = 9$是最佳列表长度，确定该值后，以$50$为间隔\footnote{间隔应视订单数量而定，订单越多，间隔越大}，生成目标函数值与迭代次数的关系，如\reff{fig:100NwithGoal}所示。
-虽然随着迭代次数的增加，目标函数值仍然会减少，其减少幅度不大，并且运算时间增加很多，所以取迭代次数$N = 500$是较为适宜的\footnote{实际上$\left. G\right|_{N=500} = 84997.2, \left. G\right|_{N=1200} = 84972.8$，两者相差仅$0.0287\%$}。
+可以看出$NL = 9$是最佳列表长度，确定该值后，生成目标函数值与迭代次数的关系，如\reff{fig:100NwithGoal}所示。
+虽然随着迭代次数的增加，目标函数值仍然会减少，其减少幅度不大，并且运算时间增加很多，所以取迭代次数$N = 70$是较为适宜的\footnote{实际上$\left. G\right|_{N=70} = 85206, \left. G\right|_{N=300} = 85200.2$，两者相差仅$0.0068\%$}。
 
-以此类推，可以确定不同问题规模下的这两个参数的值\footnote{经测试，不用决策环境$(\lambda_1, \lambda_2, \sigma)$下，禁忌列表长度$NL$和迭代次数$N$基本不变，所以这两个参数适用于不同的决策环境下}，其结果如所示。
+以此类推，可以确定不同问题规模下的这两个参数的值\footnote{经测试，不用决策环境$(\lambda_1, \lambda_2, \sigma)$下，禁忌列表长度$NL$和迭代次数$N$基本不变，所以这两个参数适用于不同的决策环境下}，多品种多装配线轮番装配调度优化模型和考虑插单的多品种多装配线轮番装配调度优化模型相关参数设定结果分别如和所示。
+\begin{table}[htbp]
+  \centering
+  \caption{Add caption}
+    \begin{tabular}{ccccccccccccc}
+    \toprule
+    \multicolumn{2}{c}{\multirow{2}[0]{*}{参数}} & \multicolumn{11}{c}{订单数量} \\
+        \multicolumn{2}{c}{} & $20 $   & $30$    & $50$    & $70$    & $100$   & $150 $  & $200$   & $300$   & $500$   & $750$   & $1000$ \\
+      \midrule
+    \multirow{2}[0]{*}{$m=5$} & $N$     & $3$     & $16$    & $65$    & $30$    & $70$    & $100$   & $1850$  & $1700$  & $1000$  & $150$   & $500$ \\
+          & $NL$    & $2$     & $2$     & $8$     & $6$     & $9$     & $29$    & $61$    & $138$   & $164$   & $152$   & $90$ \\
+    \multirow{2}[0]{*}{$m=6$} & $N$     & $14$    & $10$    & $25$    & $60$    & $130$   & $200$   & $850$   & $420$   &  $350 $     &  $650 $     &$440$  \\
+          & $NL$    & $2$     & $2$     & $2$     & $6$     & $20$    & $31$    & $52$    & $105$   & $190$   & $220$   & $312$ \\
+    \multirow{2}[0]{*}{$m=7$} & $N$     & $8$     & $13$    &$ 60    $&$ 55    $&$ 19    $&$ 200   $&$ 320   $&$ 275   $&$80       $&$      700 $&$80  $\\
+          &$ NL    $&$ 2     $&$ 2     $&$ 4     $&$ 14    $&$ 6     $&$ 21    $&$ 26    $&$ 48    $&$ 160   $&$ 227   $&$ 174 $\\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+
 \begin{table}[htbp]
   \centering
   \caption{Add caption}
@@ -95,13 +116,50 @@
     \end{tabular}%
   \label{tab:addlabel}%
 \end{table}%
-
-
-\section{算法评价体系}
-
-
-\section{参数确定}
-
+可以看出，迭代次数和禁忌列表长度和问题的规模有一定的正相关关系，问题规模越大，这两者的值也越大，但这两个参数主也和订单的实验信息数据特点有关。
+ 
 \section{结果及评估}
+\subsection{实验结果示例及说明}
+确定实验所需订单信息数据以及算法相关的参数，运行编写的算法程序，可以得到实验结果。实验结果由目标函数值$G$和所得调度序列$S$组成，以模型$1$ 为例，示例订单量$n = 20$，其实验信息数据如\ref{tab:20itemsdata}所示，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法，根据 选择相关参数，所得结果列入中。
+\begin{table}[htbp]
+  \centering
+  \caption{Add caption}
+    \begin{tabular}{cccl}
+    \toprule
+    算法    & 目标函数值($G$) & \multicolumn{2}{c}{流水线调度安排} \\
+    \midrule
+    \multirow{5}[2]{*}{Cyc -- ATC} & \multirow{5}[2]{*}{$3978.8$} & $1$     &$\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
+          &       & $2$     &  $\xymatrix{11 \ar[r] & 7 \ar[r] & 2}$\\
+          &       & $3$     &  $\xymatrix{16 \ar[r] & 15 \ar[r] & 13 \ar[r] & 9}$\\
+          &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12 \ar[r]&20}$\\
+          &       & $5$     &  $\xymatrix{5 \ar[r] & 1 \ar[r] & 3 \ar[r] & 19}$\\
+     \hline
+    \multirow{5}[2]{*}{Cyc -- Tabu} & \multirow{5}[2]{*}{$3478.8$} & $1$     &  $\xymatrix{10 \ar[r] & 6 \ar[r] & 18 \ar[r] & 14}$\\
+          &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 20 \ar[r] & 2}$ \\
+          &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15}$\\
+          &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12}$\\
+          &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 3}$\\
+       \hline
+    \multirow{5}[2]{*}{Vtr -- Tabu} & \multirow{5}[2]{*}{$3329.2$} & $1$     &  $\xymatrix{10 \ar[r] & 20 \ar[r] & 18 \ar[r] & 2}$\\
+          &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 14 }$ \\
+          &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15\ar[r]&6}$\\
+          &       & $4$     &  $\xymatrix{4\ar[r] & 8 \ar[r] & 3 \ar[r] & 12}$\\
+          &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 17}$\\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:addlabel}%
+\end{table}%
+其调度安排如\reff{fig:20items3algorithms}所示。
+%\input{thesis/figure.tex}
+从结果上来看，就该决策环境下，模型1 使用Vtr -- Tabu 算法可以得到较好调度结果。
+\subsection{模型1}
+
+\subsubsection{算法比较}
+\subsubsection{权衡决策参数}
+
+\subsection{模型2}
+\subsubsection{算法比较}
+\subsubsection{权衡决策参数}
+\subsubsection{流水线指标与评价}
 
 \section{小结}

@@ -81,6 +81,26 @@ def jobstep(n,a,b):
 		step.append(random.randrange(a,b))
 	return step
 
+# update the Tabu list
+def TL_update(TL,from_same,from_diff,S):
+	Same = from_same[:]
+	Diff = from_diff[:]
+	if from_same:
+		for s in from_same:
+			job = list(s)
+			a,b = job[0],job[1]
+			if find_job(a,S) != find_job(b,S):
+				Same.remove(s)
+				TL[TL.index(s)] = None
+	if from_diff:
+		for s in from_diff:
+			job = list(s)
+			a,b = job[0],job[1]
+			if find_job(a,S) == find_job(b,S):
+				Diff.remove(s)
+				TL[TL.index(s)] = None
+	return TL,Same,Diff
+
 # generate the number of jobs that a item needs
 def itemjobs(n,a,b):
 	n_job = [random.randrange(a,b)]

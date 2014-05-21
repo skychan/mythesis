@@ -114,8 +114,8 @@ def solve(input_data):
 
 	print 'Initial values done!'
 
-	N = 500
-	NL = 38
+	N = 1500
+	NL = 2
 	for l in xrange(m):
 		delta,S[l]= tabu(N,NL,S[l],items,completion,tardiness)
 		G += delta
@@ -187,6 +187,13 @@ def solve(input_data):
 		value = h(t,c,wt,wc)
 		v.append(value)
 	print sum(v)
+	g = open(".\\result\\draw_tabu" ,'w')
+	for s in S:
+		cc = [completion[j] for j in s]
+		tt = [tardiness[j] for j in s]
+		g.write(str(s) + '\n' + str(cc) + '\n' + str(tt) + '\n')
+		g.write('\n')
+	g.close()
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:

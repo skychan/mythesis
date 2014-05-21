@@ -28,7 +28,7 @@ def ATC(items,S):
 	return S,c
 
 
-def solve(input_data,load):
+def solve(input_data):
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1						# get the amount of items
 	items = []	
@@ -61,19 +61,19 @@ def solve(input_data,load):
 		line_values.append(value)
 	print 'Initial values done!'
 	print G
-	f = open(".\\result\\result_" +str(load),'w')
-	f.write('Initial Solution is :\n')
-	for k in range(len(S)):
-		f.write('S_'+str(k)+': '+str(S[k])+'\n')
-	f.write('And the obj value is: '+ str(G)+'\n')
+#	f = open(".\\result\\result_" +str(load),'w')
+#	f.write('Initial Solution is :\n')
+#	for k in range(len(S)):
+#		f.write('S_'+str(k)+': '+str(S[k])+'\n')
+#	f.write('And the obj value is: '+ str(G)+'\n')
 	
-	g = open(".\\result\\sky" ,'w')
-	for k in range(len(S)):
-		g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
-	g.write('let us check\n')
+	g = open(".\\result\\draw_atc" ,'w')
+#	for k in range(len(S)):
+#		g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
+#	g.write('let us check\n')
 	NR = 100
 	for k in xrange(NR):
-		g.write(str(k)+':\n')
+#		g.write(str(k)+':\n')
 		l_p,l_m = generate.reorder(items,S,line_values,item_values)
 		S[l_p],c_p = ATC(items,S[l_p])
 		S[l_m],c_m = ATC(items,S[l_m])
@@ -98,24 +98,34 @@ def solve(input_data,load):
 		line_values[l_p] += delta_p
 		line_values[l_m] += delta_m
 		G = G + delta_m + delta_p
-		for k in range(len(S)):
-			g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
+	print G
+	for s in S:
+		cc = [completion[j] for j in s]
+		tt = [tardiness[j] for j in s]
+		g.write(str(s) + '\n' + str(cc) + '\n' + str(tt) + '\n')
+		g.write('\n')
 	g.close()
-	f.write('Final Solution is :\n')
-	for k in range(len(S)):
-		f.write('S_'+str(k)+': '+str(S[k])+'\n')
-	f.write('And the obj value is: '+ str(G)+'\n')
-	f.close()
+
+#		for k in range(len(S)):
+#			g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
+#	g.close()
+#	f.write('Final Solution is :\n')
+#	for k in range(len(S)):
+#		f.write('S_'+str(k)+': '+str(S[k])+'\n')
+#	f.write('And the obj value is: '+ str(G)+'\n')
+#	f.close()
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		file_location = sys.argv[1].strip()
 #		type_location = sys.argv[2].strip()
-		data_type_file = open(file_location, 'r')
-		data_type = ''.join(data_type_file.readlines())
-		data_type_file.close()
-		numbers = data_type.split('\n')
-		for i in range(len(numbers)):
-			input_data_file = open(".\\data\\" + str(numbers[i]),'r')
-			input_data = ''.join(input_data_file.readlines())
-			input_data_file.close()
-			solve(input_data,numbers[i])
+#		data_type_file = open(file_location, 'r')
+#		data_type = ''.join(data_type_file.readlines())
+#		data_type_file.close()
+#		numbers = data_type.split('\n')
+#		for i in range(len(numbers)):
+#			input_data_file = open(".\\data\\" + str(numbers[i]),'r')
+		input_data_file = open(file_location,'r')
+		input_data = ''.join(input_data_file.readlines())
+		input_data_file.close()
+		solve(input_data)
+#			solve(input_data,numbers[i])

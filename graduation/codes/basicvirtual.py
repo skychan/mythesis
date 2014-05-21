@@ -33,15 +33,12 @@ def value_generator(S,items):
 		item_values.append(value)
 	return completion,tardiness,item_values
 
-def same_delta(a,b,items,completion,tardiness):
-	delta_c_a = - items[b].process
-	delta_c_b = items[a].process
-	delta_t_a =  max(completion[a] + delta_c_a - items[a].due ,0) - tardiness[a]
-	delta_t_b = max(completion[a] - items[b].due,0) - tardiness[b]
-	wt_a,wt_b,wc_a,wc_b = items[a].wt,items[b].wt,items[a].wc,items[b].wc
-	delta_a = h(delta_t_a,delta_c_a,wt_a,wc_a)
-	delta_b = h(delta_t_b,delta_c_b,wt_b,wc_b)
-	return delta_a,delta_b
+def same_delta(a,b,S,items,line_value):
+	K = generate.innerswap(S,S.index(a),S.index(b))
+	c, t, v = value_generator(K,items)
+	new_value = sum(v)
+	delta = new_value - line_value
+	return K,c,t,v,delta
 
 def diff_delta(S_x,items,line_value):
 	c, t, v = value_generator(S_x,items)
@@ -81,7 +78,7 @@ def delta3(S,l_a,l_b,a,b,a_idx,b_idx,item_values,items,line_values):
 	delta_III = delta_III_1 + delta_III_2
 	return S_III_1,S_III_2,c_III_1,c_III_2,t_III_1,t_III_2,v_III_1,v_III_2,delta_III
 
-def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
+def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values,G):
 	TL = [None]*NL
 	from_same = []
 	from_diff = []
@@ -94,7 +91,8 @@ def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
 	Delta = 0
 	L_star = L[:]
 	m = len(S)
-	f = open(".\\result\\NL",'w')	
+	f = open(".\\result\\N_1000_7",'w')
+	ly = open(".\\result\\ccc",'w')
 	S_star = [None]*m
 	for l in xrange(m):
 		S_star[l] = S[l][:]
@@ -117,88 +115,119 @@ def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
 			b_idx = S[l_b].index(b)
 			if s not in TL:
 				if l_a == l_b:
-					delta_a,delta_b = same_delta(a,b,items,completion_temp,tardiness_temp)
-					delta_h = delta_a + delta_b
+					S_k,c_k,t_k,v_k,delta_h = same_delta(a,b,S[l_a],items,line_values_temp[l_a])
+#					if k == 16:
+#						ly.write()
 				else:
 					# delta_I
 					S_I_1,S_I_2,c_I_1,c_I_2,t_I_1,t_I_2,v_I_1,v_I_2,c_I_2,delta_I = delta1(S,l_a,l_b,a,b_idx,item_values,items,line_values_temp)
 					# delta_II
-					S_II_1,S_II_2,c_II_1,c_II_2,t_II_1,t_II_2,v_II_1,v_II_2,delta_II = delta2(S,l_a,l_b,b,a_idx,item_values,items,line_values_temp)			
+					S_II_1,S_II_2,c_II_1,c_II_2,t_II_1,t_II_2,v_II_1,v_II_2,delta_II = delta2(S,l_a,l_b,b,a_idx,item_values,items,line_values_temp)
 					# delta_III
 					S_III_1,S_III_2,c_III_1,c_III_2,t_III_1,t_III_2,v_III_1,v_III_2,delta_III = delta3(S,l_a,l_b,a,b,a_idx,b_idx,item_values,items,line_values_temp)
-
 					delta_h = min(delta_I,delta_II,delta_III)
 			elif s in from_same:
-				break
+				continue
 			else:
-				# delta_I
-				S_I_1,S_I_2,c_I_1,c_I_2,t_I_1,t_I_2,v_I_1,v_I_2,c_I_2,delta_I = delta1(S,l_a,l_b,a,b_idx,item_values,items,line_values_temp)				
-				# delta_II
-				S_II_1,S_II_2,c_II_1,c_II_2,t_II_1,t_II_2,v_II_1,v_II_2,delta_II = delta2(S,l_a,l_b,b,a_idx,item_values,items,line_values_temp)
-				delta_h = min(delta_I,delta_II)
-
+				# delta_i
+				S_i_1,S_i_2,c_i_1,c_i_2,t_i_1,t_i_2,v_i_1,v_i_2,c_i_2,delta_i = delta1(S,l_a,l_b,a,b_idx,item_values,items,line_values_temp)
+				# delta_ii
+				S_ii_1,S_ii_2,c_ii_1,c_ii_2,t_ii_1,t_ii_2,v_ii_1,v_ii_2,delta_ii = delta2(S,l_a,l_b,b,a_idx,item_values,items,line_values_temp)
+				delta_h = min(delta_i,delta_ii)
 			if delta == [] or delta_h < delta:
 				delta = delta_h
 				a_temp,b_temp = a,b
 				l_a_temp,l_b_temp = l_a,l_b
 				if l_a == l_b:
-					S1_temp = S[l_a][:]
-					S1_temp = generate.innerswap(S1_temp,a_idx,b_idx)
-					c1_temp,t1_temp,v1_temp = value_generator(S1_temp,items)
-					S2_temp = []
-					c2_temp,t2_temp,v2_temp = [],[],[]
+					S_temp = S_k[:]
+					c_temp,t_temp,v_temp = c_k,t_k,v_k
 					issame,isdiff = 1,0
+					out = 0
 				else:
-					if delta == delta_I:
-						c1_temp,t1_temp,v1_temp = c_I_1,t_I_1,v_I_1
-						c2_temp,t2_temp,v2_temp = c_I_2,t_I_2,v_I_2
-						S1_temp,S2_temp = S_I_1,S_I_2
+					if s in TL:
+						out = 1
 						issame,isdiff = 0,0
-					elif delta == delta_II:
-						c1_temp,t1_temp,v1_temp = c_II_1,t_II_1,v_II_1
-						c2_temp,t2_temp,v2_temp = c_II_2,t_II_2,v_II_2
-						S1_temp,S2_temp = S_II_1,S_II_2
-						issame,isdiff = 0,0
-					elif delta == delta_III:
-						c1_temp,t1_temp,v1_temp = c_III_1,t_III_1,v_III_1
-						c2_temp,t2_temp,v2_temp = c_III_2,t_III_2,v_III_2
-						S1_temp,S2_temp = S_III_1,S_III_2
-						issame,isdiff = 0,1
+						if delta == delta_i:
+							c1_temp,t1_temp,v1_temp = c_i_1,t_i_1,v_i_1
+							c2_temp,t2_temp,v2_temp = c_i_2,t_i_2,v_i_2
+							S1_temp,S2_temp = S_i_1,S_i_2
+						elif delta == delta_ii:
+							c1_temp,t1_temp,v1_temp = c_ii_1,t_ii_1,v_ii_1
+							c2_temp,t2_temp,v2_temp = c_ii_2,t_ii_2,v_ii_2
+							S1_temp,S2_temp = S_ii_1,S_ii_2
+#						ly.write('l_a = ' + str(l_a) + ' l_b = ' + str(l_b) + '\n')
+					else:
+						out = 0
+						if delta == delta_I:
+							c1_temp,t1_temp,v1_temp = c_I_1,t_I_1,v_I_1
+							c2_temp,t2_temp,v2_temp = c_I_2,t_I_2,v_I_2
+							S1_temp,S2_temp = S_I_1,S_I_2
+							issame,isdiff = 0,0
+						elif delta == delta_II:
+							c1_temp,t1_temp,v1_temp = c_II_1,t_II_1,v_II_1
+							c2_temp,t2_temp,v2_temp = c_II_2,t_II_2,v_II_2
+							S1_temp,S2_temp = S_II_1,S_II_2
+							issame,isdiff = 0,0
+						elif delta == delta_III:
+							c1_temp,t1_temp,v1_temp = c_III_1,t_III_1,v_III_1
+							c2_temp,t2_temp,v2_temp = c_III_2,t_III_2,v_III_2
+							S1_temp,S2_temp = S_III_1,S_III_2
+							issame,isdiff = 0,1
 		if delta == []:
-			break
+			continue
 		L = generate.innerswap(L,L.index(a_temp),L.index(b_temp))
 		pairs = generate.pairsets(L)
 		change_set = set([a_temp,b_temp])
-#		generate.pairsets_update(pairs,change_set)
-		if isdiff or issame:
-			delete_set = TL.pop(0)
-			if delete_set in from_same:
-				from_same.remove(delete_set)
-			elif delete_set in from_diff:
-				from_diff.remove(delete_set)
+		ly.write('TL  = ' + str(TL) + '\n')
+		ly.write('Same  = ' + str(from_same) + '\n')
+		ly.write('Diff  = ' + str(from_diff) + '\n')
+		if out:
+			TL[TL.index(change_set)] = None
+			from_diff.remove(change_set)
+		delete_set = TL.pop(0)
+		if delete_set in from_same:
+			from_same.remove(delete_set)
+		elif delete_set in from_diff:
+			from_diff.remove(delete_set)
+		if isdiff or issame:			
 			TL.append(change_set)
 			if isdiff:
 				from_diff.append(change_set)
 			if issame:
 				from_same.append(change_set)
-		elif change_set in TL:
-			TL[TL.index(change_set)] = None
-			from_diff.remove(change_set)
-		c_temp = c1_temp + c2_temp
-		t_temp = t1_temp + t2_temp
-		v_temp = v1_temp + v2_temp
-		i = 0
-		for j in S1_temp + S2_temp:
-			completion_temp[j] = c_temp[i]
-			tardiness_temp[j] = t_temp[i]
-			item_values_temp[j] = v_temp[i]
-			i+=1
-		S[l_a_temp] = S1_temp[:]
-		line_values_temp[l_a_temp] = sum(v1_temp)
+		else:
+			TL.append(None)
 		if l_a_temp != l_b_temp:
+			c_temp = c1_temp + c2_temp
+			t_temp = t1_temp + t2_temp
+			v_temp = v1_temp + v2_temp
+			i = 0
+			for j in S1_temp + S2_temp:
+				completion_temp[j] = c_temp[i]
+				tardiness_temp[j] = t_temp[i]
+				item_values_temp[j] = v_temp[i]
+				i+=1
+			S[l_a_temp] = S1_temp[:]
 			S[l_b_temp] = S2_temp[:]
+			line_values_temp[l_a_temp] = sum(v1_temp)
 			line_values_temp[l_b_temp] = sum(v2_temp)
+			ly.write('l_a_temp = '+str(l_a_temp) +' a = ' + str(a_temp) + '\n'+ str(S1_temp) + '\n')
+			ly.write('l_b_temp = '+str(l_b_temp) +' b = ' + str(b_temp) + '\n'+ str(S2_temp) + '\n')
+		else:
+			S[l_a_temp] = S_temp[:]
+			line_values_temp[l_a_temp] = sum(v_temp)
+			ly.write('l_a_temp = l_b_temp = '+str(l_a_temp) +' a = ' + str(a_temp) +' b = '  + str(b_temp) + '\n'+ str(S_temp) + '\n')
+		TL,from_same,from_diff = generate.TL_update(TL,from_same,from_diff,S)
+		ly.write(str(S) + '\n')
 		Delta += delta
+		sky = []
+		for s in S:
+			sky += s
+		if len(set(sky)) == len(items):
+			print 'Yes!'
+		else:
+			print 'No!'
+			print len(set(sky))
 		print 'k =  ' +str(k)
 		if Delta < delta_star:
 			delta_star = Delta
@@ -209,12 +238,13 @@ def tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values):
 			item_values = item_values_temp[:]
 			completion = completion_temp[:]
 			tardiness = tardiness_temp[:]
-			f.write(str(k+1) +'  '+ str(delta_star) +'\n')
-		print Delta, delta_star		
+		f.write(str(k+1) +'  '+ str(delta_star+G) +'\n')			
+		print Delta, delta_star+G
 	f.close()
+	ly.close()
 	return delta_star,S_star,L_star,line_values,item_values,completion,tardiness
 
-def solve(input_data,N,NL):
+def solve(input_data,N,NL,m):
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1						# get the amount of items
 	items = []
@@ -228,7 +258,6 @@ def solve(input_data,N,NL):
 		wc = int(parts[5])					# get the completion weights
 		items.append(Item(p+s,d,wt,wc))			# combine those item data
 	print 'Data loaded!'	
-	m = 5
 	S,L,completion = generate.initialization(items,n,m)
 	lateness = generate.late(completion,items)
 	tardiness = generate.tard(lateness)
@@ -249,17 +278,23 @@ def solve(input_data,N,NL):
 
 	print 'Initial values done!'
 	for l in xrange(m):
-		delta,S[l]= basictabu.tabu(N,NL,S[l],items,completion,tardiness)
+		delta,S[l]= basictabu.tabu(1500,NL,S[l],items,completion,tardiness)
 		G += delta
 		line_values[l] += delta
 	completion,tardiness,item_values = generate.verify(S,items)
 	print 'Initial Tabu Search Done!'
-	print sum(item_values)
+	print G
 
-	delta,S,L,line_values,item_values,completion,tardiness = tabu(0,NL,S,L,items, completion,tardiness,line_values,item_values)
+	delta,S,L,line_values,item_values,completion,tardiness = tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values,G)
 	G += delta
 	print G
 	print 'Virtual Tabu Search done!'
+#	sky = open(".\\result\\draw",'w')
+#	for s in S:
+#		cc = [completion[j] for j in s]
+#		tt = [tardiness[j] for j in s]
+#		sky.write(str(s) + '\n' + str(cc) + '\n' + str(tt) + '\n')
+#	sky.close()
 
 	completion,tardiness,item_values = generate.verify(S,items)
 	print 'while the verify way is:  ' +str(sum(item_values))
@@ -268,14 +303,15 @@ def solve(input_data,N,NL):
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		file_location = sys.argv[1].strip()
-#		output = sys.argv[2].strip()
+		m = int(sys.argv[2])
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		N = 200
-		g = open(".\\result\\NL_1000",'w')
-		for NL in xrange(25,45,1):
-			G = solve(input_data,N,NL)
-			g.write(str(NL) + ' ' + str(G) +'\n')
-			print NL
-		g.close()
+		NL = 174
+		N = 1500
+#		g = open(".\\result\\N_20_6",'w')
+#		for N in xrange(300):
+		G = solve(input_data,N,NL,m)
+#			g.write(str(N) + ' ' + str(G) +'\n')
+#			print N
+#		g.close()
