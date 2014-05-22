@@ -69,7 +69,8 @@ goto start
 :6
 cls
 set /p data="your data: "
-python continuevirtual.py ./data/"%data%"
+set /p m="line amount: "
+python continuevirtual.py ./data/"%data%" "%m%"
 echo work down!
 pause
 goto start

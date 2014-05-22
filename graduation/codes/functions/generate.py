@@ -258,7 +258,7 @@ def H(item_values,S):
 	value = sum(line_values)
 	return value
 
-def Goal(completion,items,S,lambda1,lambda2,sigma):
+def Goal(completion,items,S,lambda1,lambda2):
 	lateness = late(completion,items)
 	Rb,c_max = balance_rate(completion,S)
 	Ru = idle_rate(items,completion,c_max,S)
@@ -267,7 +267,7 @@ def Goal(completion,items,S,lambda1,lambda2,sigma):
 	for s in S:
 		left = [math.sqrt((items[j].wt*lateness[j])**2) for j in s]
 		right = [items[j].wc*completion[j] for j in s]
-		line_values.append(lambda1*sum(left)/Ru[l] + lambda2*math.exp(-Rb/sigma)*sum(right))
+		line_values.append(lambda1*sum(left)/Ru[l] + lambda2*math.exp(-Rb)*sum(right))
 		l +=1
 	return line_values,sum(line_values)
 
@@ -320,7 +320,7 @@ def find_job(job,S):
 	return l_star
 
 # this function is to verify if the algorithm is right, also can use it to generate value in a silly way ^_^
-def verify(S,items):
+def verify(S,items,lambda1,lambda2):
 	n = len(items)
 	completion = [None]*n
 	for s in S:
@@ -335,7 +335,7 @@ def verify(S,items):
 		item = items[j]
 		wt,wc = item.wt,item.wc
 		t,c = tardiness[j],completion[j]
-		value = basicvirtual.h(t,c,wt,wc)
+		value = basicvirtual.h(t,c,wt,wc,lambda1,lambda2)
 		item_values.append(value)
 	return completion,tardiness,item_values
 

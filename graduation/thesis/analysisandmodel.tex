@@ -182,13 +182,13 @@ Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
 
 此外，需要考虑流水线的平衡性，可以综合入次要目标加权完成总和当中，其形式可以有很多种，为了体现提高流水线平衡性的重要，可以这样设计：
 \begin{equation}
-\min \quad \exp\left(-\frac{Rb}{\sigma}\right)\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
+\min \quad e^{-Rb}\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
 \label{equ:insertsecondobj}
 \end{equation}
 
 式中$\sigma$是比例参数，其值越大，对目标值影响越大，表明均衡性越为重要，需要根据生产管理人员的决策来确定。与基本模型类似，主要和次要目标可以通过目标权重系数$\lambda$上，然后进行帕累托分析。结合\eqref{equ:insertmainobj}与(\ref{equ:insertsecondobj})得到本模型的目标函数：
 \begin{equation}
-\min \quad \lambda_1\sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l} + \lambda_2 \exp\left(-\frac{Rb}{\sigma}\right)\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
+\min \quad \lambda_1\sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l} + \lambda_2 e^{- Rb}\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
 \label{equ:insertobj}
 \end{equation}
 

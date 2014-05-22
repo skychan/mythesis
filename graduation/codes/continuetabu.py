@@ -6,11 +6,7 @@ import continueatcs
 from collections import namedtuple
 Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
-lambda1 = 0.6
-lambda2 = 0.4
-sigma = 0.5
-
-def tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma):
+def tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2):
 	TL = [None]*NL
 	pairs = generate.pairsets(S[l])
 	completion_temp = completion[:]
@@ -31,18 +27,22 @@ def tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma):
 				a_idx = S_star[l].index(a)
 				b_idex = S_star[l].index(b)
 				S_temp = generate.innerswap(S_star[l],a_idx,b_idex)
-				_,G_temp = generate.Goal(completion_temp,items,S_star,lambda1,lambda2,sigma)
+				c,v = continueatcs.complete_time(S_star[:l]+[S_temp]+S_star[l+1:],items,lambda1,lambda2)
+				G_temp = sum(v)
 				if test_G == [] or G_temp < test_G:
 					test_G = G_temp
 					test_S = S_temp[:]
+					completion_temp = c[:]
+					line_values_temp = v[:]
 					a_star = a
 					b_star = b
 		if test_G == []:
-			break
+			continue
 		change_set = set([a_star,b_star])
 		generate.pairsets_update(pairs,change_set)
 		S_star[l] = test_S[:]
-		completion_temp,line_values_temp = continueatcs.complete_time(S_star,items,lambda1,lambda2,sigma)
+#		completion_temp,line_values_temp = continueatcs.complete_time(S_star,items,lambda1,lambda2)
+#		sky,g = generate.Goal()
 		TL.pop(0)
 		TL.append(change_set)
 		if test_G < G_star:
@@ -50,10 +50,11 @@ def tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma):
 			S[l] = test_S[:]
 			line_values = line_values_temp[:]
 			completion = completion_temp[:]
-			line_values = line_values_temp[:]
+#			line_values = line_values_temp[:]
 	return G_star,S,line_values,completion
 
-def solve(input_data):
+def solve(input_data,lambda1):
+	lambda2  = 1 - lambda1
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1							# get the amount of items
 	m = 5
@@ -71,14 +72,14 @@ def solve(input_data):
 	print 'Data loaded!'	
 	S,L,completion,item_free = generate.initialization_c(items,n,m)
 	print 'Initialization done!'
-	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
+	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2)
 	print 'Initialization values done!'
-	print G,S,line_values
+	print G
 
-	NR = 10
-	N = 100
+	NR = 1
+	N = 2
 	NL = 20
-	item_values = continueatcs.h(S,completion,items,lambda1,lambda2,sigma)
+	item_values = continueatcs.h(S,completion,items,lambda1,lambda2)
 	G_star = G
 	S_star =[]
 	for s in S:
@@ -86,14 +87,15 @@ def solve(input_data):
 #	print item_values
 	for k in xrange(NR):
 		l_p,l_m = generate.reorder(items,S_star,line_values,item_values)
-		completion,line_values = continueatcs.complete_time(S_star,items,lambda1,lambda2,sigma)
-		G_star,S_star,line_values,completion = tabu(N,NL,S_star,l_p,items,G_star,completion,line_values,lambda1,lambda2,sigma)
+		completion,line_values = continueatcs.complete_time(S_star,items,lambda1,lambda2)
+		G_star = sum(line_values)
+		G_star,S_star,line_values,completion = tabu(N,NL,S_star,l_p,items,G_star,completion,line_values,lambda1,lambda2)
 #		print S_star,line_values
-		G_star,S_star,line_values,completion = tabu(N,NL,S_star,l_m,items,G_star,completion,line_values,lambda1,lambda2,sigma)
-		item_values = continueatcs.h(S_star,completion,items,lambda1,lambda2,sigma)
+#		G_star,S_star,line_values,completion = tabu(N,NL,S_star,l_m,items,G_star,completion,line_values,lambda1,lambda2)
+		item_values = continueatcs.h(S_star,completion,items,lambda1,lambda2)
 #		print S_star,line_values
-
-	print G_star
+	print G_star,sum(line_values)
+	line_values,G = generate.Goal(completion,items,S_star,lambda1,lambda2)
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -101,4 +103,5 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		solve(input_data)
+		lambda1 = 0.6
+		solve(input_data,lambda1)

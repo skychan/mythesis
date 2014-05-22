@@ -1,3 +1,4 @@
+from __future__ import division
 import sys
 sys.path.append(".\\functions")
 import generate
@@ -7,24 +8,6 @@ import random
 from collections import namedtuple
 Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
-lambda1 = 0.6
-lambda2 = 0.4
-sigma = 0.5
-
-def value_generator(S,items):
-	completion = complete_time(S,items)
-	item = [items[j] for j in S]
-	lateness = generate.late(completion,item)
-	tardiness = generate.tard(lateness)
-	item_values = []
-	for j in xrange(len(item)):
-		itm = item[j]
-		wt,wc = itm.wt,itm.wc
-		t,c = tardiness[j],completion[j]
-		value = h(t,c,wt,wc)
-		item_values.append(value)
-	return completion,tardiness,item_values
-
 def same_S(S,l,a_idx,b_idx):
 	S_t = []
 	for s in S:
@@ -32,9 +15,9 @@ def same_S(S,l,a_idx,b_idx):
 	S_t[l] = generate.innerswap(S_t[l],a_idx,b_idx)
 	return S_t
 
-def test_G(items,S,lambda1,lambda2,sigma):
-	c_temp,v_temp = continueatcs.complete_time(S,items,lambda1,lambda2,sigma)
-	_,G = generate.Goal(c_temp,items,S,lambda1,lambda2,sigma)
+def test_G(items,S,lambda1,lambda2):
+	c_temp,v_temp = continueatcs.complete_time(S,items,lambda1,lambda2)
+	_,G = generate.Goal(c_temp,items,S,lambda1,lambda2)
 	return G
 
 def diff1_S(S,l_a,l_b,a,b_idx):
@@ -75,7 +58,7 @@ def diff3_S(S,l_a,l_b,a,b,a_idx,b_idx):
 	S_t[l_b] = S_2	
 	return S_t
 
-def tabu(N,NL,S,L,items,G,lambda1,lambda2,sigma):
+def tabu(N,NL,S,L,items,G,lambda1,lambda2):
 	TL = [None]*NL
 	from_same = []
 	from_diff = []
@@ -107,28 +90,28 @@ def tabu(N,NL,S,L,items,G,lambda1,lambda2,sigma):
 				if l_a == l_b:
 					# a <--> b
 					S_temp = same_S(S,l_a,a_idx,b_idx)
-					G_temp = test_G(items,S_temp,lambda1,lambda2,sigma)
+					G_temp = test_G(items,S_temp,lambda1,lambda2)
 				else:
 					# a -> b's
 					S_temp_1 = diff1_S(S,l_a,l_b,a,b_idx)
-					G_temp_1 = test_G(items,S_temp_1,lambda1,lambda2,sigma)
+					G_temp_1 = test_G(items,S_temp_1,lambda1,lambda2)
 					# b -> a's
 					S_temp_2 = diff2_S(S,l_a,l_b,b,a_idx)
-					G_temp_2 = test_G(items,S_temp_2,lambda1,lambda2,sigma)		
+					G_temp_2 = test_G(items,S_temp_2,lambda1,lambda2)		
 					# a <--> b
 					S_temp_3 = diff3_S(S,l_a,l_b,a,b,a_idx,b_idx)
-					G_temp_3 = test_G(items,S_temp_3,lambda1,lambda2,sigma)
+					G_temp_3 = test_G(items,S_temp_3,lambda1,lambda2)
 
 					G_temp = min(G_temp_1,G_temp_2,G_temp_3)
 			elif s in from_same:
-				break
+				continue
 			else:
 				# a -> b's
 				S_temp_1 = diff1_S(S,l_a,l_b,a,b_idx)
-				G_temp_1 = test_G(items,S_temp_1,lambda1,lambda2,sigma)
+				G_temp_1 = test_G(items,S_temp_1,lambda1,lambda2)
 				# b -> a's
 				S_temp_2 = diff2_S(S,l_a,l_b,b,a_idx)
-				G_temp_2 = test_G(items,S_temp_2,lambda1,lambda2,sigma)	
+				G_temp_2 = test_G(items,S_temp_2,lambda1,lambda2)	
 				G_temp = min(G_temp_1,G_temp_2)
 
 			if G_test == 0 or G_temp < G_test:
@@ -138,49 +121,64 @@ def tabu(N,NL,S,L,items,G,lambda1,lambda2,sigma):
 				if l_a == l_b:
 					S_star = S_temp
 					issame,isdiff = 1,0
+					out = 0
 				else:
-					if G_temp == G_temp_1:
-						S_star = S_temp_1
+					if s in TL:
+						out = 1
 						issame,isdiff = 0,0
-					elif G_temp == G_temp_2:
-						S_star = S_temp_2
-						issame,isdiff = 0,0
-					elif G_temp == G_temp_3:
-						S_star = S_temp_3
-						issame,isdiff = 0,1
+						if G_temp == G_temp_1:
+							S_star = S_temp_1
+						elif G_temp == G_temp_2:
+							S_star = S_temp_2
+					else:
+						out = 0
+						if G_temp == G_temp_1:
+							S_star = S_temp_1
+							issame,isdiff = 0,0
+						elif G_temp == G_temp_2:
+							S_star = S_temp_2
+							issame,isdiff = 0,0
+						elif G_temp == G_temp_3:
+							S_star = S_temp_3
+							issame,isdiff = 0,1
 		if G_test == 0:
-			break
+			continue
 		L = generate.innerswap(L,L.index(a_temp),L.index(b_temp))
 		pairs = generate.pairsets(L)
 		change_set = set([a_temp,b_temp])
 #		generate.pairsets_update(pairs,change_set)
+		if out:
+			TL[TL.index(change_set)] = None
+			from_diff.remove(change_set)
+		delete_set = TL.pop(0)
+		if delete_set in from_same:
+			from_same.remove(delete_set)
+		elif delete_set in from_diff:
+			from_diff.remove(delete_set)
 		if isdiff or issame:
-			delete_set = TL.pop(0)
-			if delete_set in from_same:
-				from_same.remove(delete_set)
-			elif delete_set in from_diff:
-				from_diff.remove(delete_set)
 			TL.append(change_set)
 			if isdiff:
 				from_diff.append(change_set)
 			if issame:
 				from_same.append(change_set)
-		elif change_set in TL:
-			TL[TL.index(change_set)] = None
-			from_diff.remove(change_set)
+		else:
+			TL.append(None)
 		S = S_star
 		G = G_test
 		print G
 		print 'k =  ' +str(k)
+		TL,from_same,from_diff = generate.TL_update(TL,from_same,from_diff,S)
 		if G < G_star:
 			G_star = G
 			S_c = []
 			for s in S:
 				S_c.append(s[:]) 
 			L_star = L[:]
+
 	return G_star,S_c
 
-def solve(input_data,N,NL):
+def solve(input_data,N,NL,lambda1,m):
+	lambda2 = 1 - lambda1
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1						# get the amount of items
 	items = []
@@ -194,26 +192,32 @@ def solve(input_data,N,NL):
 		wt = int(parts[4])					# get the tardiness weights
 		wc = int(parts[5])					# get the completion weights
 		items.append(Item(p,r,s,d,wt,wc))			# combine those item data
-	print 'Data loaded!'	
-	m = 5
+#	print 'Data loaded!'	
 	S,L,completion,item_free = generate.initialization_c(items,n,m)
-	print 'Initialization done!'
-	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
-	print 'Initial values done!'
+#	print 'Initialization done!'
+	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2)
+	print G,line_values
+#	print 'Initial values done!'
 
 	# initial tabu
-	Nt = 144
+	
 	for l in xrange(m):
-		G,S,line_values,completion = continuetabu.tabu(Nt,NL,S,l,items,G,completion,line_values,lambda1,lambda2,sigma)
-	print 'Initial Tabu Search Done!'
+		G,S,line_values,completion = continuetabu.tabu(N,NL,S,l,items,G,completion,line_values,lambda1,lambda2)
+		print G,sum(line_values),line_values
+#	print 'Initial Tabu Search Done!'
 
-	G,S = tabu(N,NL,S,L,items,G,lambda1,lambda2,sigma)
-	print G
-	print 'Virtual Tabu Search done!'
+#	G,S = tabu(0,NL,S,L,items,G,lambda1,lambda2)
+#	print G,sum(line_values)
+	Rb,_ = generate.balance_rate(completion,S)
+	_,G_test = generate.Goal(completion,items,S,lambda1,lambda2)
+	print 'while the verify way is:  ' +str(G_test)
+
+	return G,Rb
+#	print 'Virtual Tabu Search done!'
 
 #	completion,tardiness,item_values = generate.verify(S,items)
 #	print 'while the verify way is:  ' +str(sum(item_values))
-#	return G
+#	return G		
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -222,9 +226,12 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		N = 2000
-		f = open(".\\result\\NL",'w')	
-		for NL in range(6,7):
-			G = solve(input_data,N,NL)
-			f.write('NL = ' +str(NL) + '  G = '+str(G) +'\n')
+		m = int(sys.argv[2])
+		N = 2
+		lambda1 = 0.6
+		a = xrange(2,3)
+		f = open(".\\result\\NL_c_"  +str(int(file_location[7:]))+ "_" + str(m),'w')
+		for NL in a:
+			G,Rb = solve(input_data,N,NL,lambda1,m)
+			f.write(str(NL) +' ' + str(G) +' ' +str(Rb)+ '\n')
 		f.close()

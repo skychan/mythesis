@@ -8,8 +8,7 @@ Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
 lambda1 = 0.6
 lambda2 = 0.4
-sigma = 0.5
-def  h(S,completion,items,lambda1,lambda2,sigma):			# define the contribution of one item for the obj function
+def  h(S,completion,items,lambda1,lambda2):			# define the contribution of one item for the obj function
 	n = len(items)
 	lateness = generate.late(completion,items)
 	value = [None]*n
@@ -18,10 +17,10 @@ def  h(S,completion,items,lambda1,lambda2,sigma):			# define the contribution of
 	for s in S:
 		l = S.index(s)
 		for j in s:
-			value[j] = lambda1*(math.fabs(items[j].wt*lateness[j]))/Ru[l] + lambda2*items[j].wc*completion[j]*math.exp(-Rb/sigma)
+			value[j] = lambda1*(math.fabs(items[j].wt*lateness[j]))/Ru[l] + lambda2*items[j].wc*completion[j]*math.exp(-Rb)
 	return value
 
-def complete_time(S,items,lambda1,lambda2,sigma):
+def complete_time(S,items,lambda1,lambda2):
 	n = len(items)
 	c = [None]*n
 	f = [None]*n
@@ -35,7 +34,7 @@ def complete_time(S,items,lambda1,lambda2,sigma):
 				f[j] = max(item.release - item.setup - c[s[s.index(j)-1]],0)
 			t += item.process + item.setup + f[j]
 			c[j] = t
-	item_values = h(S,c,items,lambda1,lambda2,sigma)
+	item_values = h(S,c,items,lambda1,lambda2)
 	line_values = []
 	for s in S:
 		v = [item_values[j] for j in s]
@@ -86,7 +85,7 @@ def solve(input_data):
 	print 'Data loaded!'	
 	S,L,completion,item_free = generate.initialization_c(items,n,m)
 	print 'Initialization done!'
-	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2,sigma)
+	line_values,G = generate.Goal(completion,items,S,lambda1,lambda2)
 	print 'Initialization values done!'
 	print G
 
@@ -100,21 +99,17 @@ def solve(input_data):
 #	for k in range(len(S)):
 #		g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
 #	g.write('let us check\n')
-	print line_values
 	NR = 20
-	item_values = h(S,completion,items,lambda1,lambda2,sigma)
+	item_values = h(S,completion,items,lambda1,lambda2)
 	for k in xrange(NR):
 #		g.write(str(k)+':\n')
 		l_p,l_m = generate.reorder(items,S,line_values,item_values)
-		print l_p,l_m
 		S[l_p],c_p = ATCS(items,S[l_p],m)
 		S[l_m],c_m = ATCS(items,S[l_m],m)
-		completion,line_values = complete_time(S,items,lambda1,lambda2,sigma)
-		item_values = h(S,completion,items,lambda1,lambda2,sigma)
+		completion,line_values = complete_time(S,items,lambda1,lambda2)
+		item_values = h(S,completion,items,lambda1,lambda2)
 		G = sum(line_values)
-		print line_values
-		print G
-	print G
+
 	
 #		for k in range(len(S)):
 #			g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')

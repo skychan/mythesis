@@ -4,11 +4,9 @@ import generate
 from collections import namedtuple
 Item = namedtuple("Item", ['process','due','wt','wc'])
 
-def  h(tardiness,completion,wt,wc):			# define the contribution of one item for the obj function
+def  h(tardiness,completion,wt,wc,lambda1,lambda2):			# define the contribution of one item for the obj function
 	value = lambda1*wt*tardiness + lambda2*wc*completion
 	return value
-lambda1 = 0.6
-lambda2 = 0.4
 
 def complete_time(S,items):
 	n = len(items)
@@ -20,7 +18,7 @@ def complete_time(S,items):
 			c[j] = t
 	return c
 
-def value_generator(S,items):
+def value_generator(S,items,lambda1,lambda2):
 	completion = complete_time(S,items)
 	lateness = generate.late(completion,items)
 	tardiness = generate.tard(lateness)
@@ -29,12 +27,12 @@ def value_generator(S,items):
 		item = items[j]
 		wt,wc = item.wt,item.wc
 		t,c = tardiness[j],completion[j]
-		value = h(t,c,wt,wc)
+		value = h(t,c,wt,wc,lambda1,lambda2)
 		item_values.append(value)
 	return completion,tardiness,item_values
 	
 
-def tabu(N,NL,S,items, completion,tardiness):
+def tabu(N,NL,S,items, completion,tardiness,lambda1,lambda2):
 	TL = [None]*NL
 #	value = generate.H(item_values,S)
 	pairs = generate.pairsets(S)
@@ -55,8 +53,8 @@ def tabu(N,NL,S,items, completion,tardiness):
 				delta_t_a = - min(items[b].process,tardiness_temp[a])
 				delta_t_b = max(completion_temp[a] - items[b].due,0) - tardiness_temp[b]
 				wt_a,wt_b,wc_a,wc_b = items[a].wt,items[b].wt,items[a].wc,items[b].wc
-				delta_a = h(delta_t_a,delta_c_a,wt_a,wc_a)
-				delta_b = h(delta_t_b,delta_c_b,wt_b,wc_b)
+				delta_a = h(delta_t_a,delta_c_a,wt_a,wc_a,lambda1,lambda2)
+				delta_b = h(delta_t_b,delta_c_b,wt_b,wc_b,lambda1,lambda2)
 				delta_h = delta_a + delta_b
 				if delta == []:
 					delta = delta_h
@@ -87,7 +85,8 @@ def tabu(N,NL,S,items, completion,tardiness):
 			S_star = S[:]
 	return delta_star,S_star
 
-def solve(input_data):
+def solve(input_data,m,lambda1):
+	lambda2 = 1- lambda1
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1						# get the amount of items
 	items = []
@@ -101,11 +100,10 @@ def solve(input_data):
 		wc = int(parts[5])					# get the completion weights
 		items.append(Item(p+s,d,wt,wc))			# combine those item data
 	print 'Data loaded!'	
-	m = 5
 	S,L,completion = generate.initialization(items,n,m)
 	print 'Initialization done!'
 
-	completion,tardiness,item_values = value_generator(S,items)
+	completion,tardiness,item_values = value_generator(S,items,lambda1,lambda2)
 	G = generate.H(item_values,L)
 	line_values = []
 	for s in S:
@@ -117,10 +115,10 @@ def solve(input_data):
 	N = 1500
 	NL = 2
 	for l in xrange(m):
-		delta,S[l]= tabu(N,NL,S[l],items,completion,tardiness)
+		delta,S[l]= tabu(N,NL,S[l],items,completion,tardiness,lambda1,lambda2)
 		G += delta
 		line_values[l] += delta
-	completion,tardiness,item_values = value_generator(S,items)
+	completion,tardiness,item_values = value_generator(S,items,lambda1,lambda2)
 	print G
 	print 'Initial Tabu Search done!'
 	n = len(items)
@@ -137,7 +135,7 @@ def solve(input_data):
 		item = items[j]
 		wt,wc = item.wt,item.wc
 		t,c = ta[j],co[j]
-		value = h(t,c,wt,wc)
+		value = h(t,c,wt,wc,lambda1,lambda2)
 		v.append(value)
 	print sum(v)
 
@@ -151,11 +149,11 @@ def solve(input_data):
 	print line_values_temp
 	for k in xrange(NR):		
 		l_p,l_m = generate.reorder(items,S_temp,line_values_temp,item_values_temp)
-		completion_temp,tardiness_temp,item_values_temp = value_generator(S_temp,items)
+		completion_temp,tardiness_temp,item_values_temp = value_generator(S_temp,items,lambda1,lambda2)
 		line_values_temp[l_p] = generate.H(item_values_temp,S_temp[l_p])
 		line_values_temp[l_m] = generate.H(item_values_temp,S_temp[l_m])
-		delta_p,S_temp[l_p] = tabu(N,NL,S_temp[l_p],items,completion_temp,tardiness_temp)
-		delta_m,S_temp[l_m] = tabu(N,NL,S_temp[l_m],items,completion_temp,tardiness_temp)	
+		delta_p,S_temp[l_p] = tabu(N,NL,S_temp[l_p],items,completion_temp,tardiness_temp,lambda1,lambda2)
+		delta_m,S_temp[l_m] = tabu(N,NL,S_temp[l_m],items,completion_temp,tardiness_temp,lambda1,lambda2)
 		line_values_temp[l_p] += delta_p
 		line_values_temp[l_m] += delta_m
 		value = generate.H(item_values_temp,L)
@@ -164,7 +162,7 @@ def solve(input_data):
 		if value < G:
 			G = value
 			line_values = line_values_temp[:]
-			completion,tardiness,item_values = value_generator(S_temp,items)
+			completion,tardiness,item_values = value_generator(S_temp,items,lambda1,lambda2)
 			for l in xrange(m):
 				S[l] = S_temp[l][:]
 		print 'hello:' + str(k)
@@ -184,7 +182,7 @@ def solve(input_data):
 		item = items[j]
 		wt,wc = item.wt,item.wc
 		t,c = ta[j],co[j]
-		value = h(t,c,wt,wc)
+		value = h(t,c,wt,wc,lambda1,lambda2)
 		v.append(value)
 	print sum(v)
 	g = open(".\\result\\draw_tabu" ,'w')
@@ -202,4 +200,6 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		solve(input_data)
+		m = 5
+		lambda1 = 0.6
+		solve(input_data,m,lambda1)
