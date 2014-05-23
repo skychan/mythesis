@@ -73,54 +73,49 @@
 可以看出$NL = 9$是最佳列表长度，确定该值后，生成目标函数值与迭代次数的关系，如\reff{fig:100NwithGoal}所示。
 虽然随着迭代次数的增加，目标函数值仍然会减少，其减少幅度不大，并且运算时间增加很多，所以取迭代次数$N = 70$是较为适宜的\footnote{实际上$\left. G\right|_{N=70} = 85206, \left. G\right|_{N=300} = 85200.2$，两者相差仅$0.0068\%$}。
 
-以此类推，可以确定不同问题规模下的这两个参数的值\footnote{经测试，不用决策环境$(\lambda_1, \lambda_2, \sigma)$下，禁忌列表长度$NL$和迭代次数$N$基本不变，所以这两个参数适用于不同的决策环境下}，多品种多装配线轮番装配调度优化模型和考虑插单的多品种多装配线轮番装配调度优化模型相关参数设定结果分别如和所示。
-\begin{table}[htbp]
-  \centering
-  \caption{Add caption}
-    \begin{tabular}{ccccccccccccc}
-    \toprule
-    \multicolumn{2}{c}{\multirow{2}[0]{*}{参数}} & \multicolumn{11}{c}{订单数量} \\
-        \multicolumn{2}{c}{} & $20 $   & $30$    & $50$    & $70$    & $100$   & $150 $  & $200$   & $300$   & $500$   & $750$   & $1000$ \\
-      \midrule
-    \multirow{2}[0]{*}{$m=5$} & $N$     & $3$     & $16$    & $65$    & $30$    & $70$    & $100$   & $1850$  & $1700$  & $1000$  & $150$   & $500$ \\
-          & $NL$    & $2$     & $2$     & $8$     & $6$     & $9$     & $29$    & $61$    & $138$   & $164$   & $152$   & $90$ \\
-    \multirow{2}[0]{*}{$m=6$} & $N$     & $14$    & $10$    & $25$    & $60$    & $130$   & $200$   & $850$   & $420$   &  $350 $     &  $650 $     &$440$  \\
-          & $NL$    & $2$     & $2$     & $2$     & $6$     & $20$    & $31$    & $52$    & $105$   & $190$   & $220$   & $312$ \\
-    \multirow{2}[0]{*}{$m=7$} & $N$     & $8$     & $13$    &$ 60    $&$ 55    $&$ 19    $&$ 200   $&$ 320   $&$ 275   $&$80       $&$      700 $&$80  $\\
-          &$ NL    $&$ 2     $&$ 2     $&$ 4     $&$ 14    $&$ 6     $&$ 21    $&$ 26    $&$ 48    $&$ 160   $&$ 227   $&$ 174 $\\
-    \bottomrule
-    \end{tabular}%
-  \label{tab:addlabel}%
-\end{table}%
+以此类推，可以确定不同问题规模下的这两个参数的值\footnote{经测试，不用决策环境$(\lambda_1, \lambda_2)$下，禁忌列表长度$NL$和迭代次数$N$基本不变，所以这两个参数适用于不同的决策环境下}，多品种多装配线轮番装配调度优化模型和考虑插单的多品种多装配线轮番装配调度优化模型相关参数设定结果分别如\reft{tab:model1para}和\reft{tab:model2para}所示。
+\begin{table}[h]
+\centering
+\caption{模型$1$相关参数确定}
+\begin{tabular}{ccccccccccccc}
+\toprule
+\multicolumn{2}{c}{\multirow{2}[0]{*}{参数}} & \multicolumn{11}{c}{订单数量} \\
+\multicolumn{2}{c}{}		  & $20 $   & $30$    & $50$    & $70$    & $100$   & $150 $  & $200$   & $300$   & $500$   & $750$   & $1000$ \\
+\midrule
+\multirow{2}[0]{*}{$m=5$}&$N$& $3$     & $16$    & $65$    & $30$    & $70$    & $100$   & $1850$   & $1700$  & $238$  & $121$   & $267$ \\
+     			  & $NL$&   $2$    & $2$     & $8$      & $6$      & $9$      & $29$     & $61$     & $138$    & $164$    & $152$   & $90$ \\
+\multirow{2}[0]{*}{$m=6$}&$N$& $14$    & $10$    & $25$    & $60$    & $130$   & $200$   & $850$   & $420$    &  $350 $   &  $125 $ &$440$  \\
+		            & $NL$ & $2$     & $2$      & $2$      & $6$      & $20$     & $31$     & $52$     & $105$   & $190$    & $220$   & $312$ \\
+\multirow{2}[0]{*}{$m=7$}& $N$& $8$     & $13$    &$ 60    $&$ 55    $ &$ 19    $&$ 200   $&$ 320   $&$ 275   $&$80     $   & $   125  $&$80  $\\
+ 		          &$ NL    $&$ 2     $&$ 2     $&$ 4     $&$ 14   $  &  $6     $  &  $21 $ &$ 26   $  &$ 48    $&$ 160   $   &$ 227   $&$ 174 $\\
+\bottomrule
+\end{tabular}
+\label{tab:model1para}
+\end{table}
 
-\begin{table}[htbp]
-  \centering
-  \caption{Add caption}
-    \begin{tabular}{cccccccccccccc}
-    \toprule
-    $m $    & \multicolumn{2}{c}{参数} & 20    & 30    & 50    & 70    & 100   & 150   & 200   & 300   & 500   & 750   & 1000 \\
-    \midrule
-    \multirow{4}[0]{*}{5} & \multirow{2}[0]{*}{基本模型} & $N$    & 2     & 2     & 8     & 6     & 9     & 13    & 27    & 18    &       &       &  \\
-          &       & $NL$    &       &       &       &       &       &       &       &       &       &       &  \\
-          & \multirow{2}[0]{*}{插单模型} & $N$    & 2     &       &       &       &       &       &       &       &       &       &  \\
-          &       & $NL$    &       &       &       &       &       &       &       &       &       &       &  \\
-    \multirow{4}[0]{*}{6} & \multirow{2}[0]{*}{基本模型} & $N$    & 2     &       &       &       &       &       &       &       &       &       &  \\
-          &       & $NL$    &       &       &       &       &       &       &       &       &       &       &  \\
-          & \multirow{2}[0]{*}{插单模型} & $N$    & 2     &       &       &       &       &       &       &       &       &       &  \\
-          &       & $NL$    &       &       &       &       &       &       &       &       &       &       &  \\
-    \multirow{4}[0]{*}{7} & \multirow{2}[0]{*}{基本模型} & $N$    & 2     &       &       &       &       &       &       &       &       &       &  \\
-          &       & $NL$    &       &       &       &       &       &       &       &       &       &       &  \\
-          & \multirow{2}[0]{*}{插单模型} & $N$    & 2     &       &       &       &       &       &       &       &       &       &  \\
-          &       & $NL$    &       &       &       &       &       &       &       &       &       &       &  \\
-    \bottomrule
-    \end{tabular}%
-  \label{tab:addlabel}%
-\end{table}%
+\begin{table}[h]
+\centering
+\caption{模型$2$相关参数确定}
+\begin{tabular}{ccccccccccccc}
+\toprule
+\multicolumn{2}{c}{\multirow{2}[0]{*}{参数}} & \multicolumn{11}{c}{订单数量} \\
+\multicolumn{2}{c}{}		  & $20 $   & $30$    & $50$    & $70$    & $100$   & $150 $  & $200$   & $300$   & $500$   & $750$   & $1000$ \\
+\midrule
+\multirow{2}[0]{*}{$m=5$}&$N$& $5$     & $12$    & $20$    & $40$    & $66$    & $121$   & $152$   & $313$  & $99$  & $308$   & $241$ \\
+     			  & $NL$&   $2$    & $3$     & $16$     & $25$   & $44$    & $44$     & $63$     & $70$    & $71$    & $67$   & $62$ \\
+\multirow{2}[0]{*}{$m=6$}&$N$& $20$    & $18$    & $25$    & $19$    & $53$   & $231$   & $165$   & $431$    &  $157 $   &  $211 $ &$153$  \\
+		            & $NL$ & $2$     & $2$      & $28$     & $20$    & $33$    & $11$     & $8$     & $40$   & $18$    & $22$   & $31$ \\
+\multirow{2}[0]{*}{$m=7$}& $N$& $3$     & $9$    &$ 32    $    &$ 25 $  &$ 132  $&$ 200   $&$ 222   $&$ 109   $&$88     $   & $   106 $&$124  $\\
+ 		          &$ NL    $&$ 2     $&$ 3     $&$ 21     $&$ 60   $  &  $50   $  &  $29 $ &$ 92   $  &$ 22    $&$ 40   $   &$ 21   $&$ 52 $\\
+\bottomrule
+\end{tabular}
+\label{tab:model2para}
+\end{table}
 可以看出，迭代次数和禁忌列表长度和问题的规模有一定的正相关关系，问题规模越大，这两者的值也越大，但这两个参数主也和订单的实验信息数据特点有关。
  
 \section{结果及评估}
 \subsection{实验结果示例及说明}
-确定实验所需订单信息数据以及算法相关的参数，运行编写的算法程序，可以得到实验结果。实验结果由目标函数值$G$和所得调度序列$S$组成，以模型$1$ 为例，示例订单量$n = 20$，其实验信息数据如\ref{tab:20itemsdata}所示，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法，根据 选择相关参数，所得结果列入中。
+确定实验所需订单信息数据以及算法相关的参数，运行编写的算法程序，可以得到实验结果。实验结果由目标函数值$G$和所得调度序列$S$组成，以模型$1$ 为例，示例订单量$n = 20$，其实验信息数据如\reft{tab:20itemsdata}所示，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法，根据\reft{tab:model1para}选择相关参数，所得结果列入中。
 \begin{table}[htbp]
   \centering
   \caption{Add caption}
@@ -150,18 +145,31 @@
   \label{tab:addlabel}%
 \end{table}%
 其调度安排如\reff{fig:20items3algorithms}所示。
-%\input{thesis/figure.tex}
+\input{thesis/figure.tex}
 从结果上来看，就该决策环境下，模型1 使用Vtr -- Tabu 算法可以得到较好调度结果。
 \subsection{模型1}
 
 \subsubsection{算法比较}
+%\begin{figure}[h]
+%\centering
+%\includegraphics[height = 8.2cm, angle = -90]{basiccomp_20.pdf}
+%\end{figure}
 \subsubsection{权衡决策参数}
-\begin{figure}[h]
+\begin{sidewaysfigure}[p]
 \centering
-\subfloat[$n = 1000$]{\includegraphics[height = 5.8cm, angle = -90,trim = 50 20 50 10]{alg_1_1000}}
-\subfloat[$n = 750$]{\includegraphics[height = 5.8cm, angle = -90,trim = 50 20 50 10]{alg_1_750}}
-\subfloat[$n = 500$]{\includegraphics[height = 5.8cm, angle = -90,trim = 50 20 50 10]{alg_1_500}}\\
-\end{figure}
+\subfloat[$n = 20$]{\includegraphics[height = 6cm, angle = -90]{basic_04_20}}
+\subfloat[$n = 30$]{\includegraphics[height = 6cm, angle = -90]{basic_04_300}}
+\subfloat[$n = 50$]{\includegraphics[height = 6cm, angle = -90]{basic_04_50}}
+\subfloat[$n = 70$]{\includegraphics[height = 6cm, angle = -90]{basic_04_70}}\\
+\subfloat[$n = 100$]{\includegraphics[height = 6cm, angle = -90]{basic_04_100}}
+\subfloat[$n = 150$]{\includegraphics[height = 6cm, angle = -90]{basic_04_150}}
+\subfloat[$n = 200$]{\includegraphics[height = 6cm, angle = -90]{basic_04_200}}
+\subfloat[$n = 300$]{\includegraphics[height = 6cm, angle = -90]{basic_04_300}}\\
+\subfloat[$n = 500$]{\includegraphics[height = 6cm, angle = -90]{basic_04_500}}
+\subfloat[$n = 750$]{\includegraphics[height = 6cm, angle = -90]{basic_04_750}}
+\subfloat[$n = 1000$]{\includegraphics[height = 6cm, angle = -90]{basic_04_1000}}
+\caption{模型$1$的Cyc -- ATC、Cyc -- Tabu、Vtr -- Tabu 算法求解结果比较$(\lambda_1 = 0.4)$}
+\end{sidewaysfigure}
 \subsection{模型2}
 \subsubsection{算法比较}
 \subsubsection{权衡决策参数}

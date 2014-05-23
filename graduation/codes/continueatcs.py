@@ -6,8 +6,6 @@ from collections import namedtuple
 import test1
 Item = namedtuple("Item", ['process','release','setup','due','wt','wc'])
 
-lambda1 = 0.6
-lambda2 = 0.4
 def  h(S,completion,items,lambda1,lambda2):			# define the contribution of one item for the obj function
 	n = len(items)
 	lateness = generate.late(completion,items)
@@ -67,7 +65,8 @@ def ATCS(items,S,m):
 		c.append(t)
 	return S,c
 
-def solve(input_data):
+def solve(input_data,m,lambda1):
+	lambda2 = 1 - lambda1
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1							# get the amount of items
 	m = 5
@@ -109,6 +108,8 @@ def solve(input_data):
 		completion,line_values = complete_time(S,items,lambda1,lambda2)
 		item_values = h(S,completion,items,lambda1,lambda2)
 		G = sum(line_values)
+	Rb,_ = generate.balance_rate(completion,S)
+	return G,Rb
 
 	
 #		for k in range(len(S)):
@@ -135,4 +136,10 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		solve(input_data)
+		m = int(sys.argv[2])
+		f = open(".\\result\\atcs_"  +str(int(file_location[7:]))+ "_" + str(m),'w')
+		a = [0.4,0.5,0.6]
+		for lambda1 in a:
+			G,Rb = solve(input_data,m,lambda1)
+			f.write(str(lambda1) + ' ' + str(G) + ' ' +str(Rb) + '\n')
+		f.close()

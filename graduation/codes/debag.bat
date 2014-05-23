@@ -28,7 +28,8 @@ goto start
 :1
 cls
 set /p data="your data: "
-python basicatc.py ./data/"%data%"
+set /p m="line amount: "
+python basicatc.py ./data/"%data%" "%m%"
 echo work down!
 pause
 goto start
@@ -36,7 +37,8 @@ goto start
 :2
 cls
 set /p data="your data: "
-python basictabu.py ./data/"%data%"
+set /p m="line amount: "
+python basictabu.py ./data/"%data%" "%m%"
 echo work down!
 pause
 goto start
@@ -53,7 +55,8 @@ goto start
 :4
 cls
 set /p data="your data: "
-python continueatcs.py ./data/"%data%"
+set /p m="line amount: "
+python continueatcs.py ./data/"%data%" "%m%"
 echo work down!
 pause
 goto start
@@ -61,7 +64,8 @@ goto start
 :5
 cls
 set /p data="your data: "
-python continuetabu.py ./data/"%data%"
+set /p m="line amount: "
+python continuetabu.py ./data/"%data%" "%m%"
 echo work down!
 pause
 goto start

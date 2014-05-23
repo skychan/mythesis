@@ -85,7 +85,7 @@ def tabu(N,NL,S,items, completion,tardiness,lambda1,lambda2):
 			S_star = S[:]
 	return delta_star,S_star
 
-def solve(input_data,m,lambda1):
+def solve(input_data,m,lambda1,N,NL,NR):
 	lambda2 = 1- lambda1
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1						# get the amount of items
@@ -112,41 +112,38 @@ def solve(input_data,m,lambda1):
 
 	print 'Initial values done!'
 
-	N = 1500
-	NL = 2
 	for l in xrange(m):
 		delta,S[l]= tabu(N,NL,S[l],items,completion,tardiness,lambda1,lambda2)
 		G += delta
 		line_values[l] += delta
 	completion,tardiness,item_values = value_generator(S,items,lambda1,lambda2)
-	print G
+#	print G
 	print 'Initial Tabu Search done!'
-	n = len(items)
-	co = [None]*n
-	for s in S:
-		t = 0
-		for j in s:
-			t += items[j].process
-			co[j] = t
-	la = generate.late(co,items)
-	ta = generate.tard(la)
-	v = []
-	for j in xrange(len(items)):
-		item = items[j]
-		wt,wc = item.wt,item.wc
-		t,c = ta[j],co[j]
-		value = h(t,c,wt,wc,lambda1,lambda2)
-		v.append(value)
-	print sum(v)
+#	n = len(items)
+#	co = [None]*n
+#	for s in S:
+#		t = 0
+#		for j in s:
+#			t += items[j].process
+#			co[j] = t
+#	la = generate.late(co,items)
+#	ta = generate.tard(la)
+#	v = []
+#	for j in xrange(len(items)):
+#		item = items[j]
+#		wt,wc = item.wt,item.wc
+#		t,c = ta[j],co[j]
+#		value = h(t,c,wt,wc,lambda1,lambda2)
+#		v.append(value)
+#	print sum(v)
 
-	NR = 3
 	value = G
 	S_temp = [None]*m
 	for l in xrange(m):
 		S_temp[l] = S[l][:]
 	line_values_temp = line_values[:]
 	item_values_temp = item_values[:]
-	print line_values_temp
+#	print line_values_temp
 	for k in xrange(NR):		
 		l_p,l_m = generate.reorder(items,S_temp,line_values_temp,item_values_temp)
 		completion_temp,tardiness_temp,item_values_temp = value_generator(S_temp,items,lambda1,lambda2)
@@ -158,40 +155,42 @@ def solve(input_data,m,lambda1):
 		line_values_temp[l_m] += delta_m
 		value = generate.H(item_values_temp,L)
 		value = value + delta_m + delta_p
-		print value,G
+#		print value,G
 		if value < G:
 			G = value
 			line_values = line_values_temp[:]
 			completion,tardiness,item_values = value_generator(S_temp,items,lambda1,lambda2)
 			for l in xrange(m):
 				S[l] = S_temp[l][:]
-		print 'hello:' + str(k)
-	GG = generate.H(item_values,L)
-	print GG
-	n = len(items)
-	co = [None]*n
-	for s in S:
-		t = 0
-		for j in s:
-			t += items[j].process
-			co[j] = t
-	la = generate.late(co,items)
-	ta = generate.tard(la)
-	v = []
-	for j in xrange(len(items)):
-		item = items[j]
-		wt,wc = item.wt,item.wc
-		t,c = ta[j],co[j]
-		value = h(t,c,wt,wc,lambda1,lambda2)
-		v.append(value)
-	print sum(v)
-	g = open(".\\result\\draw_tabu" ,'w')
-	for s in S:
-		cc = [completion[j] for j in s]
-		tt = [tardiness[j] for j in s]
-		g.write(str(s) + '\n' + str(cc) + '\n' + str(tt) + '\n')
-		g.write('\n')
-	g.close()
+	print G
+	return G
+#		print 'hello:' + str(k)
+#	GG = generate.H(item_values,L)
+#	print GG,G
+#	n = len(items)
+#	co = [None]*n
+#	for s in S:
+#		t = 0
+#		for j in s:
+#			t += items[j].process
+#			co[j] = t
+#	la = generate.late(co,items)
+#	ta = generate.tard(la)
+#	v = []
+#	for j in xrange(len(items)):
+#		item = items[j]
+#		wt,wc = item.wt,item.wc
+#		t,c = ta[j],co[j]
+#		value = h(t,c,wt,wc,lambda1,lambda2)
+#		v.append(value)
+#	print sum(v)
+#	g = open(".\\result\\draw_tabu" ,'w')
+#	for s in S:
+#		cc = [completion[j] for j in s]
+#		tt = [tardiness[j] for j in s]
+#		g.write(str(s) + '\n' + str(cc) + '\n' + str(tt) + '\n')
+#		g.write('\n')
+#	g.close()
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -200,6 +199,13 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		m = 5
-		lambda1 = 0.6
-		solve(input_data,m,lambda1)
+		m = int(sys.argv[2])
+		N = 500
+		a = [0.4,0.5,0.6]
+		NL = 2
+		NR = 10
+		g = open(".\\result\\basictabu_"  +str(int(file_location[7:]))+ "_" + str(m),'w')
+		for lambda1 in a:
+			G = solve(input_data,m,lambda1,N,NL,NR)
+			g.write(str(lambda1) + ' ' + str(G) + '\n')
+		g.close()

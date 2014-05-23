@@ -307,10 +307,10 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		N = 1850
-		NL = 61
+		N = 8
+		NL = 2
 		a = [0.4,0.5,0.6]
-		g = open(".\\result\\lambda1_200_5",'w')
+		g = open(".\\result\\lambda1_20_7",'w')
 		for lambda1 in a:
 			G = solve(input_data,N,NL,m,lambda1)
 			g.write(str(lambda1) + ' ' + str(G) +'\n')
