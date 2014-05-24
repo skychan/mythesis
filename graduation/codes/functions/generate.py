@@ -265,7 +265,7 @@ def Goal(completion,items,S,lambda1,lambda2):
 	line_values = []
 	l = 0
 	for s in S:
-		left = [math.sqrt((items[j].wt*lateness[j])**2) for j in s]
+		left = [math.fabs(items[j].wt*lateness[j]) for j in s]
 		right = [items[j].wc*completion[j] for j in s]
 		line_values.append(lambda1*sum(left)/Ru[l] + lambda2*math.exp(-Rb)*sum(right))
 		l +=1

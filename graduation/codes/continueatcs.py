@@ -69,7 +69,6 @@ def solve(input_data,m,lambda1):
 	lambda2 = 1 - lambda1
 	Data = input_data.split('\n')					# load data
 	n = len(Data) -1							# get the amount of items
-	m = 5
 	items = []	
 	for j in xrange(n):
 		data = Data[j]
@@ -98,7 +97,8 @@ def solve(input_data,m,lambda1):
 #	for k in range(len(S)):
 #		g.write(str(S[k]) + ' ' +str(line_values[k]) +'\n')
 #	g.write('let us check\n')
-	NR = 20
+	NR = 19
+#	print completion
 	item_values = h(S,completion,items,lambda1,lambda2)
 	for k in xrange(NR):
 #		g.write(str(k)+':\n')
@@ -108,7 +108,9 @@ def solve(input_data,m,lambda1):
 		completion,line_values = complete_time(S,items,lambda1,lambda2)
 		item_values = h(S,completion,items,lambda1,lambda2)
 		G = sum(line_values)
-	Rb,_ = generate.balance_rate(completion,S)
+	Rb,c= generate.balance_rate(completion,S)
+#	print completion
+#	print G
 	return G,Rb
 
 	

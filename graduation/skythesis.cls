@@ -428,7 +428,7 @@
 % 重定义参考文献样式，来自thu
 \makeatletter
 \renewenvironment{thebibliography}[1]{
-    \chapter{\bibname}
+    \chapter*{\bibname}\addcontentsline{toc}{chapter}{\bibname}
  \ifskypaper
     \xiaowu
     \else

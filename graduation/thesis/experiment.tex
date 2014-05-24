@@ -62,7 +62,7 @@
 \subsection{相关参数确定}
 使用调度规则(ATC/ATCS)的交替算法所含的相关参数为交替次数$NR$，由于该算法收敛速度很快，该参数无需特别设定，一般取$NR = 30$就基本稳定在最佳的两个结果之间交替。
 
-实验中涉及到禁忌搜索的部分，其相关参数包括迭代次数、禁忌列表长度等，迭代次数增多会增大改进解的机率，但是会使得运算时间变长，禁忌列表过长会浪费迭代次数，过短则可能跳不出局部最优。所以需要在实验前需要设定恰当的参数，以订单数量$n = 100$为例，运用虚拟序列禁忌搜索算法\refa{alg:basicvirtual}，决策权重$\lambda_t =0.6, \lambda_c = 0.4$，流水线数量$m = 5$时，在初始解生成迭代次数$N_{init} = 20$的情况下，禁忌列表长度与初始解的函数值关系如\reff{fig:100NLwithGoal}所示。
+实验中涉及到禁忌搜索的部分，其相关参数包括迭代次数、禁忌列表长度等，迭代次数增多会增大改进解的机率，但是会使得运算时间变长，禁忌列表过长会浪费迭代次数，过短则可能跳不出局部最优。所以需要在实验前需要设定恰当的参数，以订单数量$n = 100$为例，运用虚拟序列禁忌搜索算法\refa{alg:basicvirtual}，决策权重$\lambda_t =0.6, \lambda_c = 0.4$，流水线数量$m = 5$时，在初始解生成迭代次数$N_{init} = 20$的情况下，禁忌列表长度与初始解的函数值关系如\reff{fig:100NLwithGoal}所示。\reff{fig:skytest}
 \begin{figure}[h]
 \centering
 \subfloat[禁忌列表长度]{\includegraphics[height= 8.2cm,angle = -90]{NL_100}\label{fig:100NLwithGoal}}
@@ -155,21 +155,7 @@
 %\includegraphics[height = 8.2cm, angle = -90]{basiccomp_20.pdf}
 %\end{figure}
 \subsubsection{权衡决策参数}
-\begin{sidewaysfigure}[p]
-\centering
-\subfloat[$n = 20$]{\includegraphics[height = 6cm, angle = -90]{basic_04_20}}
-\subfloat[$n = 30$]{\includegraphics[height = 6cm, angle = -90]{basic_04_300}}
-\subfloat[$n = 50$]{\includegraphics[height = 6cm, angle = -90]{basic_04_50}}
-\subfloat[$n = 70$]{\includegraphics[height = 6cm, angle = -90]{basic_04_70}}\\
-\subfloat[$n = 100$]{\includegraphics[height = 6cm, angle = -90]{basic_04_100}}
-\subfloat[$n = 150$]{\includegraphics[height = 6cm, angle = -90]{basic_04_150}}
-\subfloat[$n = 200$]{\includegraphics[height = 6cm, angle = -90]{basic_04_200}}
-\subfloat[$n = 300$]{\includegraphics[height = 6cm, angle = -90]{basic_04_300}}\\
-\subfloat[$n = 500$]{\includegraphics[height = 6cm, angle = -90]{basic_04_500}}
-\subfloat[$n = 750$]{\includegraphics[height = 6cm, angle = -90]{basic_04_750}}
-\subfloat[$n = 1000$]{\includegraphics[height = 6cm, angle = -90]{basic_04_1000}}
-\caption{模型$1$的Cyc -- ATC、Cyc -- Tabu、Vtr -- Tabu 算法求解结果比较$(\lambda_1 = 0.4)$}
-\end{sidewaysfigure}
+
 \subsection{模型2}
 \subsubsection{算法比较}
 \subsubsection{权衡决策参数}

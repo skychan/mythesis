@@ -236,7 +236,7 @@ if __name__ == '__main__':
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
 		m = int(sys.argv[2])
-		N = 5
+		N = 3
 #		lambda1 = 0.6
 		NL = 2
 		a = [0.4,0.5,0.6]

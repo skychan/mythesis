@@ -109,10 +109,9 @@ if __name__ == '__main__':
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()
-		lambda1 = 0.6
 		m = int(sys.argv[2])
+		N = 3
 		NL = 2
-		N = 50
 		f = open(".\\result\\ctabu_"  +str(int(file_location[7:]))+ "_" + str(m),'w')
 		a = [0.4,0.5,0.6]
 		for lambda1 in a:
