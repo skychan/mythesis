@@ -7,6 +7,7 @@
 \usepackage{tikz}
 \usepackage{rotfloat}
 \usepackage[all,pdf]{xy}
+\newcounter{local}
 \newcommand{\Step}[1]{\textbf{Step#1}}
 \newcommand{\refa}[1]{\textbf{算法} \ref{#1}}
 %\usepackage{tikz}
@@ -24,8 +25,8 @@
 
 
 
-%\include{preface/absc}     % 中文摘要
-%\include{preface/abse}     % English Abstract
+\include{preface/absc}     % 中文摘要
+\include{preface/abse}     % English Abstract
 {\pdfbookmark[0]{目~~录}{thesiscontent}
 \phantomsection
 \singlespacing\tableofcontents           % 中文目录
@@ -34,19 +35,19 @@
 \@starttoc{lof}
 \@starttoc{lot}
 \makeatother
-%\listoftables              % 表目录
+%%\listoftables              % 表目录
 }
 
 %%%%%%%%%% 正文 %%%%%%%%%%
 \mainmatter
 \makeatletter
 %\include{body/intros}
-%\input{thesis/intro}
+\input{thesis/intro}
 \include{thesis/basicintro}
 \include{thesis/analysisandmodel}
 \include{thesis/algorithm}
 \include{thesis/experiment}
-%\include{thesis/conclusion}
+\include{thesis/conclusion}
 \makeatother
 %\backmatter
 
@@ -58,10 +59,11 @@
 \bibliography{references/reference}
 %\nocite{*}   % 若将此命令屏蔽掉，则未引用的文献不会出现在文后的参考文献中。
 
-%%%%%%%%%% 致谢 %%%%%%%%%%
-%\include{thesis/acknowledgement}		% 致谢
 %%%%%%%%%% 附录 %%%%%%%%%%
 \appendix
 \include{appendix/appendix}				% 附录
+%%%%%%%%%% 致谢 %%%%%%%%%%
+\backmatter
+\include{thesis/acknowledgement}		% 致谢
 
 \end{document}                                  % 结束全文

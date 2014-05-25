@@ -222,8 +222,8 @@
 \setcounter{secnumdepth}{3} % 自动编号最大深度 到subsubsection
 \setcounter{tocdepth}{2} % 目录显示深度到 subsection
 
-\DeclareCaptionFont{songti}{\xiaowu}
-\captionsetup{labelsep=quad}
+\DeclareCaptionFont{xiaowu}{\xiaowu}
+\captionsetup{labelsep=quad,font = xiaowu}
 
 %%%%%%%%%%%%%%%%%%%%
 %% 各级标题
