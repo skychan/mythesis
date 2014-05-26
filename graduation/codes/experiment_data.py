@@ -2,7 +2,7 @@ import sys,pprint
 sys.path.append(".\\functions")
 import generate
 
-def generate_data(input_data):
+def generate_data(input_data):						# generate experiment data and store in the data file
 	data = input_data.split('\n')
 	N = len(data)
 	for k in xrange(N):
@@ -22,7 +22,7 @@ def generate_data(input_data):
 			p.append(temp)
 		d = generate.due_date_r(r,p)
 		for i in xrange(n):
-			f.write(str(p[i])+' ' + str(r[i]) + ' ' + str(s[i]) + ' ' + str(d[i]) + ' ' + str(wt[i],) + ' ' + str(wc[i],) + '\n')
+			f.write(str(p[i])+' ' + str(r[i]) + ' ' + str(s[i]) + ' ' + str(d[i]) + ' ' + str(wt[i]) + ' ' + str(wc[i]) + '\n')
 		f.close()
 		print 'data_' + str(data[k]) +' '+ 'done!'
 
@@ -30,7 +30,6 @@ import sys
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		file_location = sys.argv[1].strip()
-#		output = sys.argv[2].strip()
 		input_data_file = open(file_location, 'r')
 		input_data = ''.join(input_data_file.readlines())
 		input_data_file.close()

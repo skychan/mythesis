@@ -1,3 +1,6 @@
+% !Mode:: "TeX:UTF-8"
+% !TEX root = ..\thesis.tex
+\begin{lstlisting}[language = Python]
 import sys
 sys.path.append(".\\functions")
 import generate
@@ -83,18 +86,18 @@ def tabu(N,NL,S,items, completion,tardiness,lambda1,lambda2):
 
 def solve(input_data,m,lambda1,N,NL,NR):
 	lambda2 = 1- lambda1
-	Data = input_data.split('\n')					# load data
-	n = len(Data) -1						# get the amount of items
+	Data = input_data.split('\n')  # load data
+	n = len(Data) -1   # get the amount of items
 	items = []
 	for j in xrange(n):
 		data = Data[j]
 		parts = data.split()
-		p = int(parts[0])					# get the process time
-		s = int(parts[2])						# get the setup time
-		d = int(parts[3])					# get the due date
-		wt = int(parts[4])					# get the tardiness weights
-		wc = int(parts[5])					# get the completion weights
-		items.append(Item(p+s,d,wt,wc))			# combine those item data
+		p = int(parts[0])  # get the process time
+		s = int(parts[2])	  # get the setup time
+		d = int(parts[3])  # get the due date
+		wt = int(parts[4])  # get the tardiness weights
+		wc = int(parts[5])  # get the completion weights
+		items.append(Item(p+s,d,wt,wc))  # combine those item data
 	print 'Data loaded!'	
 	S,L,completion = generate.initialization(items,n,m)
 	print 'Initialization done!'
@@ -155,3 +158,4 @@ if __name__ == '__main__':
 		G = solve(input_data,m,lambda1,N,NL,NR)
 		f.write(str(G) +' ' +str(Rb)+ '\n')
 		f.close()
+\end{lstlisting}
