@@ -403,8 +403,8 @@ K_2 = \frac{\tau}{2\sqrt{\eta}}
 
 流水线之间的调整在于订单重派，而订单重派则的依据是流水线和订单对目标函数的贡献值，需要根据\eqref{equ:insertobj}来重新定义这两个贡献值函数：
 \begin{align}
-H(S_l) &= \lambda_1\frac{\sum_{k=1}^{|S_l|}\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l} + \lambda_2 e^{-Rb}\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\label{equ:lineinsertfunct}\\
-h(l_k) &= \lambda_1\frac{\sqrt{w_{l_k}^2L_{l_k}^2}}{Ru_l} + \lambda_2 e^{-Rb}wc_{l_k}C_{l_k}
+H(S_l) &= \lambda_1\frac{\sum_{k=1}^{|S_l|}w_{l_k}|L_{l_k}|}{Ru_l} + \lambda_2 e^{-Rb}\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\label{equ:lineinsertfunct}\\
+h(l_k) &= \lambda_1\frac{w_{l_k}|L_{l_k}|}{Ru_l} + \lambda_2 e^{-Rb}wc_{l_k}C_{l_k}
 \label{equ:iteminsertfunct}
 \end{align}
 

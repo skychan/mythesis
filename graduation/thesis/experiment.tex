@@ -110,7 +110,7 @@
  
 \section{结果及评估}
 \subsection{实验结果示例及说明}
-确定实验所需订单信息数据以及算法相关的参数，运行编写的算法程序，可以得到实验结果。实验结果由目标函数值$G$和所得调度序列$S$组成，以模型$1$ 为例，示例订单量$n = 20$，其实验信息数据如\reft{tab:20itemsdata}所示，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法，根据\reft{tab:model1para}选择相关参数，所得结果列入\reft{tab:resultexample20}中，其中深色部分为订单的延迟其跨度越长，说明延迟越大。
+确定实验所需订单信息数据以及算法相关的参数，运行编写的算法程序，可以得到实验结果。实验结果由目标函数值$G$和所得调度序列$S$组成，以模型$1$ 为例，示例订单量$n = 20$，其实验信息数据如\reft{tab:20itemsdata}所示，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法，根据\reft{tab:modelpara}选择相关参数，所得结果列入\reft{tab:resultexample20}中，其中深色部分为订单的延迟，其跨度越长，说明延迟越大。
 其调度安排如\reff{fig:20items3algorithms}所示。
 \begin{table}[h!]
   \centering
@@ -144,13 +144,13 @@
 从结果上来看，就该决策环境下，模型1 使用Vtr -- Tabu 算法可以得到较好调度结果。
 \subsection{模型1 求解结果与分析}
 \subsubsection{目标函数值分析}
-模型1 的求解可以使用3个不同的算法Cyc -- ATC、Cyc -- Tabu、Vtr -- Tabu 得到的结果目标函数值如\reft{tab:resultmodel104} -- \reft{tab:resultmodel106}所示，\reff{fig:result1} -- \ref{fig:result3}为该结果的图表形式。
+模型1 的求解可以使用3个不同的算法Cyc -- ATC、Cyc -- Tabu、Vtr -- Tabu 得到的结果目标函数值如\reft{tab:resultmodel104} -- \ref{tab:resultmodel106}所示，\reff{fig:result1} -- \ref{fig:result3}为该结果的图表形式。
 由结果目标函数值可以看出，Cyc -- Tabu 和 Vtr -- Tabu 算法都较Cyc -- ATC 算法能得到目标函数值小的解，并且大多数情况下Vtr -- Tabu 算法得到的目标函数值只比Cyc -- ATC 算法要小一点点，尤其在问题规模较大的时候。问题规模较小的时候，Vrt -- Tabu 算法对解的改进效果比较明显。并且随着决策参数$\lambda_1$的增大，Vtr -- Tabu 算法的改进效果也越为明显，也就是说，如果决策者对交付期较为重视的话，选择Vtr -- Tabu 算法来求解调度方案是比较好的。
 \subsubsection{不同决策环境分析}
 以$m = 6, n = 200$ 为例，决策参数和目标函数值的关系如\reff{fig:decisionvsG}所示。
 \begin{figure}
 \centering
-\includegraphics[height = 10cm, angle = -90]{lambda.pdf}
+\includegraphics[height = 7cm, angle = -90]{lambda.pdf}
 \caption{决策参数和目标函数值关系示例}\label{fig:decisionvsG}
 \end{figure}
 可以看出，随着决策参数$\lambda_1$的增大，即更为看重工期目标，三个算法所得的目标值都减少，说明模型1 适用于强调工期的调度问题。其他的决策环境下，所得结论基本一致。

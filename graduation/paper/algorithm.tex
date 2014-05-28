@@ -1,3 +1,28 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX root = ..\paper.tex
 \chapter{算法设计}
+\section{复合分派规则}
+复合分派规则是综合了许多基本规则的一个表达式，例如ATC规则综合了WSPT规则和MS规则，每当有空闲处理单元时，所有待调度作业按\eqref{equ:orderindexexample}计算其排序指数，选出具有最大指数值的作业进行处理。
+\begin{equation}
+I_j(t) = \frac{wt_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\right) \label{equ:orderindexexample}
+\end{equation}
+可以看出当$K \to \infty$时，$I_j(t) \to w_j/p_j$，此时ATC规则便转化为WSPT规则。当$K \to 0$时，若作业$j$将产生延期，即$\max(d_j - p_j -t , 0 ) = 0$，那么ATC规则也转化为WSPT规则，若作业不会产生延期，由于$d_j - p_j - t$的影响超过$w_j/p_j$，规则ATC将转化为MS规则。ATC规则可以较容易地应用到$Pm\mid\mid \sum w_jT_j$问题。
+其推广形式中的一种：ATCS 规则是WSPT 规则、MS 规则和SST 规则的复合规则，每当有空闲处理单元时，所有待调度作业按\eqref{equ:orderindexexample2}计算其排序指数，选出具有最大指数值的作业进行处理。
+\begin{equation}
+I_j(t) = \frac{w_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K_1\bar p} - \frac{s_j}{K_2 \bar s}\right) \label{equ:orderindexexample2}
+\end{equation}
+其中：
+
+\begin{tabular}{ll}
+$K$ & 规则比例参数\\[5pt]
+$K_1$ & 与工期相关的规则比例参数\\[5pt]
+$K_2$ & 与切换准备时间的规则比例参数\\[5pt]
+$\bar p$ &剩余作业平均处理时间\\[5pt]
+$\bar s$ & 剩余作业平均切换准备时间
+\end{tabular}\\
+\section{虚拟序列}
+定义虚拟序列
+\section{Vtr -- Tabu 算法}
+
+\section{VVT 算法}
+

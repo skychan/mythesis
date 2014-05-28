@@ -265,7 +265,7 @@
 %%% }
 \ifskypaper
   %\titleformat{\section}[hang]{\onequarterspacing\xiaosi\heiti}{\thesection}{1em}{}{}
-  \CTEXsetup[format = {\xiaosi\heiti}]{section}
+  \CTEXsetup[format = {\xiaosi\heiti},beforeskip=0pt,afterskip=10pt]{section}
   %\titlespacing{\section}{0pt}{0em}{0em}
 \fi
 

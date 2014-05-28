@@ -1,7 +1,110 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX root = ..\paper.tex
+\renewcommand{\labelenumi}{(\theenumi)}
 \chapter{多品种多装配线轮番装配调度优化模型}
 某汽车电子有限公司主要产品为车用电子电器开关、控制模块、控制面板等，是美国通用、上海大众等国内外40余家汽车主机厂的专业定点配套供应商，该公司的订单特点是品种多、批量大、小型产品、工艺成熟，所以采用流水线生产是比较合适的，与其合作较多的客户(主机厂)一般有其专用线，专门负责该主机厂的订单生产。其专线生产策略带来诸如产能浪费严重，设备冗余等问题，需要突破流水线专用限制来进行改善。如此便是多品种多装配线的调度优化问题，需要进行建模求解。
-\section{符号说明}
-
+%\section{符号说明}
+%\begin{supertabular}{ll}
+%$n$ & 订单数量\\[5pt]
+%$m$ & 流水线数量\\[5pt]
+%$j$ & 订单标记，$j = 1,2,...,n$\\[5pt]
+%$N$ & 所有订单集合$\{ j\mid j \in \mathbb{Z}, 1\le j \le n  \}$\\[5pt]
+%$l$ & 流水线标记，$l = 1,2,...,m$\\[5pt]
+%$S_l$ & 流水线$l$上的订单调度\\[5pt]
+%$|S|$ & 调度$S$的订单数量\\[5pt]
+%$\overline S$ & 调度$S$中的订单集合\\[5pt]
+%$l_k$ & 调度$S_l$的第$k$项订单标记,，$k = 1,2,...,|S_l|$\\[5pt]
+%$d_j$ & 订单$j$的交货时刻(工期)\\[5pt]
+%$t$ & 生产系统时间\\[5pt]
+%$r_j$ & 订单$j$到达流水线系统时刻，是其最早可开始时刻\\[5pt]
+%$s_j$ & 订单$j$开始之前所需的切换(开工)准备时间\\[	5pt]
+%$C_j$ & 订单$j$的完成时刻\\[5pt]
+%\end{supertabular}
 \section{基本假设}
+\begin{compactenum}
+\item 整数变量假设
+\suspend{compactenum}
+
+模型中所涉及的所有变量，如订单处理时间$p_j$，切换准备时间$s_j$等，皆在整数范围内考虑(除了后面的决策参数$\lambda_1, \lambda_2$)，便于后面将问题离散化。
+\resume{compactenum}
+\item 数量有限假设
+\suspend{compactenum}
+
+假设研究对象所设计的订单数量$n$、订单包含的作业数量$n_j$、订单涉及的处理单元数量$m_j$以及流水线数量$m$皆有限。
+\resume{compactenum}
+\item 无差别假设
+\suspend{compactenum}
+
+对于订单来说，一般都是由一定批量的作业组成的，所以可以假设其中包含的各作业无差别，即每项作业的处理时间、工艺顺序皆相同。由于各流水线上无固定设备，在安排装配生产时，都是现场安排流程对应的工位，所以可以假设流水线之间无差别，类似于同速并行机环境，即同一订单在不同流水线上的切换准备时间、处理时间都一样。
+\resume{compactenum}
+\item 不可中断假设
+\suspend{compactenum}
+
+订单在流水线上装配处理过程中，需要其中所有的作业装配完成才可以离开流水线系统，假设生产过程中没有人为或机器原因产生中断。同时，由于该厂总装厂的产品体积较小，每个工位都有足够的空间存放在制品，不会因此使生产中断。
+\resume{compactenum}
+\item 无相关假设
+\end{compactenum}
+
+按队列生产时，处理不同订单需要考虑切换准备时间，由于流水线上的工位都是订单到达后再根据工艺布置的，所以可以假设切换准备时间只和订单本身有关，和其前续后继订单没有相关性，并且各订单所需的切换准备时间事先已知。此外，各流水线切换准备时间不算入停线等待。
+
+\section{模型1：多品种多装配线轮番装配调度优化模型}
+可以考虑满足工期和提高流水线利用率，其中满足工期为主要目标，可用加权延迟时间和$\sum wt_jT_j$，流水线利用率为次要目标，可用加权完成总时刻和$\sum wc_jC_j$。其中$wt_j, wc_j$分别为订单$j$的延迟和完工权重。两目标的重要程度可以体现在目标权重系数$\lambda_1, \lambda_2$上，其数学表达式如下：
+\begin{equation}
+\min\quad \lambda_t\sum_{l=1}^m\sum_{k=1}^{|S_l|} wt_{l_k}T_{l_k} + \lambda_c\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
+\label{equ:objmain}
+\end{equation}
+\begin{numcases}{s.t.}
+\sum_{l=1}^m |S_l| = n\label{equ:basicst1}\\
+\bigcup_{l=1}^m \overline{S_l} = N\label{equ:basicst2}\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} wt_{l_k}= 1\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} wc_{l_k}= 1\\
+\lambda_c + \lambda_t = 1\\
+C_{l_1} = p_{l_1} & $l = 1,2,...,m$\label{equ:basicst3}\\
+C_{l_k} = C_{l_{k-1}} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:basicst4}\\
+p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst5}\\
+T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst6}\\
+p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}, \lambda_t, \lambda_c\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst7}
+\end{numcases}
+\eqref{equ:basicst1}表示所有流水线安排的订单数量总和为需要安排调度的订单数量总和，\eqref{equ:basicst2}为\eqref{equ:basicst1}的集合表达形式，\eqref{equ:basicst3} -- (\ref{equ:basicst4})计算各订单的完成时刻，连续的订单之间没有停顿，\eqref{equ:basicst5}计算了整合订单处理时间，\eqref{equ:basicst6}为订单的延迟定义，\eqref{equ:basicst7}为变量的非负约束。
+\section{模型2：考虑插单的多品种多装配线轮番装配调度优化模型}
+考虑订单插单的情况，在系统在开始运行后，订单陆续进入系统，其进入系统的时刻为该订单最早可被处理时刻。也就是说各订单并不是在系统时刻$t=0$时刻皆可开始进行处理，订单可以开始处理需要同时满足两个条件：
+\begin{inparaenum}
+\renewcommand{\labelenumi}{\theenumi)}
+\item 有流水线处于闲置状态，
+\item 系统时刻大于等于订单最早可开始时刻$t \ge r_j$。
+\end{inparaenum}
+但若有流水线闲置，且接下来要对这个订单进行加工处理，那么此时可以先开始该订单的切换准备，以节少流水线产能浪费，那么考虑插单情况的模型表达式为：
+\begin{equation}
+\min \quad \lambda_1\sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}w_{l_k}|L_{l_k}|}{Ru_l} + \lambda_2 e^{- Rb}\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
+\label{equ:insertobj}
+\end{equation}
+\begin{numcases}{s.t.}
+\sum_{l=1}^m |S_l| = n\label{equ:insertst1}\\
+\bigcup_{l=1}^m \overline{S_l} = N\label{equ:insertst2}\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} w_{l_k}= 1\label{equ:insertst3}\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} wc_{l_k}= 1\label{equ:insertst4}\\
+\lambda_1 + \lambda_2 = 1\label{equ:insertst5}\\
+C_{l_1} = f_{l_1} + s_{l_1} + p_{l_1}& $l = 1,2,...,m$\label{equ:insertst6}\\
+C_{l_k} = C_{l_{k-1}} + f_{l_k} + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst7}\\
+%p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst8}\\
+\sum_{l=1}^m\sum_{k=1}^{|S_l|} r_{l_k} > 0& $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:insertst9}\\
+L_{l_k} = C_{l_k} - d_{l_k}& $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst10}\\
+T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst11}\\
+E_{l_k} = \max\{d_{l_k} - C_{l_k}, 0\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst12}\\
+s_{l_k}, d_{l_k}, w_{l_k}, wc_{l_k}, \lambda_1, \lambda_2, r_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst13}
+\end{numcases}
+其中$f_{l_k}$是订单闲置，定义为：
+\begin{subnumcases}{f_{l_k} = }
+\max\{r_{l_k} - s_{l_k}, 0\} & $k = 1$\notag\\
+\max\{r_{l_k} - s_{l_k}- C_{l_{k-1}}, 0\}& $k\ge 2$\notag
+\end{subnumcases}
+$Rb$为流水线均衡率，定义为：
+\[
+Rb = \frac{\sum_{l=1}^m C_l}{\displaystyle m\times \max_{1 \le l \le m} \{C_l\}}
+\]
+$Ru_l$为流水线均衡率，定义为：
+\[
+Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
+\]
+\eqref{equ:insertst1}表示所有流水线安排的订单总和，\eqref{equ:insertst2}为\eqref{equ:insertst1}的集合表达形式，\eqref{equ:insertst3} -- (\ref{equ:insertst5})是权重之后为$1$，\eqref{equ:insertst6} -- (\ref{equ:insertst7})计算了各订单的完成时刻，考虑了流水线的等待时间，\eqref{equ:insertst9}确保不出现所有订单在$t = 0$时刻同时可以进行处理的情况，\eqref{equ:insertst10} -- (\ref{equ:insertst12})是订单的迟滞、延迟、提早的定义，\eqref{equ:insertst13}为变量的非负定义。
+

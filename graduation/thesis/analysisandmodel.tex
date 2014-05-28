@@ -27,19 +27,19 @@ $t$ & 生产系统时间\\[3pt]
 
 一个调度问题可以由三元组$\alpha \mid \beta \mid \gamma$表示，$\alpha$域描述单一处理单元环境，$\beta$域包含加工特征和约束的细节，$\gamma$域描述其目标\cite{pinedo}。
 
-\subsubsection{基本$\alpha$域}
+\subsection{基本$\alpha$域}
 \begin{supertabular}{ll}
 $Pm$ & 同速并行机\\
 $Fm$ & 流水车间\\
 \end{supertabular}
 
-\subsubsection{基本$\beta$域}
+\subsection{基本$\beta$域}
 \begin{supertabular}{ll}
 $r_j$ & 订单$j$到达流水线系统时刻，是其最早可开始时刻\\
 $s_j$ & 订单$j$开始之前所需的切换(开工)准备时间\\
 \end{supertabular}
 
-\subsubsection{基本$\gamma$域}
+\subsection{基本$\gamma$域}
 $\gamma$域涉及目标函数，一般调度问题需要考虑最小化目标函数，常见的目标函数为订单$j$的完成时刻$C_j$，为订单$j$离开系统的时刻。订单$j$的迟滞可以定义为：
 \[
 L_j = C_j - d_j
@@ -223,7 +223,7 @@ Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
 \label{equ:insertsecondobj}
 \end{equation}
 
-式中$\sigma$是比例参数，其值越大，对目标值影响越大，表明均衡性越为重要，需要根据生产管理人员的决策来确定。与模型1 类似，主要和次要目标可以通过目标权重系数$\lambda$上，然后进行帕累托分析。结合\eqref{equ:insertmainobj}与(\ref{equ:insertsecondobj})得到本模型的目标函数：
+与模型1 类似，主要和次要目标可以通过目标权重系数$\lambda$上。结合\eqref{equ:insertmainobj}与(\ref{equ:insertsecondobj})得到本模型的目标函数：
 \begin{equation}
 \min \quad \lambda_1\sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}w_{l_k}|L_{l_k}|}{Ru_l} + \lambda_2 e^{- Rb}\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
 \label{equ:insertobj}
@@ -246,7 +246,7 @@ T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\labe
 E_{l_k} = \max\{d_{l_k} - C_{l_k}, 0\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst12}\\
 s_{l_k}, d_{l_k}, w_{l_k}, wc_{l_k}, \lambda_1, \lambda_2, r_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst13}
 \end{numcases}
-\eqref{equ:insertst1}表示所有流水线安排的订单总和，\eqref{equ:insertst2}为\eqref{equ:insertst1}的集合表达形式，\eqref{equ:insertst3} -- (\ref{equ:insertst5})是权重之后为$1$，\eqref{equ:insertst6} -- (\ref{equ:insertst7})计算了各订单的完成时刻，考虑了流水线的等待时间，\eqref{equ:insertst9}确保不出现所有订单在$t = 0$时刻同时可以进行处理的情况，\eqref{equ:insertst10} -- (\ref{equ:insertst12})是订单的迟滞、延迟、提早的定义，\eqref{equ:insertst13}为变量的非负定义
+\eqref{equ:insertst1}表示所有流水线安排的订单总和，\eqref{equ:insertst2}为\eqref{equ:insertst1}的集合表达形式，\eqref{equ:insertst3} -- (\ref{equ:insertst5})是权重之后为$1$，\eqref{equ:insertst6} -- (\ref{equ:insertst7})计算了各订单的完成时刻，考虑了流水线的等待时间，\eqref{equ:insertst9}确保不出现所有订单在$t = 0$时刻同时可以进行处理的情况，\eqref{equ:insertst10} -- (\ref{equ:insertst12})是订单的迟滞、延迟、提早的定义，\eqref{equ:insertst13}为变量的非负定义。
 
 至此，$2$个多品种多装配线轮番装配调度优化模型建立完毕。
 \section{小结}
