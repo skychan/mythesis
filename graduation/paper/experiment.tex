@@ -1,3 +1,37 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX root = ..\paper.tex
 \chapter{计算实验}
+为了评估上一章所提出的算法的运行效果，以及给出所得调度方案，供决策者选择，所有的算法都用Python 语言编写，并在2.20GHz i3 CPU，5.84GB RAM，Windows 8 的个人计算机上运行测试。
+
+\section{模型1 求解结果与分析}
+以$m = 6, n = 200$ 为例，决策参数和目标函数值的关系如\reff{fig:decisionvsG}所示。
+\begin{figure}
+\centering
+\includegraphics[height = 7cm, angle = -90]{lambda.pdf}
+\caption{决策参数和目标函数值关系示例}\label{fig:decisionvsG}
+\end{figure}
+可以看出，随着决策参数$\lambda_1$的增大，即更为看重工期目标，三个算法所得的目标值都减少，说明模型1 适用于强调工期的调度问题。其他的决策环境下，所得结论基本一致。
+问题规模较小的时候，Vrt -- Tabu 算法对解的改进效果比较明显。并且随着决策参数$\lambda_1$的增大，Vtr -- Tabu 算法的改进效果也越为明显，也就是说，如果决策者对交付期较为重视的话，选择Vtr -- Tabu 算法来求解调度方案是比较好的。
+\section{模型2 求解结果及分析}
+在决策参数$\lambda_1 = 0.5$ 的环境下，$3$种算法所得不同流水线数所得调度的流水线均衡率如\reff{fig:linenumbervsrate}所示。
+\begin{figure}[h]
+\centering
+\subfloat[$m = 5$]{\includegraphics[height = 5.6cm,angle = -90]{rb_05_5.pdf}}
+\subfloat[$m = 6$]{\includegraphics[height = 5.6cm,angle = -90]{rb_05_6.pdf}}
+\subfloat[$m = 7$]{\includegraphics[height = 5.6cm,angle = -90]{rb_05_7.pdf}}
+\caption{不同流水线数量和流水线均衡率关系}\label{fig:linenumbervsrate}
+\end{figure}
+
+可以看出，$3$个算法中，VVT 算法所得的流水线均衡率随订单数量的增加最为稳定，始终可以保持一个较高的水平，而Cyc -- Tabu 算法则会有较大波动。随着订单数量增加，各算法所得的流水线均衡率都大约成对数趋势增加趋向于$100\%$，一般在$n = 500$左右稳定在较高值，这十分符合常理，并且随着流水线数量的增加，各算法的稳定点都前移($n$减少的方向)。
+随着流水线数量$m$的增加，Cyc -- Tabu 算法和VVT 对解的改进效果和Cyc -- ATCS 相差不大(除个别情况外)，但VVT 算法所得结果较为稳定。
+
+流水线$m = 6$ 的环境下，$3$种算法所得不同决策环境下调度的流水线均衡率如\reff{fig:decisionvsrate}所示。
+\begin{figure}
+\centering
+\subfloat[$\lambda_1= 0.4$]{\includegraphics[height = 5.6cm,angle = -90]{rb_04_6.pdf}}
+\subfloat[$\lambda_1= 0.6$]{\includegraphics[height = 5.6cm,angle = -90]{rb_06_6.pdf}}
+\caption{决策环境和流水线均衡率关系}\label{fig:decisionvsrate}
+\end{figure}
+
+与流水线均衡率分析类似，不同决策环境下，VVT 算法所得的流水线均衡率随订单数量的增加最为稳定，始终可以保持一个较高的水平，而Cyc -- Tabu 算法所得结果由较大波动，而且随着决策参数$\lambda_1$的增加，即大工期目标的重要性，各算法都会逐渐产生较为稳定的流水线均衡率，并且稳定点都前移。说明模型2 的设计是符合工期要求的，并且能明显提高流水线生产均衡率。
+
