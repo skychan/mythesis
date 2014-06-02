@@ -20,7 +20,7 @@
 \newtheorem{thm}{定理}
 \begin{frame}
 \titlepage
-\transdissolve<1>
+\transboxout<1->
 \end{frame}
 \section{绪论}
 \subsection{课题研究的背景、意义及内容}
@@ -30,9 +30,8 @@
 \item 技术革新，客户需求的多样化，以及精益思想、环保节能观念的出现，汽车工业的生产模式转变为面向订单的大批量、多品种的生产方式。
 \item 为配合汽车生产，汽车电子部件的装配生产也要呈现多品种与批量化。
 \item 合理安排装配产线，优化调度作业单元，对保证汽车零部件装配质量，快速响应需求，提高汽车零部件装配线的生产效率有着重要的现实意义。
-\transblindshorizontal<0-5>
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}{研究内容}
 \begin{itemize}[<+-| alert@+>]
@@ -41,14 +40,14 @@
 \item 模型求解及算法实现
 \item 计算实验
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}{研究技术路线}
 \begin{figure}
 \centering
 \includegraphics[width = 10cm]{techroute1.pdf}
 \caption{课题研究关键技术路线}
 \end{figure}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \section{研究对象现状与分析}
 \subsection{研究对象现状}
@@ -58,7 +57,7 @@
 \item 订单特点是品种多、批量大、小型产品、工艺成熟，所以采用流水线生产是比较合适的，与
 其合作较多的客户 (主机厂) 一般有其专用线，专门负责该主机厂的订单生产。
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}{装配车间现状}
 \onslide<1->{采用专线生产的方式，当同
 一客户有多个订单下达时，按照先到先服务 (FCFS) 的规则进行装配生产安排，多条产线并行作业互不干扰。}
@@ -66,7 +65,7 @@
 \includegraphics[width = 10cm]{orderschedulenow.pdf}
 \caption{$3$条生产线的现行调度\footnote{其中订单a -- b 表示主机厂a 的第b 个订单，下同。}}
 \end{figure}}
-\end{frame}
+\transboxout<1->\end{frame}
 \subsection{问题分析与解决思路}
 \begin{frame}{装配车间分析}{存在问题}
 现行调度方案存在一些改进空间，例如多条装配线负荷不均衡，有的任务过
@@ -79,7 +78,7 @@
 \item 工期可控性底
 \item 工艺及设备和生产需求不匹配
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}{装配车间分析}{改进设计}
 \onslide<1->{目前的生产现状的主要问题是各主机厂有其专用流水线，使得订单的调度安排为较为单一，受到一些限制，不能很合理地利用流水线的生产能力，所以首要的改进是突破专用线的生产界限。如此一来，生产线可以加工多家主机厂的订单，形成所谓的混线生产。}
 \onslide<2>{\begin{figure}
@@ -87,7 +86,7 @@
 \includegraphics[width = 10cm]{oredrschedule.pdf}
 \caption{$3$条产线的混线装配生产示意}
 \end{figure}}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \section{多品种装配车间调度建模}
 \subsection{多品种多装配线轮番装配调度优化模型}
@@ -100,7 +99,7 @@
 \item 不可中断假设
 \item 无相关假设
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}
 \tiny
@@ -119,7 +118,7 @@
  T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst6}\\
  p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}, \lambda_t, \lambda_c\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst7}
 \end{numcases}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}{模型2}{相关假设}
 \begin{itemize}[<+-| alert@+>]
@@ -127,7 +126,7 @@
 \item 惩罚一致假设
 \item 订单最早可处理时刻假设
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}{模型2}{相关定义}
 \only<1>{\begin{block}{产线均衡率}
@@ -149,7 +148,7 @@ Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
 \max\{r_{l_k} - s_{l_k}- C_{l_{k-1}}, 0\}& $k\ge 2$\notag
 \end{subnumcases}
 \end{block}}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}
 \tiny
@@ -171,7 +170,7 @@ Ru_l = 1 - \frac{\sum_{k=1}^{|S_l|}f_{l_k}}{C_l}
  E_{l_k} = \max\{d_{l_k} - C_{l_k}, 0\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst12}\\
  s_{l_k}, d_{l_k}, w_{l_k}, wc_{l_k}, \lambda_1, \lambda_2, r_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:insertst13}
 \end{numcases}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \section{模型求解}
 \subsection{模型1求解分析}
@@ -185,7 +184,7 @@ I_j(t) = \frac{wt_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\rig
 \only<3>{模型 1 适合用 ATC 规则进行初始解的构造，按照系统时间 t 的进行，动态判断各流水线闲忙状态，若有
 流水线处于空闲状态，则根据排序指数选出下一个进行处理的订单，将其安排入该空闲流水线，更新流水线
 状态及待调度订单列表，预估该流水线的下一次空闲时刻，重复这个步骤一直到所有订单都被调度。}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}{解的改进}{交替调整策略(Cycly Amend, Cyc)}
 \begin{itemize}[<+- | alert@+>]
 \item 流水线内部调整
@@ -199,7 +198,7 @@ I_j(t) = \frac{wt_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\rig
 \item 订单贡献值
 \end{itemize}
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}
 \tiny
@@ -232,7 +231,7 @@ I_j(t) = \frac{wt_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\rig
 \item 置$k_r = k_r + 1$，若$k_r\le NR$，执行\Step{2}，否则终止算法。
 \end{enumerate}
 \end{exampleblock}}
-\end{frame}
+\transboxout<1->\end{frame}
 
 %\begin{frame}{解的改进}{虚拟序列策略(Virtual List, Vtr)}
 
@@ -255,7 +254,7 @@ I_j(t) = \frac{wt_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\rig
   \item 流水线之内相邻订单过度禁忌
  \end{itemize}
 \end{exampleblock}}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}
 \tiny
 \begin{exampleblock}{Vtr -- Tabu 算法}
@@ -272,13 +271,13 @@ I_j(t) = \frac{wt_j}{p_j}\exp\left(-\frac{\max\{d_j - p_j - t, 0\}}{K\bar p}\rig
 \item 置$k = k + 1$，若$k\le N_I$，执行\Step{3}，否则终止算法，$S^{(0)}$为最终所得调度。
 \end{enumerate}
 \end{exampleblock}
-\end{frame}
+\transboxout<1->\end{frame}
 \subsection{模型2求解分析}
 \begin{frame}{模型2 解的改进}{变动邻域策略(Variate Neighbor, VN)}
 Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的特点，可能需要很大的迭代次数才能将解
 改进。采用变动邻域的策略可以人为切换邻域结构，放弃一些需要过多迭代次数的邻域结构，以减少计算时
 间，这样的综合策略称为 VVT (变动邻域结构的虚拟序列禁忌搜索)
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}
 \tiny
@@ -296,7 +295,7 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \item 置$k = k + 1$，若连续$50$次采用没有更新$S^{(0)}$，则置$i = i+1$，执行\Step{2}，否则若$k\le N_I$，执行\Step{3}，否则终止算法，$S^{(0)}$为最终所得调度。
 \end{enumerate}
 \end{exampleblock}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \section{计算实验}
 \subsection{实验设计}
@@ -306,7 +305,7 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \item 时间信息
 \item 惩罚系数和有限系数
 \end{itemize}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}{实验设计}{相关参数确定}
 \onslide<1->{\begin{figure}
 \centering
@@ -316,7 +315,7 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \end{figure}
 }
 \onslide<2->{可以看出，$NL = 9$是最佳列表长度，取迭代次数$N = 70$是较为适宜的}
-\end{frame}
+\transboxout<1->\end{frame}
 \subsection{实验结果及评估}
 \begin{frame}{实验结果示例}
 \only<1>{以模型$1$ 为例，示例订单量$n = 20$，决策参数为$\lambda_1 = 0.6, \lambda_2 = 0.4$}
@@ -383,7 +382,7 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \end{tikzpicture}}
 \caption{Vtr -- Tabu 算法调度结果}
 \end{figure}}
-\end{frame}
+\transboxout<1->\end{frame}
 
 \begin{frame}{模型1求解结果与分析}{不同决策环境分析}
 \onslide<1->{以$m = 6, n = 200$为例}
@@ -392,7 +391,7 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \includegraphics[height = 6cm, angle = -90]{lambda.pdf}
 \caption{决策参数和目标函数值关系示例}
 \end{figure}}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}{模型2求解结果与分析}{流水线均衡率分析}
 \begin{figure}[h]
 \centering
@@ -401,7 +400,7 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \subfloat[$m = 7$]{\includegraphics[height = 4cm,angle = -90]{rb_05_7.pdf}}
 \caption{不同流水线数量和流水线均衡率关系($\lambda_1 = 0.5$)}
 \end{figure}
-\end{frame}
+\transboxout<1->\end{frame}
 \begin{frame}{模型2求解结果与分析}{不同决策环境分析}
 \begin{figure}
 \centering
@@ -409,11 +408,11 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \subfloat[$\lambda_1= 0.6$]{\includegraphics[height = 5.6cm,angle = -90]{rb_06_6.pdf}}
 \caption{决策环境和流水线均衡率关系$(m = 6)$}
 \end{figure}
-\end{frame}
+\transboxout<1->\end{frame}
 \section{ }
 \begin{frame}
 \centering
 \Huge
 谢~~谢！
-\end{frame}
+\transboxout<1->\end{frame}
 \end{document}
