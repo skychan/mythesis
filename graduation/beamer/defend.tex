@@ -15,7 +15,7 @@
 \subtitle{论文答辩}
 \author{陈晟恺}
 \institute[diufanshu@gmail.com]{健行理工1001~~201002750102\\ 指导老师：鲁建厦、董巧英 }
-\date{2014年6月6日}
+\date{2014年6月11日}
 \begin{document}
 \newtheorem{thm}{定理}
 \begin{frame}
@@ -23,15 +23,15 @@
 \transboxout<1->
 \end{frame}
 \section{绪论}
-\subsection{课题研究的背景、意义及内容}
-\begin{frame}{研究背景及意义}{多品种生产方式出现}
-\begin{itemize}[<+-| alert@+>]
-\item 同步装配流水线方式作业
-\item 技术革新，客户需求的多样化
-\item 配合汽车生产
-\item 合理安排装配产线，优化调度作业单元
-\end{itemize}
-\transboxout<1->\end{frame}
+%\subsection{课题研究的背景、意义及内容}
+%\begin{frame}{研究背景及意义}{多品种生产方式出现}
+%\begin{itemize}[<+-| alert@+>]
+%\item 同步装配流水线方式作业
+%\item 技术革新，客户需求的多样化
+%\item 配合汽车生产
+%\item 合理安排装配产线，优化调度作业单元
+%\end{itemize}
+%\transboxout<1->\end{frame}
 
 \begin{frame}{研究技术路线}
 \begin{figure}
@@ -83,19 +83,21 @@
 \begin{itemize}[<+-| alert@+>]
 \item 整数变量假设
 \item 数量有限假设
-\item 无差别假设
-\item 无插单生产假设
+\item 无差别假设(订单包含的各作业无差别，每项作业的处理时间、工艺顺序皆相同，各流水线无差别。)
+\item 无插单生产假设(订单到达稳定)
 \item 不可中断假设
-\item 无相关假设
+\item 无相关假设(根据节拍可确定订单处理时间)
+\item 惩罚假设(只惩罚订单中延迟的作业)
 \end{itemize}
 \transboxout<1->\end{frame}
 
 \begin{frame}
 \tiny
-\begin{equation}
+\onslide<1->{\begin{equation}
 \min\quad \lambda_t\sum_{l=1}^m\sum_{k=1}^{|S_l|} wt_{l_k}T_{l_k} + \lambda_c\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
-\end{equation}
-\begin{numcases}{s.t.}
+\end{equation}}
+\only<2>{\centering\zihao{-3} 加权延迟时间和隐含了订单的完成情况，加权完成时刻和隐含了流水线的均衡率}
+\onslide<3>{\begin{numcases}{s.t.}
 \sum_{l=1}^m |S_l| = n\label{equ:basicst1}\\
 \bigcup_{l=1}^m \overline{S_l} = N\label{equ:basicst2}\\
 \sum_{l=1}^m\sum_{k=1}^{|S_l|} wt_{l_k}= 1\\
@@ -106,12 +108,12 @@
  p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst5}\\
  T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst6}\\
  p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}, \lambda_t, \lambda_c\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst7}
-\end{numcases}
+\end{numcases}}
 \transboxout<1->\end{frame}
 
 \begin{frame}{模型2}{相关假设}
 \begin{itemize}[<+-| alert@+>]
-\item 插单假设
+\item 插单假设(订单到达不稳定情况)
 \item 惩罚一致假设
 \item 订单最早可处理时刻假设
 \end{itemize}
@@ -311,6 +313,33 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \only<2>{\begin{figure}
 \centering
 \resizebox{12cm}{!}{\begin{tikzpicture}
+\fill[blue!20!] (116mm,2.5mm) rectangle (141mm,7.5mm)
+			 (105mm,12.5mm) rectangle (106mm,17.5mm)
+			  (43mm,22.5mm) rectangle (52mm,27.5mm) 
+			  (70mm,22.5mm) rectangle (106mm,27.5mm)
+			  (112mm,32.5mm) rectangle (118mm,37.5mm)
+			   (96mm,42.5mm) rectangle (98mm,47.5mm)
+			    (101mm,42.5mm) rectangle (128mm,47.5mm);
+\draw (70mm,-7mm) node{$G = 9312$};
+\draw [->,very thick] (0,0) -- (140mm,0);
+\draw (25mm,0) -- (25mm,1mm) (25mm,-3mm) node{$25$} (50mm,0) -- (50mm,1mm) (50mm,-3mm) node{$50$} (75mm,0) -- (75mm,1mm) (75mm,-3mm) node{$70$}  (100mm,0) -- (100mm,1mm) (100mm,-3mm) node{$100$} (125mm,0) -- (125mm,1mm) (125mm,-3mm) node{$125$} (143mm,0) node{$tu$};
+\draw [very thick] (0,0) -- (0,50mm) (0.4,53mm) node{流水线};
+\draw [thick] (-2mm,5mm) node{$1$} (0,2.5mm) rectangle (27mm,7.5mm) rectangle (70mm,2.5mm) rectangle (100mm,7.5mm) rectangle (141mm,2.5mm);
+\draw [thick] (-2mm,15mm) node{$2$} (0,12.5mm) rectangle (22mm,17.5mm) rectangle (48mm,12.5mm) rectangle (77mm,17.5mm) rectangle (106mm,12.5mm);
+\draw [thick] (-2mm,25mm) node{$3$} (0,22.5mm) rectangle (28mm,27.5mm) rectangle (52mm,22.5mm) rectangle (89mm,27.5mm) rectangle (106mm,22.5mm) ;
+\draw [thick] (-2mm,35mm) node{$4$} (0,32.5mm) rectangle (27mm,37.5mm) rectangle (44mm,32.5mm) rectangle (79mm,37.5mm) rectangle (118mm,32.5mm); 
+\draw [thick] (-2mm,45mm) node{$5$} (0,42.5mm) rectangle (39mm,47.5mm) rectangle (77mm,42.5mm) rectangle (98mm,47.5mm) rectangle (128mm, 42.5mm);
+\draw (19.5mm,45mm) node{$19$} (58mm,45mm) node{$18$} (87.5mm,45mm) node{$17$} (113mm,45mm) node{$20$} ;
+\draw (13.5mm,35mm) node{$16$} (35.5mm,35mm) node{$13$} (61.5mm,35mm) node{$15$} (98.5mm,35mm) node{$14$} ;
+\draw (14mm,25mm) node{$12$} (40mm,25mm) node{$10$} (70.5mm,25mm) node{$11$} (97.5mm,25mm) node{$9$};
+\draw (11mm,15mm) node{$5$} (35mm,15mm) node{$7$} (62.5mm,15mm) node{$6$} (91.5mm,15mm) node{$8$};
+\draw (13.5mm,5mm) node{$4$} (48.5mm,5mm) node{$3$} (85mm,5mm) node{$1$} (120.5mm,5mm) node{$2$};
+\end{tikzpicture}}
+\caption{原始调度结果(完成率 $=60\%$)}
+\end{figure}}
+\only<3>{\begin{figure}
+\centering
+\resizebox{12cm}{!}{\begin{tikzpicture}
 \fill[blue!20!] (101mm,2.5mm) rectangle (130mm,7.5mm) (79mm,22.5mm) rectangle (96mm,27.5mm) (77mm,32.5mm) rectangle (105mm,37.5mm) (110mm,32.5mm)rectangle(135mm,37.5mm) (95mm,42.5mm) rectangle (134mm,47.5mm) ;
 \draw (70mm,-7mm) node{$G = 3978.8$};
 \draw [->,very thick] (0,0) -- (140mm,0);
@@ -327,9 +356,9 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \draw (18.5mm,15mm) node{$11$} (50mm,15mm) node{$7$} (83.5mm,15mm) node{$2$} ;
 \draw (12mm,5mm) node{$10$} (43mm,5mm) node{$18$} (79.5mm,5mm) node{$14$} (115.5mm,5mm) node{$6$};
 \end{tikzpicture}}
-\caption{Cyc -- ATC 算法调度结果}
+\caption{Cyc -- ATC 算法调度结果(完成率 $=75\%$)}
 \end{figure}}
-\only<3>{\begin{figure}
+\only<4>{\begin{figure}
 \centering
 \resizebox{12cm}{!}{\begin{tikzpicture}
 \fill[blue!20!] (112mm,2.5mm) rectangle (130mm,7.5mm) (116mm,12.5mm) rectangle (134mm,17.5mm) (77mm,32.5mm) rectangle (105mm,37.5mm) (98mm,42.5mm) rectangle (134mm,47.5mm) ;
@@ -348,9 +377,9 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \draw (13mm,15mm) node{$7$} (44.5mm,15mm) node{$11$} (78mm,15mm) node{$20$} (113.5mm,15mm) node{$2$};
 \draw (12mm,5mm) node{$10$} (38.5mm,5mm) node{$6$} (72mm,5mm) node{$18$} (110.5mm,5mm) node{$14$} ;
 \end{tikzpicture}}
-\caption{Cyc -- Tabu 算法调度结果}
+\caption{Cyc -- Tabu 算法调度结果(完成率 $=80\%$)}
 \end{figure}}
-\only<4>{\begin{figure}
+\only<5>{\begin{figure}
 \centering
 \resizebox{12cm}{!}{\begin{tikzpicture}
 \fill[blue!20!] (91mm,2.5mm) rectangle (92mm,7.5mm) (116mm,2.5mm) rectangle (133mm,7.5mm) (99mm,22.5mm) rectangle (125mm,27.5mm) (98mm,32.5mm) rectangle (127mm,37.5mm) (96mm,42.5mm) rectangle (112mm,47.5mm) ;
@@ -369,7 +398,7 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \draw (13mm,15mm) node{$7$} (44.5mm,15mm) node{$11$} (82.5mm,15mm) node{$14$} ;
 \draw (12mm,5mm) node{$10$} (39mm,5mm) node{$20$} (73mm,5mm) node{$18$} (112.5mm,5mm) node{$2$};
 \end{tikzpicture}}
-\caption{Vtr -- Tabu 算法调度结果}
+\caption{Vtr -- Tabu 算法调度结果(完成率 $=70\%$)}
 \end{figure}}
 \transboxout<1->\end{frame}
 
@@ -403,6 +432,8 @@ Vtr – Tabu 算法可以得到较有的结果，然而由于其邻域结构的�
 \begin{itemize}[<+-| alert@+>]
 \item 考虑混流生产的情况
 \item 假设限制
+\item 将订单完成率融入目标函数
+\item 扩大适用范围，例如流水线数量(根据情况考虑开动成本)
 \item 调度分派规则
 \item 算法创新
 \end{itemize}

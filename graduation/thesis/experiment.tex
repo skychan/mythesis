@@ -109,16 +109,24 @@
 可以看出，迭代次数和禁忌列表长度和问题的规模有一定的正相关关系，问题规模越大，这两者的值也越大，但这两个参数主也和订单的实验信息数据特点有关。
  
 \section{结果及评估}
-\subsection{实验结果示例及说明}
-确定实验所需订单信息数据以及算法相关的参数，运行编写的算法程序，可以得到实验结果。实验结果由目标函数值$G$和所得调度序列$S$组成，以模型$1$ 为例，示例订单量$n = 20$，其实验信息数据如\reft{tab:20itemsdata}所示，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法，根据\reft{tab:modelpara}选择相关参数，所得结果列入\reft{tab:resultexample20}中，其中深色部分为订单的延迟，其跨度越长，说明延迟越大。
+\subsection{实验结果与原始调度结果对比分析}
+原始调度方案中，订单$1-4$安排入流水线$1$，$5-8$入流水线$2$以此类推，并根据EDD 规则进行调度安排，其结果如\reff{fig:orginschedule}所示。
+确定实验所需订单信息数据以及算法相关的参数，运行编写的算法程序，可以得到实验结果。实验结果由目标函数值$G$和所得调度序列$S$组成，以模型$1$ 为例，示例订单量$n = 20$，其实验信息数据如\reft{tab:20itemsdata}所示，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法，根据\reft{tab:modelpara}选择相关参数，所得结果列入\reft{tab:resultexample20}中，并与原始调度相比较，其中深色部分为订单的延迟，其跨度越长，说明延迟越大。
 其调度安排如\reff{fig:20items3algorithms}所示。
 \begin{table}[h!]
   \centering
-  \label{tab:resultmodel1}\caption{订单量$n = 20$的模型1 $3$种算法求解结果}
+  \label{tab:resultmodel1}\caption{订单量$n = 20$的模型1 原始调度结果与$3$种算法求解结果}
     \begin{tabular}{cccl}
     \toprule
     算法    & 目标函数值($G$) & \multicolumn{2}{c}{流水线调度安排} \\
     \midrule
+    \multirow{5}[2]{*}{原始调度} & \multirow{5}[2]{*}{$9312$} & $1$
+        &  $\xymatrix{4 \ar[r] & 3 \ar[r] & 1 \ar[r] & 2}$\\
+         &        & $2$     &  $\xymatrix{5 \ar[r] & 7 \ar[r]& 6 \ar [r]& 8}$\\
+         &        & $3$     &  $\xymatrix{12 \ar[r] & 10 \ar[r] & 11 \ar[r] & 9}$\\
+         &        & $4$     &  $\xymatrix{16 \ar[r] & 13 \ar[r]& 15 \ar[r] & 14}$\\
+         &        & $5$     &  $\xymatrix{19 \ar[r] &18 \ar[r] & 17 \ar[r] &20}$\\
+      \hline
     \multirow{5}[2]{*}{Cyc -- ATC} & \multirow{5}[2]{*}{$3978.8$} & $1$     &$\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
           &       & $2$     &  $\xymatrix{11 \ar[r] & 7 \ar[r] & 2}$\\
           &       & $3$     &  $\xymatrix{16 \ar[r] & 15 \ar[r] & 13 \ar[r] & 9}$\\
@@ -141,7 +149,7 @@
   \label{tab:resultexample20}
 \end{table}
 \input{thesis/figure.tex}
-从结果上来看，就该决策环境下，模型1 使用Vtr -- Tabu 算法可以得到较好调度结果。
+从结果上来看，就该决策环境下，三种算法所得调度都相对于原始调度有很大改进，说明突破主机厂限制是很有效的方案。模型1 使用Vtr -- Tabu 算法可以得到较好调度结果。三种算法所得订单完成率分别为：$75\%, 80\%, 70\%$，虽然这个指标上来说，Vtr -- Tabu 算法所得结果果最差，然而，由\reff{fig:20items3algorithms}可以看出，订单$3$与$18$在Vtr -- Tabu 算法下虽然有延迟，但是所占比例相当少。
 \subsection{模型1 求解结果与分析}
 \subsubsection{目标函数值分析}
 模型1 的求解可以使用3个不同的算法Cyc -- ATC、Cyc -- Tabu、Vtr -- Tabu 得到的结果目标函数值如\reft{tab:resultmodel104} -- \ref{tab:resultmodel106}所示，\reff{fig:result1} -- \ref{fig:result3}为该结果的图表形式。

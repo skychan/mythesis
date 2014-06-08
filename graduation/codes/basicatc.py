@@ -86,7 +86,14 @@ def solve(input_data,m,lambda1,NR):
 		line_values[l_p] += delta_p
 		line_values[l_m] += delta_m
 		G = G + delta_m + delta_p
-	return G
+	lateness = generate.late(completion,items)
+	tardiness = generate.tard(lateness)
+	u = tardiness.count(0)
+	cv = u/len(tardiness)
+	print tardiness
+	print cv
+	return G,cv
+
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -98,6 +105,6 @@ if __name__ == '__main__':
 		NR = int(raw_input('iterate time: '))
 		lambda1 = float(raw_input('lambda1 = '))
 		f = open(".\\result\\batc_"  +str(int(file_location[7:]))+ "_" + str(m) + "_" + str(lambda1),'w')
-		G = solve(input_data,m,lambda1,NR)
-		f.write(str(G) +' ' +str(Rb)+ '\n')
+		G,cv = solve(input_data,m,lambda1,NR)
+		f.write(str(G) +' ' +str(cv) +'\n')
 		f.close()

@@ -1,8 +1,43 @@
 % !Mode:: "TeX:UTF-8"
 % !TEX root = ..\paper.tex
 \chapter{计算实验}
-为了评估上一章所提出的算法的运行效果，以及给出所得调度方案，供决策者选择，所有的算法都用Python 语言编写，并在2.20GHz i3 CPU，5.84GB RAM，Windows 8 的个人计算机上运行测试。
-
+\section{实验结果与原始调度结果对比分析}
+原始调度方案中，订单$1-4$安排入流水线$1$，$5-8$入流水线$2$以此类推，并根据EDD 规则进行调度安排，在决策参数$\lambda_1 = 0.6, \lambda_2 = 0.4$的环境下，分别采用Cyc -- ATC 算法、Cyc -- Tabu 算法和Vtr -- Tabu 算法求解结果，并与原始调度相比较，结果如\reft{tab:resultexample20}所示。
+\begin{table}[h!]
+  \centering
+  \label{tab:resultmodel1}\caption{订单量$n = 20$的模型1 原始调度结果与$3$种算法求解结果}
+    \begin{tabular}{cccl}
+    \toprule
+    算法    & 目标函数值($G$) & \multicolumn{2}{c}{流水线调度安排} \\
+    \midrule
+    \multirow{5}[2]{*}{原始调度} & \multirow{5}[2]{*}{$9312$} & $1$
+        &  $\xymatrix{4 \ar[r] & 3 \ar[r] & 1 \ar[r] & 2}$\\
+         &        & $2$     &  $\xymatrix{5 \ar[r] & 7 \ar[r]& 6 \ar [r]& 8}$\\
+         &        & $3$     &  $\xymatrix{12 \ar[r] & 10 \ar[r] & 11 \ar[r] & 9}$\\
+         &        & $4$     &  $\xymatrix{16 \ar[r] & 13 \ar[r]& 15 \ar[r] & 14}$\\
+         &        & $5$     &  $\xymatrix{19 \ar[r] &18 \ar[r] & 17 \ar[r] &20}$\\
+      \hline
+    \multirow{5}[2]{*}{Cyc -- ATC} & \multirow{5}[2]{*}{$3978.8$} & $1$     &$\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
+          &       & $2$     &  $\xymatrix{11 \ar[r] & 7 \ar[r] & 2}$\\
+          &       & $3$     &  $\xymatrix{16 \ar[r] & 15 \ar[r] & 13 \ar[r] & 9}$\\
+          &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12 \ar[r]&20}$\\
+          &       & $5$     &  $\xymatrix{5 \ar[r] & 1 \ar[r] & 3 \ar[r] & 19}$\\
+     \hline
+    \multirow{5}[2]{*}{Cyc -- Tabu} & \multirow{5}[2]{*}{$3478.8$} & $1$     &  $\xymatrix{10 \ar[r] & 6 \ar[r] & 18 \ar[r] & 14}$\\
+          &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 20 \ar[r] & 2}$ \\
+          &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15}$\\
+          &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12}$\\
+          &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 3}$\\
+       \hline
+    \multirow{5}[2]{*}{Vtr -- Tabu} & \multirow{5}[2]{*}{$3329.2$} & $1$     &  $\xymatrix{10 \ar[r] & 20 \ar[r] & 18 \ar[r] & 2}$\\
+          &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 14 }$ \\
+          &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15\ar[r]&6}$\\
+          &       & $4$     &  $\xymatrix{4\ar[r] & 8 \ar[r] & 3 \ar[r] & 12}$\\
+          &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 17}$\\
+    \bottomrule
+    \end{tabular}
+  \label{tab:resultexample20}
+\end{table}
 \section{模型1 求解结果与分析}
 以$m = 6, n = 200$ 为例，决策参数和目标函数值的关系如\reff{fig:decisionvsG}所示。
 \begin{figure}

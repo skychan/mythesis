@@ -1,3 +1,4 @@
+from __future__ import division
 import sys
 sys.path.append(".\\functions")
 import generate
@@ -138,7 +139,10 @@ def solve(input_data,m,lambda1,N,NL,NR):
 			for l in xrange(m):
 				S[l] = S_temp[l][:]
 	print G
-	return G
+	u = tardiness.count(0)
+	cv = u/len(tardiness)
+	print tardiness
+	return G,cv
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -152,6 +156,6 @@ if __name__ == '__main__':
 		NL = int(raw_input('tabu list volume = '))
 		lambda1 = float(raw_input('lambda1 = '))
 		f = open(".\\result\\bt_"  +str(int(file_location[7:]))+ "_" + str(m) + "_" + str(lambda1),'w')
-		G = solve(input_data,m,lambda1,N,NL,NR)
-		f.write(str(G) +' ' +str(Rb)+ '\n')
+		G,cv = solve(input_data,m,lambda1,N,NL,NR)
+		f.write(str(G) +' ' +str(cv)+ '\n')
 		f.close()

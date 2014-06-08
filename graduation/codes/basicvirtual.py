@@ -258,7 +258,10 @@ def solve(input_data,N,NL,m,lambda1):
 	delta,S,L,line_values,item_values,completion,tardiness = tabu(N,NL,S,L,items, completion,tardiness,line_values,item_values,G,lambda1,lambda2)
 	G += delta
 	completion,tardiness,item_values = generate.verify(S,items,lambda1,lambda2)
-	return G
+	u = tardiness.count(0)
+	cv = u/len(tardiness)
+	print tardiness
+	return G,cv
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -271,6 +274,6 @@ if __name__ == '__main__':
 		NL = int(raw_input('tabu list volume = '))
 		lambda1 = float(raw_input('lambda1 = '))
 		f = open(".\\result\\bv_"  +str(int(file_location[7:]))+ "_" + str(m) + "_" + str(lambda1),'w')
-		G = solve(input_data,N,NL,m,lambda1)
-		f.write(str(G) +' ' +str(Rb)+ '\n')
+		G,cv = solve(input_data,N,NL,m,lambda1)
+		f.write(str(G) +' ' +str(cv)+ '\n')
 		f.close()
