@@ -2,16 +2,30 @@
 % !TEX program = xelatex
 \documentclass[thesis]{skythesis}
 \graphicspath{{preface/figures/}{thesis/figures/}}  % 图路径
-
+\skip\footins = 5mm plus 4pt minus 2pt
+\usepackage{pifont}
+\usepackage{multicol}
+\usepackage{tikz}
+\usepackage{rotfloat}
+\usepackage[all,pdf]{xy}
+\newcounter{local}
+\newcommand{\Step}[1]{\textbf{Step#1}}
+\newcommand{\refa}[1]{\textbf{算法} \ref{#1}}
+%\usepackage{tikz}
+\usepackage{pgfgantt}
+\usepackage{fancyvrb}
 \begin{document}
 \include{preface/info}     % 个人信息
 \input{preface/cover}      % 封面
 \frontmatter
 {\pdfbookmark[0]{学位论文原创性声明}{thesisstatement}
-\phantomsection\includepdf{preface/statement}}
+\phantomsection\includepdf{preface/statement}
+\includepdf[pages = -]{preface/report_1}}
 \pagenumbering{Roman}
 %\begingroup % 在组内的chapter不换行
 %\let\clearpage\relax % chapter之后不换页
+
+
 
 \include{preface/absc}     % 中文摘要
 \include{preface/abse}     % English Abstract
@@ -19,7 +33,11 @@
 \phantomsection
 \singlespacing\tableofcontents           % 中文目录
 \listoffigures             % 图目录
-\listoftables              % 表目录
+\makeatletter
+\@starttoc{lof}
+\@starttoc{lot}
+\makeatother
+%%\listoftables              % 表目录
 }
 
 %%%%%%%%%% 正文 %%%%%%%%%%
@@ -29,10 +47,11 @@
 \input{thesis/intro}
 \include{thesis/basicintro}
 \include{thesis/analysisandmodel}
-%\include{body/others}
-%\include{body/conclusion}
+\include{thesis/algorithm}
+\include{thesis/experiment}
+\include{thesis/conclusion}
 \makeatother
-\backmatter
+%\backmatter
 
 %\endgroup % 组结束
 %\clearpage % 显式换页，使书签定位准确
@@ -42,11 +61,14 @@
 \bibliography{references/reference}
 %\nocite{*}   % 若将此命令屏蔽掉，则未引用的文献不会出现在文后的参考文献中。
 
-%%%%%%%%%% 致谢 %%%%%%%%%%
-\include{thesis/acknowledgement}            % 致谢
-%\include{body/lit}
 %%%%%%%%%% 附录 %%%%%%%%%%
-%\appendix
-%\include{appendix/appendix}            % 附录
+\appendix
+\include{appendix/appendix}
+\include{appendix/python}
+
+
+%%%%%%%%%% 致谢 %%%%%%%%%%
+\backmatter
+\include{thesis/acknowledgement}		% 致谢
 
 \end{document}                                  % 结束全文

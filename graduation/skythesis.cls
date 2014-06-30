@@ -46,7 +46,7 @@
 \fi
 
 \RequirePackage{graphicx}                       % 支持插图处理
-\RequirePackage{titlesec}                       % 控制标题的宏包
+%\RequirePackage{titlesec}                       % 控制标题的宏包
 \RequirePackage{titletoc}                       % 控制目录的宏包
 \RequirePackage{fancyhdr}                       % fancyhdr宏包 支持页眉和页脚的相关定义
 \RequirePackage[fntef]{ctexcap}
@@ -54,7 +54,8 @@
 %\RequirePackage[slantfont, CJKnumber, boldfont]{xeCJK}    %xeCJK中文粗体、斜体、数字支持，并提供将阿拉伯数字转换成中文数字的命令
 \RequirePackage{color}                          % 支持彩色
 %\RequirePackage[fleqn]{amsmath}
-\RequirePackage{amsmath,cases,amssymb}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
+\RequirePackage{amsmath,amssymb}                        % AMSLaTeX宏包 用来排出更加漂亮的公式
+\RequirePackage{cases}
 \allowdisplaybreaks[2]
 \RequirePackage{amssymb}                        % 数学符号生成命令
 \RequirePackage{mathtools}
@@ -128,7 +129,7 @@
 \RequirePackage{calc}
 \RequirePackage{setspace}
 \RequirePackage{listings} %插入代码
-\RequirePackage{xcolor} %代码高亮
+\RequirePackage[dvipsnames]{xcolor} %代码高亮
 
 %% 代码高亮设置
 \lstset{numbers=left, %设置行号位置
@@ -155,7 +156,7 @@
 \setsansfont{Arial}
 \setmonofont{Courier New}
 
-%\setCJKmainfont{SimSun}
+%\setCJKmainfont{Adobe 宋体 Std}
 %\setCJKsansfont{SimHei}
 %\setCJKmonofont{SimSun}
 \punctstyle{hangmobanjiao}
@@ -221,8 +222,8 @@
 \setcounter{secnumdepth}{3} % 自动编号最大深度 到subsubsection
 \setcounter{tocdepth}{2} % 目录显示深度到 subsection
 
-\DeclareCaptionFont{songti}{\xiaowu}
-\captionsetup{labelsep=quad}
+\DeclareCaptionFont{xiaowu}{\xiaowu}
+\captionsetup{labelsep=quad,font = xiaowu}
 
 %%%%%%%%%%%%%%%%%%%%
 %% 各级标题
@@ -231,12 +232,13 @@
 %% \titlecontents ToC
 %% http://mirror.bjtu.edu.cn/CTAN/macros/latex/contrib/titlesec/titlesec.pdf
 %%%%%%%%%%%%%%%%%%%%
-%\CTEXsetup[name = {第,章},number={\chinese{chapter}}]{chapter}
-\CTEXsetup[format = {\sanhao\bfseries}]{section}
+
+
 %%% 1级标题，二号，黑体，居中，加粗，段前段后18磅，1.25倍行距 {
 %\titleclass{\chapter}{straight}
-\titleformat{\chapter}[block]{\onequarterspacing\erhao\heiti\filcenter\bfseries}{第\chinese{chapter}章}{1em}{}{}
-\titlespacing{\chapter}{0pt}{-10pt}{30pt} % XXX 调整行距后@mckelvin 人工调的
+%\titleformat{\chapter}[block]{\onequarterspacing\erhao\heiti\filcenter\bfseries}{第\chinese{chapter}章}{1em}{}{}
+\CTEXsetup[name = {第,章},number={\chinese{chapter}},format = {\zihao{2}\bf\heiti\centering},nameformat = {\bf\heiti\zihao{2}},titleformat = {\bf\heiti\zihao{2}},numberformat = {\bf\heiti\zihao{2}},beforeskip = {-10pt},afterskip = 1em]{chapter}
+%\titlespacing{\chapter}{0pt}{-10pt}{30pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{chapter}[0.1ex]
         {}
         {\wuhao\bfseries{\thecontentslabel\hspace{1ex}}}
@@ -244,15 +246,17 @@
         {\wuhao\titlerule*[3pt]{.}\contentspage}
 %%% }
 \ifskypaper
-   \titleclass{\chapter}{straight}  %%不换页！！
-   \titleformat{\chapter}[block]{\onequarterspacing\sihao\heiti\bfseries}{\thechapter}{1ex}{}{}
-\titlespacing{\chapter}{0pt}{5pt}{5pt}
+   %\titleclass{\chapter}{straight}  %%不换页！！
+   \CTEXsetup[name={,},format={\zihao{4}\bf\heiti},nameformat={\zihao{4}\bf\heiti},titleformat={\zihao{4}\bf\heiti},numberformat={\zihao{4}\bf\heiti},number = {\arabic{chapter}},beforeskip=5pt,afterskip=10pt]{chapter}
+   %\titleformat{\chapter}[block]{\onequarterspacing\sihao\heiti\bfseries}{\thechapter}{1ex}{}{}
+%\titlespacing{\chapter}{0pt}{5pt}{5pt}
 \fi
 
 
 %%% 2级标题，三号，宋体，加粗，段前12磅，段后6磅，1.25倍行距 {
-\titleformat{\section}[hang]{\onequarterspacing\sanhao\bfseries}{\thesection}{1em}{}{}
-\titlespacing{\section}{0pt}{1em}{1em} % XXX 调整行距后@mckelvin 人工调的
+\CTEXsetup[format = {\songti\sanhao\bfseries}]{section}
+%\titleformat{\section}[hang]{\onequarterspacing\sanhao\bfseries}{\thesection}{1em}{}{}
+%\titlespacing{\section}{0pt}{1em}{1em} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{section}[1.0ex]
         {}
         {\wuhao\hspace{1ex}\thecontentslabel\hspace{1em}}
@@ -261,13 +265,13 @@
 %%% }
 \ifskypaper
   %\titleformat{\section}[hang]{\onequarterspacing\xiaosi\heiti}{\thesection}{1em}{}{}
-  \CTEXsetup[format = {\xiaosi\heiti}]{section}
-  \titlespacing{\section}{0pt}{0em}{0em}
+  \CTEXsetup[format = {\xiaosi\heiti},beforeskip=0pt,afterskip=10pt]{section}
+  %\titlespacing{\section}{0pt}{0em}{0em}
 \fi
 
 %%% 3级标题，四号，宋体，加粗，段前６磅，1.5倍行距，建议不使用四级或更高级别目录、标题 {
-\titleformat{\subsection}[hang]{\onequarterspacing\sihao\bfseries}{\thesubsection}{1em}{}{}
-\titlespacing{\subsection}{0pt}{0.5em}{0pt} % XXX 调整行距后@mckelvin 人工调的
+%\titleformat{\subsection}[hang]{\onequarterspacing\songti\sihao\bfseries}{\thesubsection}{1em}{}{}
+%\titlespacing{\subsection}{0pt}{0.5em}{0pt} % XXX 调整行距后@mckelvin 人工调的
 \titlecontents{subsection}[1.0ex]
         {}
         {\wuhao\hspace{2em}\thecontentslabel\hspace{1em}}
@@ -275,12 +279,12 @@
         {\wuhao\titlerule*[3pt]{.}\contentspage}
 %%% }
 \ifskypaper
-  \titleformat{\subsection}[hang]{\onequarterspacing\wuhao\heiti}{\thesubsection}{1em}{}{}
-  \titlespacing{\subsection}{0pt}{0em}{0pt}
+  %\titleformat{\subsection}[hang]{\onequarterspacing\wuhao\heiti}{\thesubsection}{1em}{}{}
+  %\titlespacing{\subsection}{0pt}{0em}{0pt}
 \fi
 %%% 4级标题 DEPRECATED {
-\titleformat{\subsubsection}[hang]{\onequarterspacing\xiaosi\heiti}{\thesubsubsection}{1em}{}{}
-\titlespacing{\subsubsection}{0pt}{0em}{0pt}
+%\titleformat{\subsubsection}[hang]{\onequarterspacing\xiaosi\heiti}{\thesubsubsection}{1em}{}{}
+%\titlespacing{\subsubsection}{0pt}{0em}{0pt}
 \titlecontents{subsubsection}[1.0ex]
         {}
         {\wuhao\hspace{3em}\thecontentslabel\hspace{1em}}
@@ -297,9 +301,10 @@
 
 \newenvironment{abstractc}
 {
-    \titleformat{\chapter}[block]{ \filcenter\erhao\bf}{}{0ex}{}{}
+    %\titleformat{\chapter}[block]{ \filcenter\erhao\bf}{}{0ex}{}{}
+    \CTEXsetup[ number={},aftername={},name={,},format={\zihao{2}\centering\bf\songti},nameformat={\zihao{2}\centering\bf\songti},titleformat={\zihao{2}\centering\bf\songti},numberformat={\zihao{2}\centering\bf\songti}]{chapter}
     \setlength{\parindent}{2.9em}
-    \titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
+    %\titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
     \ifskypaper
     \vbox{}
     \fi
@@ -316,10 +321,12 @@
 %%% English Abstract and Keywords {
 \newenvironment{abstracte}
 {
-    \titleformat{\chapter}[block]{\filcenter\sanhao}{}{1ex}{}{}
-    \titlespacing{\chapter}{0pt}{3mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
+    %\titleformat{\chapter}[block]{\filcenter\sanhao}{}{1ex}{}{}
+    \CTEXsetup[ number={},aftername={},name={,},format={\zihao{3}\centering\bf},nameformat={\zihao{3}\centering\bf},titleformat={\zihao{3}\centering\bf},numberformat={\zihao{3}\centering\bf}]{chapter}
+    %\titlespacing{\chapter}{0pt}{3mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
     \chapter[Abstract]{\bf\Skytitlec}
-}{}
+
+}{\setcounter{chapter}{0}}
 \newcommand\keywordse[1]{\ifskythesis
 \vspace{1em}
 \fi \noindent%
@@ -331,12 +338,12 @@
  
 
 \newenvironment{Abstract}{
-   \newpage
-   \setcounter{chapter}{0}
+   \newpage   
    \setstretch{1.2}
-   \titleformat{\chapter}[block]{\singlespacing\filcenter\sanhao\bf}{}{1ex}{}{}
-    \titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
-}{}
+   \CTEXsetup[name={,},number={},format={\centering\songti\bfseries\zihao{3}},titleformat={\centering\songti\bfseries\zihao{3}},numberformat={\centering\songti\bfseries\zihao{3}},nameformat={\centering\songti\bfseries\zihao{3}},aftername={},beforeskip=-10pt,afterskip=0pt]{chapter}
+   %\titleformat{\chapter}[block]{\singlespacing\filcenter\sanhao\bf}{}{1ex}{}{}
+    %\titlespacing{\chapter}{0pt}{12mm}{0mm} % XXX 调整行距后@mckelvin 人工调的
+}{\setcounter{chapter}{0}}
 \newcommand\keywords[1]{
     \noindent%
     {\textbf{\sky@label@keywordsc}}{#1}%
@@ -421,7 +428,7 @@
 % 重定义参考文献样式，来自thu
 \makeatletter
 \renewenvironment{thebibliography}[1]{
-    \chapter{\bibname}
+    \chapter*{\bibname}\addcontentsline{toc}{chapter}{\bibname}
  \ifskypaper
     \xiaowu
     \else

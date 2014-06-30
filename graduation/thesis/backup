@@ -1,0 +1,71 @@
+\section{分单模型}
+在基本假设中，订单一旦开始装配处理，就要不间断地处理完整个批量，然而这样的生产安排必然对提高产线利用率不利。考虑将订单拆分，将订单的作业分布在各流水线上，可以提高产线利用率，然而由于需要考虑切换准备，并不是拆分越多越好。此外，先前订单的完成时刻不再为定值，所以另外还需要设计其求解方法，这将在下一章中具体分析。
+\subsection{相关符号及说明}
+在基本模型基础上，需要补充或修改符号定义如下：%\\[3pt]
+
+\begin{supertabular}{ll}
+$n_j$ & 订单$j$的作业(需求)量\\
+$n_{j,l}$ & 订单$j$分配在流水线$l$上的作业数量\\
+$p_{j,l}$ & 订单$j$分配在流水线$l$上的子单处理时间\\
+$s_{k,l}$ & 订单$j$分配在流水线$l$上的子单切换准备时间\\
+$C_{j,l}$ & 订单$j$分配在流水线$l$上的子单完成时刻\\
+\end{supertabular}
+
+\subsection{相关假设}
+在基本假设基础上，考虑各订单可以拆分的情况，需要进行一些假设补充。
+考虑插单时，拆分的最小单元为订单中的作业，并称分出的订单为子单，每条流水线至多分配到某订单的一个子单。
+订单$j$的完成时刻$C_j$为该订单中最后一个离开系统的作业的时刻，若订单$j$没有在流水线$l$上分配子单，那么$C_{j,l} = 0$。
+各子单开始前都需进行切换准备，其准备时间为所属订单的切换准备时间，即$s_{j,l} = s_j$。
+子单在流水线上的处理时间无产线差别，只和其作业数量及处理单元有关。
+\subsection{目标函数}
+分单的目的是为了使装配生产更为均衡化，提高产线利用率，而且这么操作满足较为容易工期，故以加权完成时刻为主要目标，并以加权延迟时间和为次要目标，那么该模型的调度问题可记作：
+$Pm\mid s_j\mid \sum wc_jC_j(\text{opt}), \sum wt_jT_j$
+主要目标函数为：
+\begin{equation}
+\min\quad \sum_{j = 1}^n  wc_jC_j
+\label{equ:apartmainobj}
+\end{equation}
+次要目标函数为：
+\begin{equation}
+\min\quad \sum_{j = 1}^n wt_jT_j
+\label{equ:apartsecondobj}
+\end{equation}
+\subsection{约束条件}
+在寻找约束前，需要对子单处理时间作一些说明。首先，子单处理时间可以这样求得：
+\begin{equation}
+p_{j,l} = f(j, n_{j,l}) \label{equ:processing}
+\end{equation}
+函数$f(j, n_{j,l})$将在下一章具体表述，同样，流水线上的订单标记可以另一个函数表示：
+\begin{equation}
+l_k = g(j, l)
+\end{equation}
+这样可用$p_{j,l}$确定$p_{l_k} = p_{g(j,l)}$及$s_{l_k} = s_{g(j,l)}$
+
+分单模型以基本模型为基础，需要对基本约束进行增改。
+\begin{numcases}{}
+|S_l| \le n&$l = 1,2,...,m$\label{equ:apartst1}\\
+\sum_{l=1}^mn_{j,l} = n_j & $j = 1,2,...,n$ \label{equ:apartst2}\\
+C_{l_1} = s_{l_1} + p_{l_1} & $l = 1,2,...,m$\label{equ:apartst3}\\
+C_{l_k} = C_{l_{k-1}} + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:apartst4}\\
+C_j = \max_{1\le l\le m}\{C_{j,l}\} & $j = 1,2,...,n$\label{equ:apartst5}\\
+T_j = \max\{0, C_j - d_j\} & $j = 1,2,...,n$\label{equ:apartst6}\\
+p_{l_k}, s_{l_k}, d_j, wt_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m, j = 1,2,...,n$\label{equ:apartst7}
+\end{numcases}
+
+\section{综合模型}
+综合模型同时考虑插单和分单，主要以分单模型为基础，进一步考虑订单进入系统的时刻，更为符合实际情况。
+\subsection{相关假设}
+在分单模型的假设基础上，参考插单模型的假设。
+所有订单在$t=0$时皆已知
+同切换准备时间类似，各子单的进入系统时刻为所属订单的进入系统时刻，即$r_{j,l} = r_j$。
+\subsection{目标函数}
+\subsection{约束条件}
+\begin{numcases}{}
+|S_l| \le n&$l = 1,2,...,m$\label{equ:apartst1}\\
+\sum_{l=1}^mn_{j,l} = n_j & $j = 1,2,...,n$ \label{equ:apartst2}\\
+C_{l_1} = s_{l_1} + p_{l_1} & $l = 1,2,...,m$\label{equ:apartst3}\\
+C_{l_k} = \max\{C_{l_{k-1}}, r_{l_k}\} + s_{l_k} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:apartst4}\\
+C_j = \max_{1\le l\le m}\{C_{j,l}\} & $j = 1,2,...,n$\label{equ:apartst5}\\
+T_j = \max\{0, C_j - d_j\} & $j = 1,2,...,n$\label{equ:apartst6}\\
+p_{l_k}, s_{l_k}, ,r_{l_k}, d_j, wt_{l_k}\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m, j = 1,2,...,n$\label{equ:apartst7}
+\end{numcases}

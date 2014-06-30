@@ -3,15 +3,14 @@
 \documentclass[Paper]{skythesis}
 %\renewcommand{\encodingdefault}{T1}
 %\renewcommand{\familydefault}{cmbr}
-\graphicspath{{preface/figures/}{paper/figures/}}  % 图路径
+\usepackage[all,pdf]{xy}
+\graphicspath{{preface/figures/}{thesis/figures/}{paper/figures/}}  % 图路径
 \begin{document}
 \include{preface/info}     % 个人信息
 %\input{preface/cover}      % 封面
-\frontmatter
+%\frontmatter
 %\includepdf{preface/statement}
-\begingroup % 在组内的chapter不换行
-\let\cleardoublepage\relax % chapter之后不换页
-\input{paper/head}
+
 %\listoffigures             % 图目录
 %\pagenumbering{Roman}
 %\listoftables              % 表目录
@@ -19,18 +18,22 @@
 
 
 %%%%%%%%%% 正文 %%%%%%%%%%
-\mainmatter
+%\mainmatter
 \makeatletter
 %\include{body/intros}
+\begingroup % 在组内的chapter不换行
+\let\clearpage\relax % chapter之后不换页
+\input{paper/head}
 
-\input{paper/123}
-%\include{body/tables}
-%\include{body/equations}
-%\include{body/others}
-%\include{body/conclusion}
+\input{paper/intro}
+\input{paper/model}
+\input{paper/algorithm}
+\input{paper/experiment}
+\input{paper/conclusion}
+
 \bibliography{references/reference}
 \makeatother
-\backmatter
+%\backmatter
 \endgroup % 组结束
 \clearpage % 显式换页，使书签定位准确
 
