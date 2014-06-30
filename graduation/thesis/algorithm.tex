@@ -233,8 +233,8 @@ $NR$ &交替次数\\[3pt]
 
 为提高流水线均衡性，订单重派策略为：从具有最大目标值$H(S_l)$的流水线中选取具有最大函数值$h(l_k)$的作业，将其重派至具有最小目标值的流水线上调度末端，因此需要定义流水线$l$的函数贡献值与各订单的函数贡献值，根据\eqref{equ:objmain}可得两贡献值值的定义：
 \begin{align}
-H(S_l) &= \lambda_t\sum_{k=1}^{|S_l|} wt_{l_k}T_{l_k} + \lambda_c\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\label{equ:linefunct}\\
-h(l_k) &= \lambda_t wt_{l_k}T_{l_k} + \lambda_c wc_{l_k}C_{l_k}
+H(S_l) &= \lambda_1\sum_{k=1}^{|S_l|} \left(wt_{l_k}T_{l_k} + wc_{l_k}C_{l_k}\right)+ \lambda_2 \sum_{k=1}^{|S_l|} c_{l_k}\label{equ:linefunct}\\
+h(l_k) &= \lambda_1 \left(wt_{l_k}T_{l_k}+wc_{l_k}C_{l_k}\right) + \lambda_2 c_{l_k} 
 \label{equ:itemfunct}
 \end{align}
 当然可以使用其他的策略进行流水线之间的调整，比如区域搜索，然而解的改进是由内部调整和流水线之间调整两部分组成，简单的总运算次数是两者之积。而流水线之间的区域搜索复杂程度要大大超出内部调整，而调整后解的改进效果可能差不多。所以采用简单明了的策略是比较正确的。
@@ -465,8 +465,8 @@ K_2 = \frac{\tau}{2\sqrt{\eta}}
 
 流水线之间的调整在于订单重派，而订单重派则的依据是流水线和订单对目标函数的贡献值，需要根据\eqref{equ:insertobj}来重新定义这两个贡献值函数：
 \begin{align}
-H(S_l) &= \lambda_1\frac{\sum_{k=1}^{|S_l|}w_{l_k}|L_{l_k}|}{Ru_l} + \lambda_2 e^{-Rb}\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\label{equ:lineinsertfunct}\\
-h(l_k) &= \lambda_1\frac{w_{l_k}|L_{l_k}|}{Ru_l} + \lambda_2 e^{-Rb}wc_{l_k}C_{l_k}
+H(S_l) &= \lambda_1\left(\frac{\sum_{k=1}^{|S_l|}w_{l_k}|L_{l_k}|}{Ru_l} + e^{-Rb}\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\right) + \lambda_2 RC\label{equ:lineinsertfunct}\\
+h(l_k) &= \lambda_1\left(\frac{w_{l_k}|L_{l_k}|}{Ru_l}  + e^{-Rb}wc_{l_k}C_{l_k}\right)+ \lambda_2 RC
 \label{equ:iteminsertfunct}
 \end{align}
 

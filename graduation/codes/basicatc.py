@@ -6,7 +6,11 @@ from collections import namedtuple
 Item = namedtuple("Item", ['process','due','wt','wc'])
 
 def  h(tardiness,completion,wt,wc,lambda1,lambda2):			# define the contribution of one item for the obj function
-	value = lambda1*wt*tardiness + lambda2*wc*completion
+	if tardiness:
+		c = 1
+	else:
+		c = 0
+	value = lambda1*(wt*tardiness + wc*completion)+ lambda2*200*c
 	return value
 
 def ATC(items,S):							# use ATC rule
@@ -59,7 +63,6 @@ def solve(input_data,m,lambda1,NR):
 		value = generate.H(item_values,s)
 		line_values.append(value)
 	print 'Initial values done!'
-	print G
 
 	for k in xrange(NR):
 		l_p,l_m = generate.reorder(items,S,line_values,item_values)
@@ -90,10 +93,7 @@ def solve(input_data,m,lambda1,NR):
 	tardiness = generate.tard(lateness)
 	u = tardiness.count(0)
 	cv = u/len(tardiness)
-	print tardiness
-	print cv
-	return G,cv
-
+	return G,cv,S
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -105,6 +105,7 @@ if __name__ == '__main__':
 		NR = int(raw_input('iterate time: '))
 		lambda1 = float(raw_input('lambda1 = '))
 		f = open(".\\result\\batc_"  +str(int(file_location[7:]))+ "_" + str(m) + "_" + str(lambda1),'w')
-		G,cv = solve(input_data,m,lambda1,NR)
-		f.write(str(G) +' ' +str(cv) +'\n')
+		G,cv,S= solve(input_data,m,lambda1,NR)
+		f.write(str(G) +' ' +str(cv) +'\n' 
+			 +str(S))
 		f.close()

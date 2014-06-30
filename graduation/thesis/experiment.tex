@@ -120,36 +120,36 @@
     \toprule
     算法    & 目标函数值($G$) & \multicolumn{2}{c}{流水线调度安排} \\
     \midrule
-    \multirow{5}[2]{*}{原始调度} & \multirow{5}[2]{*}{$9312$} & $1$
+    \multirow{5}[2]{*}{原始调度} & \multirow{5}[2]{*}{$6227.2$} & $1$
         &  $\xymatrix{4 \ar[r] & 3 \ar[r] & 1 \ar[r] & 2}$\\
          &        & $2$     &  $\xymatrix{5 \ar[r] & 7 \ar[r]& 6 \ar [r]& 8}$\\
          &        & $3$     &  $\xymatrix{12 \ar[r] & 10 \ar[r] & 11 \ar[r] & 9}$\\
          &        & $4$     &  $\xymatrix{16 \ar[r] & 13 \ar[r]& 15 \ar[r] & 14}$\\
          &        & $5$     &  $\xymatrix{19 \ar[r] &18 \ar[r] & 17 \ar[r] &20}$\\
       \hline
-    \multirow{5}[2]{*}{Cyc -- ATC} & \multirow{5}[2]{*}{$3978.8$} & $1$     &$\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
+    \multirow{5}[2]{*}{Cyc -- ATC} & \multirow{5}[2]{*}{$6136$} & $1$     &$\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
           &       & $2$     &  $\xymatrix{11 \ar[r] & 7 \ar[r] & 2}$\\
           &       & $3$     &  $\xymatrix{16 \ar[r] & 15 \ar[r] & 13 \ar[r] & 9}$\\
           &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12 \ar[r]&20}$\\
           &       & $5$     &  $\xymatrix{5 \ar[r] & 1 \ar[r] & 3 \ar[r] & 19}$\\
      \hline
-    \multirow{5}[2]{*}{Cyc -- Tabu} & \multirow{5}[2]{*}{$3478.8$} & $1$     &  $\xymatrix{10 \ar[r] & 6 \ar[r] & 18 \ar[r] & 14}$\\
+    \multirow{5}[2]{*}{Cyc -- Tabu} & \multirow{5}[2]{*}{$5638.4$} & $1$     &  $\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
           &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 20 \ar[r] & 2}$ \\
           &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15}$\\
           &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12}$\\
           &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 3}$\\
        \hline
-    \multirow{5}[2]{*}{Vtr -- Tabu} & \multirow{5}[2]{*}{$3329.2$} & $1$     &  $\xymatrix{10 \ar[r] & 20 \ar[r] & 18 \ar[r] & 2}$\\
+    \multirow{5}[2]{*}{Vtr -- Tabu} & \multirow{5}[2]{*}{$5482.4$} & $1$     &  $\xymatrix{10 \ar[r] & 18 \ar[r] & 17 \ar[r] & 20}$\\
           &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 14 }$ \\
-          &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15\ar[r]&6}$\\
-          &       & $4$     &  $\xymatrix{4\ar[r] & 8 \ar[r] & 3 \ar[r] & 12}$\\
-          &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 17}$\\
+          &       & $3$     &  $\xymatrix{9 \ar[r] & 16 \ar[r] & 15 \ar[r] & 19}$\\
+          &       & $4$     &  $\xymatrix{5\ar[r] & 8 \ar[r] & 13 \ar[r] & 2\ar[r] & 12}$\\
+          &       & $5$     &  $\xymatrix{4 \ar[r] & 3 \ar[r] & 1 \ar[r] & 6}$\\
     \bottomrule
     \end{tabular}
   \label{tab:resultexample20}
 \end{table}
 \input{thesis/figure.tex}
-从结果上来看，就该决策环境下，三种算法所得调度都相对于原始调度有很大改进，说明突破主机厂限制是很有效的方案。模型1 使用Vtr -- Tabu 算法可以得到较好调度结果。三种算法所得订单完成率分别为：$75\%, 80\%, 70\%$，虽然这个指标上来说，Vtr -- Tabu 算法所得结果果最差，然而，由\reff{fig:20items3algorithms}可以看出，订单$3$与$18$在Vtr -- Tabu 算法下虽然有延迟，但是所占比例相当少。
+从结果上来看，就该决策环境下，三种算法所得调度都相对于原始调度有很大改进，说明突破主机厂限制是很有效的方案。模型1 使用Vtr -- Tabu 算法可以得到较好调度结果。原始调度和三种算法所得订单完成率分别为：$60\%, 75\%, 80\%, 80\%$，可以看出，Cyc -- Tabu 和Vtr -- Tabu 算法所得结果有最高的订单完成率，而且Vtr -- Tabu 算法所得结果最优，改进最大。
 \subsection{模型1 求解结果与分析}
 \subsubsection{目标函数值分析}
 模型1 的求解可以使用3个不同的算法Cyc -- ATC、Cyc -- Tabu、Vtr -- Tabu 得到的结果目标函数值如\reft{tab:resultmodel104} -- \ref{tab:resultmodel106}所示，\reff{fig:result1} -- \ref{fig:result3}为该结果的图表形式。

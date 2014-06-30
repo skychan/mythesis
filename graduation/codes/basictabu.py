@@ -142,7 +142,7 @@ def solve(input_data,m,lambda1,N,NL,NR):
 	u = tardiness.count(0)
 	cv = u/len(tardiness)
 	print tardiness
-	return G,cv
+	return G,cv,S
 
 if __name__ == '__main__':
 	if len(sys.argv) > 1:
@@ -156,6 +156,6 @@ if __name__ == '__main__':
 		NL = int(raw_input('tabu list volume = '))
 		lambda1 = float(raw_input('lambda1 = '))
 		f = open(".\\result\\bt_"  +str(int(file_location[7:]))+ "_" + str(m) + "_" + str(lambda1),'w')
-		G,cv = solve(input_data,m,lambda1,N,NL,NR)
-		f.write(str(G) +' ' +str(cv)+ '\n')
+		G,cv,S = solve(input_data,m,lambda1,N,NL,NR)
+		f.write(str(G) +' ' +str(cv)+ '\n' + str(S))
 		f.close()

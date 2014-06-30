@@ -10,30 +10,30 @@
     \toprule
     算法    & 目标函数值($G$) & \multicolumn{2}{c}{流水线调度安排} \\
     \midrule
-    \multirow{5}[2]{*}{原始调度} & \multirow{5}[2]{*}{$9312$} & $1$
+    \multirow{5}[2]{*}{原始调度} & \multirow{5}[2]{*}{$6227.2$} & $1$
         &  $\xymatrix{4 \ar[r] & 3 \ar[r] & 1 \ar[r] & 2}$\\
          &        & $2$     &  $\xymatrix{5 \ar[r] & 7 \ar[r]& 6 \ar [r]& 8}$\\
          &        & $3$     &  $\xymatrix{12 \ar[r] & 10 \ar[r] & 11 \ar[r] & 9}$\\
          &        & $4$     &  $\xymatrix{16 \ar[r] & 13 \ar[r]& 15 \ar[r] & 14}$\\
          &        & $5$     &  $\xymatrix{19 \ar[r] &18 \ar[r] & 17 \ar[r] &20}$\\
       \hline
-    \multirow{5}[2]{*}{Cyc -- ATC} & \multirow{5}[2]{*}{$3978.8$} & $1$     &$\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
+    \multirow{5}[2]{*}{Cyc -- ATC} & \multirow{5}[2]{*}{$6136$} & $1$     &$\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
           &       & $2$     &  $\xymatrix{11 \ar[r] & 7 \ar[r] & 2}$\\
           &       & $3$     &  $\xymatrix{16 \ar[r] & 15 \ar[r] & 13 \ar[r] & 9}$\\
           &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12 \ar[r]&20}$\\
           &       & $5$     &  $\xymatrix{5 \ar[r] & 1 \ar[r] & 3 \ar[r] & 19}$\\
      \hline
-    \multirow{5}[2]{*}{Cyc -- Tabu} & \multirow{5}[2]{*}{$3478.8$} & $1$     &  $\xymatrix{10 \ar[r] & 6 \ar[r] & 18 \ar[r] & 14}$\\
+    \multirow{5}[2]{*}{Cyc -- Tabu} & \multirow{5}[2]{*}{$5638.4$} & $1$     &  $\xymatrix{10 \ar[r] & 18 \ar[r] & 14 \ar[r] & 6}$\\
           &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 20 \ar[r] & 2}$ \\
           &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15}$\\
           &       & $4$     &  $\xymatrix{4 \ar[r] & 8 \ar[r] & 17 \ar[r] & 12}$\\
           &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 3}$\\
        \hline
-    \multirow{5}[2]{*}{Vtr -- Tabu} & \multirow{5}[2]{*}{$3329.2$} & $1$     &  $\xymatrix{10 \ar[r] & 20 \ar[r] & 18 \ar[r] & 2}$\\
+    \multirow{5}[2]{*}{Vtr -- Tabu} & \multirow{5}[2]{*}{$5482.4$} & $1$     &  $\xymatrix{10 \ar[r] & 18 \ar[r] & 17 \ar[r] & 20}$\\
           &       & $2$     & $\xymatrix{7 \ar[r] & 11 \ar[r] & 14 }$ \\
-          &       & $3$     &  $\xymatrix{9 \ar[r] & 13 \ar[r] & 16 \ar[r] & 15\ar[r]&6}$\\
-          &       & $4$     &  $\xymatrix{4\ar[r] & 8 \ar[r] & 3 \ar[r] & 12}$\\
-          &       & $5$     &  $\xymatrix{5 \ar[r] & 19 \ar[r] & 1 \ar[r] & 17}$\\
+          &       & $3$     &  $\xymatrix{9 \ar[r] & 16 \ar[r] & 15 \ar[r] & 19}$\\
+          &       & $4$     &  $\xymatrix{5\ar[r] & 8 \ar[r] & 13 \ar[r] & 2\ar[r] & 12}$\\
+          &       & $5$     &  $\xymatrix{4 \ar[r] & 3 \ar[r] & 1 \ar[r] & 6}$\\
     \bottomrule
     \end{tabular}
   \label{tab:resultexample20}

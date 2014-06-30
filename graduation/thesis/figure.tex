@@ -10,7 +10,7 @@
 			  (112mm,32.5mm) rectangle (118mm,37.5mm)
 			   (96mm,42.5mm) rectangle (98mm,47.5mm)
 			    (101mm,42.5mm) rectangle (128mm,47.5mm);
-\draw (70mm,-7mm) node{$G = 9312$};
+\draw (70mm,-7mm) node{$G = 6227.2$};
 \draw [->,very thick] (0,0) -- (140mm,0);
 \draw (25mm,0) -- (25mm,1mm) (25mm,-3mm) node{$25$} (50mm,0) -- (50mm,1mm) (50mm,-3mm) node{$50$} (75mm,0) -- (75mm,1mm) (75mm,-3mm) node{$70$}  (100mm,0) -- (100mm,1mm) (100mm,-3mm) node{$100$} (125mm,0) -- (125mm,1mm) (125mm,-3mm) node{$125$} (143mm,0) node{$tu$};
 \draw [very thick] (0,0) -- (0,50mm) (0.4,53mm) node{流水线};
@@ -27,7 +27,7 @@
 \end{tikzpicture}}}\\[-3pt]
 \subfloat[Cyc -- ATC 算法调度结果]{\resizebox{12.7cm}{!}{\begin{tikzpicture}
 \fill[blue!20!] (101mm,2.5mm) rectangle (130mm,7.5mm) (79mm,22.5mm) rectangle (96mm,27.5mm) (77mm,32.5mm) rectangle (105mm,37.5mm) (110mm,32.5mm)rectangle(135mm,37.5mm) (95mm,42.5mm) rectangle (134mm,47.5mm) ;
-\draw (70mm,-7mm) node{$G = 3978.8$};
+\draw (70mm,-7mm) node{$G = 6136$};
 \draw [->,very thick] (0,0) -- (140mm,0);
 \draw (25mm,0) -- (25mm,1mm) (25mm,-3mm) node{$25$} (50mm,0) -- (50mm,1mm) (50mm,-3mm) node{$50$} (75mm,0) -- (75mm,1mm) (75mm,-3mm) node{$70$}  (100mm,0) -- (100mm,1mm) (100mm,-3mm) node{$100$} (125mm,0) -- (125mm,1mm) (125mm,-3mm) node{$125$} (143mm,0) node{$tu$};
 \draw [very thick] (0,0) -- (0,50mm) (0.4,53mm) node{流水线};
@@ -43,38 +43,38 @@
 \draw (12mm,5mm) node{$10$} (43mm,5mm) node{$18$} (79.5mm,5mm) node{$14$} (115.5mm,5mm) node{$6$};
 \end{tikzpicture}}}\\[-3pt]
 \subfloat[Cyc -- Tabu 算法调度结果]{\resizebox{12.7cm}{!}{\begin{tikzpicture}
-\fill[blue!20!] (112mm,2.5mm) rectangle (130mm,7.5mm) (116mm,12.5mm) rectangle (134mm,17.5mm) (77mm,32.5mm) rectangle (105mm,37.5mm) (98mm,42.5mm) rectangle (134mm,47.5mm) ;
+\fill[blue!20!] (101mm,2.5mm) rectangle (130mm,7.5mm) (101mm,22.5mm)rectangle(126mm,27.5mm) (77mm,32.5mm) rectangle (105mm,37.5mm) (95mm,42.5mm) rectangle (134mm,47.5mm) ;
 \draw [->,very thick] (0,0) -- (140mm,0);
 \draw (25mm,0) -- (25mm,1mm) (25mm,-3mm) node{$25$} (50mm,0) -- (50mm,1mm) (50mm,-3mm) node{$50$} (75mm,0) -- (75mm,1mm) (75mm,-3mm) node{$70$}  (100mm,0) -- (100mm,1mm) (100mm,-3mm) node{$100$} (125mm,0) -- (125mm,1mm) (125mm,-3mm) node{$125$} (143mm,0) node{$tu$};
-\draw (70mm,-7mm) node{$G = 3478.8$};
+\draw (70mm,-7mm) node{$G = 5638.4$};
 \draw [very thick] (0,0) -- (0,50mm) (0.4,53mm) node{流水线};
-\draw [thick] (-2mm,5mm) node{$1$} (0,2.5mm) rectangle (24mm,7.5mm) rectangle (53mm,2.5mm) rectangle (91mm,7.5mm) rectangle (130mm,2.5mm);
-\draw [thick] (-2mm,15mm) node{$2$} (0,12.5mm) rectangle (26mm,17.5mm) rectangle (63mm,12.5mm) rectangle (93mm,17.5mm) rectangle (134mm,12.5mm);
-\draw [thick] (-2mm,25mm) node{$3$} (0,22.5mm) rectangle (17mm,27.5mm) rectangle (34mm,22.5mm) rectangle (61mm,27.5mm) rectangle (96mm,22.5mm) ;
+\draw [thick] (-2mm,5mm) node{$1$} (0,2.5mm) rectangle (24mm,7.5mm) rectangle (62mm,2.5mm) rectangle (101mm,7.5mm) rectangle (130mm,2.5mm);
+\draw [thick] (-2mm,15mm) node{$2$} (0,12.5mm) rectangle (26mm,17.5mm) rectangle (63mm,12.5mm) rectangle (104mm,17.5mm) ;
+\draw [thick] (-2mm,25mm) node{$3$} (0,22.5mm) rectangle (17mm,27.5mm) rectangle (34mm,22.5mm) rectangle (61mm,27.5mm) rectangle (96mm,22.5mm) rectangle (126mm,27.5mm);
 \draw [thick] (-2mm,35mm) node{$4$} (0,32.5mm) rectangle (27mm,37.5mm) rectangle (56mm,32.5mm) rectangle (77mm,37.5mm) rectangle (105mm,32.5mm);
-\draw [thick] (-2mm,45mm) node{$5$} (0,42.5mm) rectangle (22mm,47.5mm) rectangle (61mm,42.5mm) rectangle (91mm,47.5mm) rectangle (134mm, 42.5mm);
-\draw (11mm,45mm) node{$5$} (41.5mm,45mm) node{$19$} (76mm,45mm) node{$1$} (112.5mm,45mm) node{$3$} ;
+\draw [thick] (-2mm,45mm) node{$5$} (0,42.5mm) rectangle (22mm,47.5mm) rectangle (52mm,42.5mm) rectangle (95mm,47.5mm) rectangle (134mm, 42.5mm);
+\draw (11mm,45mm) node{$5$} (37mm,45mm) node{$1$} (73.5mm,45mm) node{$3$} (114.5mm,45mm) node{$19$} ;
 \draw (13.5mm,35mm) node{$4$} (41.5mm,35mm) node{$8$} (66.5mm,35mm) node{$17$} (91mm,35mm) node{$12$} ;
-\draw (8.5mm,25mm) node{$9$} (25.5mm,25mm) node{$13$} (47.5mm,25mm) node{$16$} (78.5mm,25mm) node{$15$};
-\draw (13mm,15mm) node{$7$} (44.5mm,15mm) node{$11$} (78mm,15mm) node{$20$} (113.5mm,15mm) node{$2$};
-\draw (12mm,5mm) node{$10$} (38.5mm,5mm) node{$6$} (72mm,5mm) node{$18$} (110.5mm,5mm) node{$14$} ;
+\draw (8.5mm,25mm) node{$9$} (25.5mm,25mm) node{$13$} (47.5mm,25mm) node{$16$} (78.5mm,25mm) node{$15$} (111mm,25mm) node{$20$};
+\draw (13mm,15mm) node{$7$} (44.5mm,15mm) node{$11$}  (83.5mm,15mm) node{$2$};
+\draw (12mm,5mm) node{$10$} (43mm,5mm) node{$18$} (81.5mm,5mm) node{$14$} (115.5mm,5mm) node{$6$} ;
 \end{tikzpicture}}}\\[-3pt]
 \subfloat[Vtr -- Tabu 算法调度结果]{\resizebox{12.7cm}{!}{\begin{tikzpicture}
-\fill[blue!20!] (91mm,2.5mm) rectangle (92mm,7.5mm) (116mm,2.5mm) rectangle (133mm,7.5mm) (99mm,22.5mm) rectangle (125mm,27.5mm) (98mm,32.5mm) rectangle (127mm,37.5mm) (96mm,42.5mm) rectangle (112mm,47.5mm) ;
+\fill[blue!20!] (101mm,2.5mm) rectangle (113mm,7.5mm) (116mm,2.5mm)  (79mm,22.5mm) rectangle (118mm,27.5mm) (109mm,32.5mm) rectangle (137mm,37.5mm) (101mm,42.5mm) rectangle (129mm,47.5mm) ;
 \draw [->,very thick] (0,0) -- (140mm,0);
 \draw (25mm,0) -- (25mm,1mm) (25mm,-3mm) node{$25$} (50mm,0) -- (50mm,1mm) (50mm,-3mm) node{$50$} (75mm,0) -- (75mm,1mm) (75mm,-3mm) node{$70$}  (100mm,0) -- (100mm,1mm) (100mm,-3mm) node{$100$} (125mm,0) -- (125mm,1mm) (125mm,-3mm) node{$125$} (143mm,0) node{$tu$};
-\draw (70mm,-7mm) node{$G = 3329.2$};
+\draw (70mm,-7mm) node{$G = 5482.4$};
 \draw [very thick] (0,0) -- (0,50mm) (0.4,53mm) node{流水线};
-\draw [thick] (-2mm,5mm) node{$1$} (0,2.5mm) rectangle (24mm,7.5mm) rectangle (54mm,2.5mm) rectangle (92mm,7.5mm) rectangle (133mm,2.5mm);
+\draw [thick] (-2mm,5mm) node{$1$} (0,2.5mm) rectangle (24mm,7.5mm) rectangle (62mm,2.5mm) rectangle (83mm,7.5mm) rectangle (113mm,2.5mm);
 \draw [thick] (-2mm,15mm) node{$2$} (0,12.5mm) rectangle (26mm,17.5mm) rectangle (63mm,12.5mm) rectangle (102mm,17.5mm);
-\draw [thick] (-2mm,25mm) node{$3$} (0,22.5mm) rectangle (17mm,27.5mm) rectangle (34mm,22.5mm) rectangle (61mm,27.5mm) rectangle (96mm,22.5mm) rectangle (125mm,27.5mm);
-\draw [thick] (-2mm,35mm) node{$4$} (0,32.5mm) rectangle (27mm,37.5mm) rectangle (56mm,32.5mm) rectangle (99mm,37.5mm) rectangle (127mm,32.5mm);
-\draw [thick] (-2mm,45mm) node{$5$} (0,42.5mm) rectangle (22mm,47.5mm) rectangle (61mm,42.5mm) rectangle (91mm,47.5mm) rectangle (112mm, 42.5mm);
-\draw (11mm,45mm) node{$5$} (41.5mm,45mm) node{$19$} (76mm,45mm) node{$1$} (101.5mm,45mm) node{$17$} ;
-\draw (13.5mm,35mm) node{$4$} (41.5mm,35mm) node{$8$} (77.5mm,35mm) node{$3$} (113mm,35mm) node{$12$} ;
-\draw (8.5mm,25mm) node{$9$} (25.5mm,25mm) node{$13$} (47.5mm,25mm) node{$16$} (78.5mm,25mm) node{$15$} (110.5mm,25mm) node{$6$};
+\draw [thick] (-2mm,25mm) node{$3$} (0,22.5mm) rectangle (17mm,27.5mm) rectangle (44mm,22.5mm) rectangle (79mm,27.5mm) rectangle (118mm,22.5mm);
+\draw [thick] (-2mm,35mm) node{$4$} (0,32.5mm) rectangle (27mm,37.5mm) rectangle (51mm,32.5mm) rectangle (68mm,37.5mm) rectangle (109mm,32.5mm) rectangle (137mm, 37.5mm);
+\draw [thick] (-2mm,45mm) node{$5$} (0,42.5mm) rectangle (27mm,47.5mm) rectangle (70mm,42.5mm) rectangle (100mm,47.5mm) rectangle (129mm, 42.5mm);
+\draw (13.5mm,45mm) node{$4$} (48.5mm,45mm) node{$3$} (85mm,45mm) node{$1$} (114.5mm,45mm) node{$6$} ;
+\draw (11mm,35mm) node{$5$} (36.5mm,35mm) node{$8$} (59.5mm,35mm) node{$13$} (88.5mm,35mm) node{$2$} (123mm,35mm) node{$12$} ;
+\draw (8.5mm,25mm) node{$9$} (30.5mm,25mm) node{$16$} (61.5mm,25mm) node{$15$} (98.5mm,25mm) node{$19$} ;
 \draw (13mm,15mm) node{$7$} (44.5mm,15mm) node{$11$} (82.5mm,15mm) node{$14$} ;
-\draw (12mm,5mm) node{$10$} (39mm,5mm) node{$20$} (73mm,5mm) node{$18$} (112.5mm,5mm) node{$2$};
+\draw (12mm,5mm) node{$10$} (43mm,5mm) node{$18$} (72.5mm,5mm) node{$17$} (98mm,5mm) node{$20$};
 \end{tikzpicture}}}
 \caption{模型$1$下 $20$件订单原始调度结果和三种算法求解所得结果\label{fig:20items3algorithms}}
 \end{figure}

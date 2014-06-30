@@ -59,9 +59,19 @@
 
 \section{多品种多装配线轮番装配调度优化模型}
 当订单到达稳定的时候，可以忽略插单的影响，据此构建的模型简称模型1。
-可以考虑满足工期和提高流水线利用率，其中满足工期为主要目标，可用加权延迟时间和$\sum wt_jT_j$，流水线利用率为次要目标，可用加权完成总时刻和$\sum wc_jC_j$。其中$wt_j, wc_j$分别为订单$j$的延迟和完工权重。两目标的重要程度可以体现在目标权重系数$\lambda_1, \lambda_2$上，其数学表达式如下：
+可以考虑满足工期和提高流水线利用率，其中满足工期为主要目标，可用加权延迟时间和$\sum wt_jT_j$，同时要考虑流水线利用率标，可用加权完成总时刻和$\sum wc_jC_j$。其中$wt_j, wc_j$分别为订单$j$的延迟和完工权重，可以设置订单的完成率为次要目标。
+为了定义$RC$，需要补充定义如下：
+\begin{numcases}{c_j = }
+1 & 若$T_j = 0$\notag\\
+0 & 若$T_j \neq 0$\notag
+\end{numcases}
+那么
+\[
+RC = \frac{\sum_{j = 1}^n c_j}{n}
+\]
+两目标的重要程度可以体现在目标权重系数$\lambda_1, \lambda_2$上，其数学表达式如下：
 \begin{equation}
-\min\quad \lambda_t\sum_{l=1}^m\sum_{k=1}^{|S_l|} wt_{l_k}T_{l_k} + \lambda_c\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
+\min\quad \lambda_1\sum_{l=1}^m\sum_{k=1}^{|S_l|} (wt_{l_k}T_{l_k} + wc_{l_k}C_{l_k}) + \lambda_2 \sum_{l=1}^m\sum_{k=1}^{|S_l|} c_{l_k}
 \label{equ:objmain}
 \end{equation}
 \begin{numcases}{s.t.}
@@ -74,7 +84,7 @@ C_{l_1} = p_{l_1} & $l = 1,2,...,m$\label{equ:basicst3}\\
 C_{l_k} = C_{l_{k-1}} + p_{l_k} & $k = 2,3,...,|S_l|, l = 1,2,...,m$\label{equ:basicst4}\\
 p_{l_k} = p'_{l_k} + s_{l_k} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst5}\\
 T_{l_k} = \max\{0, C_{l_k} - d_{l_k}\} & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst6}\\
-p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}, \lambda_t, \lambda_c\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst7}
+p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}, \lambda_1, \lambda_2\ge 0 & $k = 1,2,...,|S_l|, l = 1,2,...,m$\label{equ:basicst7}
 \end{numcases}
 \eqref{equ:basicst1}表示所有流水线安排的订单数量总和为需要安排调度的订单数量总和，\eqref{equ:basicst2}为\eqref{equ:basicst1}的集合表达形式，\eqref{equ:basicst3} -- (\ref{equ:basicst4})计算各订单的完成时刻，连续的订单之间没有停顿，\eqref{equ:basicst5}计算了整合订单处理时间，\eqref{equ:basicst6}为订单的延迟定义，\eqref{equ:basicst7}为变量的非负约束。
 \section{考虑插单的多品种多装配线轮番装配调度优化模型}
@@ -86,7 +96,7 @@ p'_{l_k}, s_{l_k}, d_{l_k}, wt_{l_k}, \lambda_t, \lambda_c\ge 0 & $k = 1,2,...,|
 \end{inparaenum}
 但若有流水线闲置，且接下来要对这个订单进行加工处理，那么此时可以先开始该订单的切换准备，以节少流水线产能浪费，那么考虑插单情况的模型表达式为：
 \begin{equation}
-\min \quad \lambda_1\sum_{l = 1}^m\frac{\sum_{k=1}^{|S_l|}w_{l_k}|L_{l_k}|}{Ru_l} + \lambda_2 e^{- Rb}\sum_{l=1}^m\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}
+\min \quad \lambda_1\sum_{l = 1}^m\left(\frac{\sum_{k=1}^{|S_l|}w_{l_k}|L_{l_k}|}{Ru_l}  + e^{- Rb}\sum_{k=1}^{|S_l|}wc_{l_k}C_{l_k}\right)+ \lambda_2 \sum_{l=1}^m\sum_{k=1}^{|S_l|} c_{l_k}
 \label{equ:insertobj}
 \end{equation}
 其中$f_{l_k}$是订单闲置，定义为：
